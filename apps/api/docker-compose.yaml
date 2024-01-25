@@ -1,0 +1,30 @@
+version: "3"
+services:
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
+  directus:
+    image: directus/directus:10.8.3
+    # build: ./
+    ports:
+      - 8055:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    environment:
+      KEY: "directus-key"
+      SECRET: "directus-secret"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "1"
+      DB_CLIENT: "sqlite3"
+      DB_FILENAME: "/directus/database/data.db"
+      WEBSOCKETS_ENABLED: true
+      EMAIL_VERIFY_SETUP: true
+      EMAIL_TRANSPORT: "smtp"
+      EMAIL_SMTP_HOST: "mailhog"
+      EMAIL_SMTP_PORT: 1025
+      CORS_ENABLED: true
+      EXTENSIONS_AUTO_RELOAD: true
