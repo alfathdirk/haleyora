@@ -1,18 +1,49 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { NextRequest, NextResponse } from 'next/server';
-import { publicRoutes } from './router';
+import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const currentUser = request.cookies.get("currentUser")?.value;
-  const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname);
+type Middleware = (request: NextRequest) => NextResponse
 
-  if (!isPublicRoute && !currentUser) {
-    return NextResponse.redirect(new URL("/login", request.url));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const redirectIfAuthenticated: Middleware = (request) => {
+  const authSession = request.cookies.get('auth')?.value
+
+  if (authSession) {
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
-  return NextResponse.next();
+  return NextResponse.next()
 }
 
-export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+const authenticated: Middleware = (request) => {
+  const authSession = request.cookies.get('auth')?.value
+
+  if (!authSession) {
+    const response = NextResponse.redirect(new URL('/login', request.url))
+    response.cookies.set({
+      name: 'redirect',
+      value: request.url,
+    })
+    return response
+  }
+
+  return NextResponse.next()
+}
+
+export default function middleware(request: NextRequest) {
+  // Uncomment if you want to redirect if authenticated.
+  // if ([
+  //   '/login',
+  //   '/register',
+  // ].includes(request.nextUrl.pathname)) {
+  //   return redirectIfAuthenticated(request)
+  // }
+
+  if ([
+    '/',
+    '/pokemons',
+  ].includes(request.nextUrl.pathname)) {
+    return authenticated(request)
+  }
+
+  return NextResponse.next()
 }
