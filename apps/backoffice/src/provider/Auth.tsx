@@ -38,19 +38,14 @@ export const AuthProvider = ({ children }: Props) => {
     };
     setCookie('auth', JSON.stringify(sampleUser))
     setIsAuthenticated(true);
+    return router.push('/');
   };
 
   const logout = () => {
     deleteCookie('auth');
     setIsAuthenticated(false);
-  };
-
-  useEffect(() => {
-    if(isAuthenticated) {
-      return router.push('/');
-    }
     router.push('/login');
-  }, [isAuthenticated, router]);
+  };
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
