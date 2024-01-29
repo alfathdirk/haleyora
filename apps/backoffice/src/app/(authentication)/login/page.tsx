@@ -1,37 +1,50 @@
-import { Col, Row } from 'react-bootstrap'
-import Link from 'next/link'
-import LoginForm from '@/app/(authentication)/login/login'
+/* eslint-disable jsx-a11y/alt-text */
+import { Col, Row, Image, Container } from "react-bootstrap";
+import Link from "next/link";
+import LoginForm from "@/app/(authentication)/login/login";
 
 export default function Page() {
   return (
-    <Row className="justify-content-center align-items-center px-3">
-      <Col lg={8}>
-        <Row>
-          <Col md={7} className="bg-white border p-5">
-            <div>
-              <h1>Login</h1>
-              <p className="text-black-50">Sign In to your account</p>
-
-              <LoginForm />
-            </div>
-          </Col>
-          <Col
-            md={5}
-            className="bg-primary text-white d-flex align-items-center justify-content-center p-5"
-          >
-            <div className="text-center">
-              <h2>Sign up</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <Link className="btn btn-lg btn-outline-light mt-3" href="/register">
-                Register Now!
-              </Link>
-            </div>
-          </Col>
-        </Row>
-      </Col>
-    </Row>
-  )
+    <Container>
+      <Row>
+        <Col
+          xs={12}
+          md={7}
+          className="d-flex align-items-center justify-content-center"
+        >
+          <Image
+            src="./assets/img/general/login-image.png"
+            style={{ width: "530px", height: "550px" }}
+            fluid
+          />
+        </Col>
+        <Col
+          xs={12}
+          md={5}
+          className="align-items-center d-flex justify-content-center"
+        >
+          <div className=" w-100">
+            <Image
+              src="./assets/img/general/haleyora-logo.png"
+              style={{ width: "200px" }}
+              fluid
+            />
+            <h3
+              style={{
+                marginTop: "12px",
+                marginBottom: "12px",
+                fontWeight: "bold",
+              }}
+            >
+              Welcome back
+            </h3>
+            <p style={{ marginBottom: "24px", color: "#787486" }}>
+              Please enter your email & password
+            </p>
+            <LoginForm />
+          </div>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
