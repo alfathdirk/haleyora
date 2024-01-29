@@ -12,7 +12,7 @@ export default function middleware(request: NextRequest) {
   }
 
   if (publicRoutes.includes(request.nextUrl.pathname) && authSession) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL(request.nextUrl.pathname, request.url))
   }
 
   return NextResponse.next()
