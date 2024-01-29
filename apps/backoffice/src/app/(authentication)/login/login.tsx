@@ -6,15 +6,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
-import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useContext, useState } from 'react'
 import { deleteCookie, getCookie } from 'cookies-next'
 import axios from 'axios'
 import Link from 'next/link'
 import InputGroupText from 'react-bootstrap/InputGroupText'
+import { AuthContext } from '@/provider/Auth'
 
 export default function Login() {
-  const router = useRouter()
+  const { login }= useContext(AuthContext)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -28,17 +28,14 @@ export default function Login() {
     return '/'
   }
 
-  const login = async (e: SyntheticEvent) => {
+  const loginForm = async (e: SyntheticEvent) => {
     e.stopPropagation()
     e.preventDefault()
 
     setSubmitting(true)
 
     try {
-      const res = await axios.post('api/mock/login')
-      if (res.status === 200) {
-        router.push(getRedirect())
-      }
+      login('alfath','password')
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)
@@ -58,7 +55,7 @@ export default function Login() {
       >
         {error}
       </Alert>
-      <Form onSubmit={login}>
+      <Form onSubmit={loginForm}>
         <InputGroup className="mb-3">
           <InputGroupText>
             <FontAwesomeIcon
@@ -72,7 +69,7 @@ export default function Login() {
             disabled={submitting}
             placeholder="Username"
             aria-label="Username"
-            defaultValue="Username"
+            defaultValue=""
           />
         </InputGroup>
 
@@ -90,7 +87,7 @@ export default function Login() {
             disabled={submitting}
             placeholder="Password"
             aria-label="Password"
-            defaultValue="Password"
+            defaultValue=""
           />
         </InputGroup>
 

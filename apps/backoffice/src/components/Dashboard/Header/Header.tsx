@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { Container } from 'react-bootstrap'
-import HeaderSidebarToggler from '@/app/ui/dashboard/Header/HeaderSidebarToggler'
-import HeaderFeaturedNav from '@/app/ui/dashboard/Header/HeaderFeaturedNav'
-import HeaderNotificationNav from '@/app/ui/dashboard/Header/HeaderNotificationNav'
-import HeaderProfileNav from '@/app/ui/dashboard/Header/HeaderProfileNav'
-import Breadcrumb from '@/app/ui/dashboard/Breadcrumb/Breadcrumb'
+import HeaderSidebarToggler from '@/components/Dashboard/Header/HeaderSidebarToggler'
+import HeaderFeaturedNav from '@/components/Dashboard/Header/HeaderFeaturedNav'
+import HeaderNotificationNav from '@/components/Dashboard/Header/HeaderNotificationNav'
+import HeaderProfileNav from '@/components/Dashboard/Header/HeaderProfileNav'
+// import Breadcrumb from '@/components/Dashboard/Breadcrumb/Breadcrumb'
 
 export default function Header() {
   return (
@@ -18,19 +18,19 @@ export default function Header() {
           </svg>
         </Link>
         <div className="header-nav d-none d-md-flex">
-          <HeaderFeaturedNav />
+          {/* <HeaderFeaturedNav /> */}
         </div>
         <div className="header-nav ms-auto">
-          <HeaderNotificationNav />
+          {/* <HeaderNotificationNav /> */}
         </div>
         <div className="header-nav ms-2">
           <HeaderProfileNav />
         </div>
       </Container>
-      <div className="header-divider border-top my-2 mx-sm-n2" />
+      {/* <div className="header-divider border-top my-2 mx-sm-n2" />
       <Container fluid>
         <Breadcrumb />
-      </Container>
+      </Container> */}
     </header>
   )
 }
