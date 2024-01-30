@@ -1,6 +1,6 @@
 "use client ";
 
-import { Col, Row, Image, Container } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import HeaderProfileNav from "../Dashboard/Header/HeaderProfileNav";
 
 type Props = {

@@ -1,11 +1,9 @@
 "use client";
 
-import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import React, { PropsWithChildren, useContext } from "react";
 import { SidebarContext } from "@/components/Dashboard/sidebar-provider";
 import { NavItem, NavLink, Image } from "react-bootstrap";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Props = {
   href: string;

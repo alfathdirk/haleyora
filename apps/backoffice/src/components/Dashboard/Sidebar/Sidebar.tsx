@@ -1,13 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faDroplet } from "@fortawesome/free-solid-svg-icons";
 import React, { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { Image } from "react-bootstrap";
 import { SidebarContext } from "@/components/Dashboard/sidebar-provider";
-import SidebarNavItem from "./SidebarNavItem";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [isNarrow, setIsNarrow] = useState(false);

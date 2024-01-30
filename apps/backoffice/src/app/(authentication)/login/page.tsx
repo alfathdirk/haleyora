@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Col, Row, Image, Container } from "react-bootstrap";
-import Link from "next/link";
 import LoginForm from "@/app/(authentication)/login/login";
 
 export default function Page() {

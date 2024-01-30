@@ -1,25 +1,4 @@
-import {
-  faAddressCard,
-  faBell,
-  faFileLines,
-  faStar,
-} from "@fortawesome/free-regular-svg-icons";
-import {
-  faBug,
-  faCalculator,
-  faChartPie,
-  faCode,
-  faDroplet,
-  faGauge,
-  faLayerGroup,
-  faLocationArrow,
-  faPencil,
-  faPuzzlePiece,
-  faRightToBracket,
-} from "@fortawesome/free-solid-svg-icons";
 import React, { PropsWithChildren } from "react";
-import { Badge } from "react-bootstrap";
-import SidebarNavGroup from "@/components/Dashboard/Sidebar/SidebarNavGroup";
 import SidebarNavItem from "@/components/Dashboard/Sidebar/SidebarNavItem";
 
 const SidebarNavTitle = (props: PropsWithChildren) => {

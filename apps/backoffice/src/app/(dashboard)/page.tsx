@@ -3,25 +3,9 @@ import CommentListCard from "@/components/Cards/CommentListCard";
 import FilterCard from "@/components/Cards/FilterCard";
 import LessonChart from "@/components/Charts/LessonChart ";
 import PerformanceChart from "@/components/Charts/PerformanceChart";
-import { Col, Row, Image, Container } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 
 export default function Page() {
-  const data = {
-    labels: ["Category 1", "Category 2", "Category 3"],
-    datasets: [
-      {
-        data: [30, 50, 20],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
-
   return (
     <div>
       <h2>Dashboard</h2>
