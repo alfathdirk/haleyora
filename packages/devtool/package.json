@@ -1,0 +1,26 @@
+{
+  "name": "@roh/devtool",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "bin": "cli.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc --pretty -p tsconfig.build.json -w",
+    "build": "tsc --pretty -p tsconfig.build.json",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest watch --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@directus/sdk": "^14.0.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "promptly": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4"
+  }
+}
