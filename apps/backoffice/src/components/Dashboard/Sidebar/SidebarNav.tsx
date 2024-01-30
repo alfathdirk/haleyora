@@ -36,30 +36,30 @@ export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
       <SidebarNavTitle>Main Menu</SidebarNavTitle>
-      <SidebarNavItem icon={faDroplet} href="#">
+      <SidebarNavItem icon={faDroplet} href="/">
         Dashboard
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="#">
+      <SidebarNavItem icon={faPencil} href="/employee">
         Employee
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="#">
+      <SidebarNavItem icon={faDroplet} href="/lesson">
         Lesson
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="#">
+      <SidebarNavItem icon={faPencil} href="/quiz">
         Quiz
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="#">
+      <SidebarNavItem icon={faDroplet} href="/exam">
         Exam
       </SidebarNavItem>
 
       <SidebarNavTitle>Master Data</SidebarNavTitle>
-      <SidebarNavItem icon={faDroplet} href="#">
+      <SidebarNavItem icon={faDroplet} href="/user-admin">
         User Admin
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="#">
+      <SidebarNavItem icon={faPencil} href="role-management">
         Role Management
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="#">
+      <SidebarNavItem icon={faDroplet} href="parameters">
         Parameters
       </SidebarNavItem>
     </ul>

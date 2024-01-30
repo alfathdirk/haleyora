@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import { Container } from 'react-bootstrap'
-import HeaderSidebarToggler from '@/components/Dashboard/Header/HeaderSidebarToggler'
-import HeaderFeaturedNav from '@/components/Dashboard/Header/HeaderFeaturedNav'
-import HeaderNotificationNav from '@/components/Dashboard/Header/HeaderNotificationNav'
-import HeaderProfileNav from '@/components/Dashboard/Header/HeaderProfileNav'
+import Link from "next/link";
+import { Container } from "react-bootstrap";
+import HeaderSidebarToggler from "@/components/Dashboard/Header/HeaderSidebarToggler";
+import HeaderFeaturedNav from "@/components/Dashboard/Header/HeaderFeaturedNav";
+import HeaderNotificationNav from "@/components/Dashboard/Header/HeaderNotificationNav";
+import HeaderProfileNav from "@/components/Dashboard/Header/HeaderProfileNav";
 // import Breadcrumb from '@/components/Dashboard/Breadcrumb/Breadcrumb'
 
 export default function Header() {
@@ -19,6 +19,8 @@ export default function Header() {
         </Link>
         <div className="header-nav d-none d-md-flex">
           {/* <HeaderFeaturedNav /> */}
+          <h2 style={{ marginRight: "8px", color: "#C2BB34" }}>E-LEARNING</h2>
+          <h2 style={{ color: "#05A5DE" }}> HALEYORA POWER</h2>
         </div>
         <div className="header-nav ms-auto">
           {/* <HeaderNotificationNav /> */}
@@ -32,5 +34,5 @@ export default function Header() {
         <Breadcrumb />
       </Container> */}
     </header>
-  )
+  );
 }
