@@ -66,4 +66,7 @@ yarn-error.log
 .metro-health-check*
 
 # testing
-/coverage
+coverage
+
+# build
+dist
