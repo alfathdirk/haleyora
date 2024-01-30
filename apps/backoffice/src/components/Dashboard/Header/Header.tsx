@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Container } from "react-bootstrap";
+import { Col, Container } from "react-bootstrap";
 import HeaderSidebarToggler from "@/components/Dashboard/Header/HeaderSidebarToggler";
 import HeaderFeaturedNav from "@/components/Dashboard/Header/HeaderFeaturedNav";
 import HeaderNotificationNav from "@/components/Dashboard/Header/HeaderNotificationNav";
@@ -24,6 +24,18 @@ export default function Header() {
         </div>
         <div className="header-nav ms-auto">
           {/* <HeaderNotificationNav /> */}
+          <div style={{ textAlign: "right" }}>
+            <p style={{ marginTop: "-24px" }}>Henry Pramudya</p>
+            <p
+              style={{
+                marginTop: "-20px",
+                color: "#787486",
+                marginBottom: "-24px",
+              }}
+            >
+              Super Administrator
+            </p>
+          </div>
         </div>
         <div className="header-nav ms-2">
           <HeaderProfileNav />

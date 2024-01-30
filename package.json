@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/chart.js": "^2.9.41",
+    "chart.js": "^4.4.1",
+    "utility-types": "^3.11.0"
+  }
 }
