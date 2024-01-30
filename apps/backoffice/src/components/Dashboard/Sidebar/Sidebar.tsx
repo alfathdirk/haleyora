@@ -55,13 +55,16 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       </div>
       <div className="sidebar-nav flex-fill">{children}</div>
 
-      <div className="px-3 py-2 pt-3 d-flex align-center border-top">
-        <FontAwesomeIcon
-          className="pt-1"
-          img={faDroplet}
-          style={{ marginRight: "20px" }}
+      <div
+        className="px-3 py-2 pt-3 d-flex align-center border-top"
+        style={{ cursor: "pointer" }}
+      >
+        <Image
+          src="./assets/svg/setting.svg"
+          style={{ width: "17px", marginRight: "20px" }}
+          alt=""
         />
-        <p>Logout</p>
+        <p style={{ marginTop: "12px" }}>Logout</p>
       </div>
     </div>
   );

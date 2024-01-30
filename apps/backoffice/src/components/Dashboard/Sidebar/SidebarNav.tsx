@@ -36,30 +36,33 @@ export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
       <SidebarNavTitle>Main Menu</SidebarNavTitle>
-      <SidebarNavItem icon={faDroplet} href="/">
+      <SidebarNavItem icon={"./assets/svg/category.svg"} href="/">
         Dashboard
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="/employee">
+      <SidebarNavItem icon={"./assets/svg/profile-2user.svg"} href="/employee">
         Employee
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="/lesson">
+      <SidebarNavItem icon={"./assets/svg/book-saved.svg"} href="/lesson">
         Lesson
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="/quiz">
+      <SidebarNavItem icon={"./assets/svg/message.svg"} href="/quiz">
         Quiz
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="/exam">
+      <SidebarNavItem icon={"./assets/svg/edit-2.svg"} href="/exam">
         Exam
       </SidebarNavItem>
 
       <SidebarNavTitle>Master Data</SidebarNavTitle>
-      <SidebarNavItem icon={faDroplet} href="/user-admin">
+      <SidebarNavItem icon={"./assets/svg/user.svg"} href="/user-admin">
         User Admin
       </SidebarNavItem>
-      <SidebarNavItem icon={faPencil} href="role-management">
+      <SidebarNavItem
+        icon={"./assets/svg/user-tick.svg"}
+        href="role-management"
+      >
         Role Management
       </SidebarNavItem>
-      <SidebarNavItem icon={faDroplet} href="parameters">
+      <SidebarNavItem icon={"./assets/svg/task-square.svg"} href="parameters">
         Parameters
       </SidebarNavItem>
     </ul>
