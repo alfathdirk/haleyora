@@ -1,5 +1,9 @@
-import React, { PropsWithChildren } from "react";
-import SidebarNavItem from "@/components/Dashboard/Sidebar/SidebarNavItem";
+'use client'
+
+import React, { PropsWithChildren, use } from 'react'
+import SidebarNavGroup from '@/components/Dashboard/Sidebar/SidebarNavGroup'
+import SidebarNavItem from '@/components/Dashboard/Sidebar/SidebarNavItem'
+import { routeConfig } from '@/routes/routeConfig'
 
 const SidebarNavTitle = (props: PropsWithChildren) => {
   const { children } = props;
@@ -14,36 +18,26 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavTitle>Main Menu</SidebarNavTitle>
-      <SidebarNavItem icon={"./assets/svg/category.svg"} href="/">
-        Dashboard
-      </SidebarNavItem>
-      <SidebarNavItem icon={"./assets/svg/profile-2user.svg"} href="/employee">
-        Employee
-      </SidebarNavItem>
-      <SidebarNavItem icon={"./assets/svg/book-saved.svg"} href="/lesson">
-        Lesson
-      </SidebarNavItem>
-      <SidebarNavItem icon={"./assets/svg/message.svg"} href="/quiz">
-        Quiz
-      </SidebarNavItem>
-      <SidebarNavItem icon={"./assets/svg/edit-2.svg"} href="/exam">
-        Exam
-      </SidebarNavItem>
-
-      <SidebarNavTitle>Master Data</SidebarNavTitle>
-      <SidebarNavItem icon={"./assets/svg/user.svg"} href="/user-admin">
-        User Admin
-      </SidebarNavItem>
-      <SidebarNavItem
-        icon={"./assets/svg/user-tick.svg"}
-        href="role-management"
-      >
-        Role Management
-      </SidebarNavItem>
-      <SidebarNavItem icon={"./assets/svg/task-square.svg"} href="parameters">
-        Parameters
-      </SidebarNavItem>
+      {routeConfig.map((route, key) => (
+        <React.Fragment key={key}>
+          {route.groupLabel && <SidebarNavTitle>{route.groupLabel}</SidebarNavTitle>}
+          {route.children ? (
+            <React.Fragment>
+              <SidebarNavGroup toggleIcon={route.icon} toggleText={route.label ?? ''}>
+                {route.children.map((child, key) => (
+                  <SidebarNavItem key={key} href={child.path}>
+                    {child.label}
+                  </SidebarNavItem>
+                ))}
+              </SidebarNavGroup>
+            </React.Fragment>
+          ): (
+            <SidebarNavItem href={route.path} icon={route.icon}>
+              {route.label}
+            </SidebarNavItem>
+          )}
+        </React.Fragment>
+      ))}
     </ul>
   );
 }

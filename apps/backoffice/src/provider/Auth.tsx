@@ -13,7 +13,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-interface UserData {
+export interface UserData {
   username: string;
   email: string;
   token: string;

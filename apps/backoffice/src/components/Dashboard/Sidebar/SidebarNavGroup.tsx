@@ -19,7 +19,7 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 type SidebarNavGroupToggleProps = {
   eventKey: string;
-  icon: IconDefinition;
+  icon: IconDefinition | string;
   setIsShow: (isShow: boolean) => void;
 } & PropsWithChildren;
 
@@ -58,7 +58,7 @@ const SidebarNavGroupToggle = (props: SidebarNavGroupToggleProps) => {
 };
 
 type SidebarNavGroupProps = {
-  toggleIcon: IconDefinition;
+  toggleIcon: IconDefinition | string;
   toggleText: string;
 } & PropsWithChildren;
 
