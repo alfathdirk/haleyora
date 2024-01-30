@@ -70,7 +70,7 @@ export default function Login() {
       <Form onSubmit={loginForm} style={{ paddingRight: "100px" }}>
         <InputGroup className="mb-3">
           <InputGroupText>
-            <FontAwesomeIcon icon={faUser} fixedWidth />
+            <FontAwesomeIcon img={faUser} fixedWidth />
           </InputGroupText>
           <FormControl
             name="username"
@@ -84,7 +84,7 @@ export default function Login() {
 
         <InputGroup className="mb-3">
           <InputGroupText>
-            <FontAwesomeIcon icon={faLock} fixedWidth />
+            <FontAwesomeIcon img={faLock} fixedWidth />
           </InputGroupText>
           <FormControl
             type={showPassword ? "text" : "password"}
@@ -98,7 +98,7 @@ export default function Login() {
             style={{ cursor: "pointer" }}
             onClick={togglePasswordVisibility}
           >
-            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            <FontAwesomeIcon img={showPassword ? faEyeSlash : faEye} />
           </InputGroupText>
         </InputGroup>
 

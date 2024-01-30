@@ -1,5 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faEnvelope, IconDefinition } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBell,
+  faEnvelope,
+  IconDefinition,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faBasketShopping,
   faChartBar,
@@ -7,10 +11,11 @@ import {
   faList,
   faUserMinus,
   faUserPlus,
-} from '@fortawesome/free-solid-svg-icons'
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Badge,
-  Dropdown, DropdownDivider,
+  Dropdown,
+  DropdownDivider,
   DropdownHeader,
   DropdownItem,
   DropdownMenu,
@@ -19,25 +24,25 @@ import {
   NavItem,
   NavLink,
   ProgressBar,
-} from 'react-bootstrap'
-import Link from 'next/link'
-import React, { PropsWithChildren } from 'react'
-import Image from 'next/image'
+} from "react-bootstrap";
+import Link from "next/link";
+import React, { PropsWithChildren } from "react";
+import Image from "next/image";
 
 type ItemWithIconProps = {
   icon: IconDefinition;
-} & PropsWithChildren
+} & PropsWithChildren;
 
 const ItemWithIcon = (props: ItemWithIconProps) => {
-  const { icon, children } = props
+  const { icon, children } = props;
 
   return (
     <>
-      <FontAwesomeIcon className="me-2" icon={icon} fixedWidth />
+      <FontAwesomeIcon className="me-2" img={icon} fixedWidth />
       {children}
     </>
-  )
-}
+  );
+};
 
 export default function HeaderNotificationNav() {
   return (
@@ -45,13 +50,19 @@ export default function HeaderNotificationNav() {
       <NavItem>
         <Dropdown>
           <DropdownToggle as={NavLink} bsPrefix="hide-caret" id="dropdown-mail">
-            <FontAwesomeIcon icon={faBell} size="lg" />
-            <Badge pill bg="primary" className="position-absolute top-0 right-0">
+            <FontAwesomeIcon img={faBell} size="lg" />
+            <Badge
+              pill
+              bg="primary"
+              className="position-absolute top-0 right-0"
+            >
               7
             </Badge>
           </DropdownToggle>
           <DropdownMenu className="pt-0" align="end">
-            <DropdownHeader className="bg-light fw-bold rounded-top">You have 4 messages</DropdownHeader>
+            <DropdownHeader className="bg-light fw-bold rounded-top">
+              You have 4 messages
+            </DropdownHeader>
             <Link href="#" passHref legacyBehavior>
               <DropdownItem>
                 <div className="message">
@@ -63,19 +74,17 @@ export default function HeaderNotificationNav() {
                         src="/assets/img/avatars/1.jpg"
                         alt="user@email.com"
                       />
-                      <span
-                        className="avatar-status position-absolute d-block bottom-0 end-0 bg-success rounded-circle border border-white"
-                      />
+                      <span className="avatar-status position-absolute d-block bottom-0 end-0 bg-success rounded-circle border border-white" />
                     </div>
                   </div>
                   <div>
                     <small className="text-muted">John Doe</small>
-                    <small className="text-muted float-end mt-1">Just now</small>
+                    <small className="text-muted float-end mt-1">
+                      Just now
+                    </small>
                   </div>
                   <div className="text-truncate font-weight-bold">
-                    <span className="text-danger">!</span>
-                    {' '}
-                    Pet Pikachu
+                    <span className="text-danger">!</span> Pet Pikachu
                   </div>
                   <div className="small text-truncate text-muted">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit,
@@ -88,5 +97,5 @@ export default function HeaderNotificationNav() {
         </Dropdown>
       </NavItem>
     </Nav>
-  )
+  );
 }
