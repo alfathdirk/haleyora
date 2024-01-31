@@ -89,8 +89,11 @@ const CheckboxTableAdmin: React.FC<CheckboxTableProps> = ({ data }) => {
                 {row.column3}
               </p>
             </td>
-            <td>
-              <div className="d-flex justify-content-between">
+            <td style={{ width: "150px" }}>
+              <div
+                className="d-flex justify-content-between"
+                style={{ paddingLeft: "12px", paddingRight: "12px" }}
+              >
                 <Image
                   src="./assets/svg/info.svg"
                   style={{ width: "24px", cursor: "pointer" }}
