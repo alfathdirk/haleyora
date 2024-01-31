@@ -29,7 +29,7 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
           <th style={{ paddingTop: "12px", paddingBottom: "12px" }}>Role</th>
           <th style={{ paddingTop: "12px", paddingBottom: "12px" }}>Status</th>
           <th style={{ paddingTop: "12px", paddingBottom: "12px" }}>Lesson</th>
-          <th style={{ paddingTop: "12px", paddingBottom: "12px" }}>Action</th>
+          <th style={{ paddingTop: "12px", paddingBottom: "12px" }}></th>
         </tr>
       </thead>
       <tbody>
@@ -39,19 +39,17 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
               <Form.Check type="checkbox" />
             </td>
             <td>
-              {row.column1}
               <div className="d-flex">
                 <div style={{ paddingTop: "6px" }}>
                   <HeaderProfileNav />
                 </div>
                 <div>
-                  <p style={{ marginBottom: "-1px" }}>Tanner Finsha</p>
-                  <p style={{ color: "#6B788E" }}>@Tannerfinsha@gmail.com</p>
+                  <p style={{ marginBottom: "-1px" }}>{row.column1}</p>
+                  <p style={{ color: "#6B788E" }}>{row.column1}</p>
                 </div>
               </div>
             </td>
             <td>
-              {row.column2}
               <p
                 style={{
                   backgroundColor: "#F5F6F7",
@@ -61,18 +59,19 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
                 }}
                 className="rounded"
               >
-                #23454GH6J7YT6
+                {row.column2}
               </p>
             </td>
             <td>
-              {row.column3}
               <div>
-                <p style={{ marginBottom: "-1px" }}>Engineer</p>
-                <p style={{ color: "#6B788E", fontSize: "12px" }}>Fulltime </p>
+                <p style={{ marginBottom: "-1px" }}> {row.column3}</p>
+                <p style={{ color: "#6B788E", fontSize: "12px" }}>
+                  {" "}
+                  {row.column3}{" "}
+                </p>
               </div>
             </td>
             <td>
-              {row.column4}
               <div
                 style={{
                   color: "#12B76A",
@@ -92,11 +91,10 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
                   }}
                   className="rounded "
                 />
-                Active
+                {row.column4}
               </div>
             </td>
             <td>
-              {row.column5}
               <div className="d-flex">
                 <div
                   style={{
@@ -109,7 +107,7 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
                   }}
                   className="rounded d-flex align-items-center"
                 >
-                  Electrical Part
+                  {row.column5}
                 </div>
                 <div
                   style={{
@@ -122,7 +120,7 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
                   }}
                   className="rounded d-flex align-items-center"
                 >
-                  Cable
+                  {row.column5}
                 </div>
                 <div
                   style={{
@@ -134,7 +132,7 @@ const CheckboxTable: React.FC<CheckboxTableProps> = ({ data }) => {
                   }}
                   className="rounded d-flex align-items-center"
                 >
-                  +3
+                  {row.column5}
                 </div>
               </div>
             </td>
