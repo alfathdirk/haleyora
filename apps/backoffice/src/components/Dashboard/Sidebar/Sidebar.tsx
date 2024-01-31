@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { Image } from "react-bootstrap";
 import { SidebarContext } from "@/components/Dashboard/sidebar-provider";
+import Link from "next/link";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [isNarrow, setIsNarrow] = useState(false);
@@ -43,13 +44,16 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       })}
       id="sidebar"
     >
-      <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-left border-bottom border-right">
+      <Link
+        href="/"
+        className="sidebar-brand d-none d-md-flex align-items-center justify-content-left border-bottom border-right"
+      >
         <Image
           src="./assets/img/general/haleyora-logo.png"
           style={{ width: "170px", paddingLeft: "20px" }}
           fluid
         />
-      </div>
+      </Link>
       <div className="sidebar-nav flex-fill">{children}</div>
 
       <div
