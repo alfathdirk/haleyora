@@ -64,9 +64,9 @@ export default function UserAdminPage() {
       <div style={{ marginBottom: "24px" }}>
         <CheckboxTableAdmin data={exampleData} />
       </div>
-      {/* <div>
+      <div>
         <Pagination meta={exampleData} />
-      </div> */}
+      </div>
     </div>
   );
 }
