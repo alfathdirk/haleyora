@@ -5,7 +5,6 @@ import SidebarOverlay from "@/components/Dashboard/Sidebar/SidebarOverlay";
 import Sidebar from "@/components/Dashboard/Sidebar/Sidebar";
 import SidebarNav from "@/components/Dashboard/Sidebar/SidebarNav";
 import Header from "@/components/Dashboard/Header/Header";
-import Footer from "@/components/Dashboard/Footer/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
