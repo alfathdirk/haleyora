@@ -1,7 +1,8 @@
 'use client'
 import { deleteCookie, setCookie } from 'cookies-next';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
+import { DirectusContext } from './Directus';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -28,24 +29,39 @@ export const AuthContext = createContext<AuthContextProps>({
 
 export const AuthProvider = ({ children }: Props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { client }= useContext(DirectusContext);
   const router = useRouter();
-  const login = (username: string, password: string) => {
-    const sampleUser: UserData = {
-      username: username,
-      email: `${username}@gmail.com`,
-      token: 'token',
-      role: 'admin',
-    };
-    setCookie('auth', JSON.stringify(sampleUser))
-    setIsAuthenticated(true);
-    return router.push('/');
+
+  const login = async (username: string, password: string) => {
+    let result = await client.login(username, password);
+    if (result) {
+      setCookie('auth', JSON.stringify(result), { path: '/' });
+      setIsAuthenticated(true);
+      router.push('/');
+    }
   };
 
   const logout = () => {
     deleteCookie('auth');
+    client.logout();
     setIsAuthenticated(false);
     router.push('/login');
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        let response = await client.refresh();
+        if (response) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.warn('belum login gais > ', error)
+        setIsAuthenticated(false);
+        return router.push('/login');
+      }
+    })();
+  }, [])
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

@@ -23,6 +23,9 @@ importers:
 
   apps/backoffice:
     dependencies:
+      '@directus/sdk':
+        specifier: ^14.0.0
+        version: 14.0.0
       '@fortawesome/fontawesome-svg-core':
         specifier: ^6.5.1
         version: 6.5.1

@@ -12,38 +12,32 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { SyntheticEvent, useContext, useState } from "react";
+import { SyntheticEvent, useContext, useEffect, useState } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
 import axios from "axios";
 import Link from "next/link";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { AuthContext } from "@/provider/Auth";
 import { faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { DirectusContext } from "@/provider/Directus";
+import { readUsers } from "@directus/sdk";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { login } = useContext(AuthContext);
+  const { client } = useContext(DirectusContext);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const getRedirect = () => {
-    const redirect = getCookie("redirect");
-    if (redirect) {
-      deleteCookie("redirect");
-      return redirect.toString();
-    }
-
-    return "/";
-  };
+  const router = useRouter();
 
   const loginForm = async (e: SyntheticEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
     setSubmitting(true);
-
     try {
-      login("alfath", "password");
+      await login("admin@example.com", "1");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -129,3 +123,4 @@ export default function Login() {
     </>
   );
 }
+
