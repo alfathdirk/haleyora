@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "9157f85a-fbf0-455a-9299-096aca685328",
+    "name": "ROH: Create User",
+    "key": "roh_create_user_kevcp",
+    "type": "roh-create-user",
+    "position_x": 21,
+    "position_y": 1,
+    "options": {
+      "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+      "template": {
+        "first_name": "{{$trigger.payload.full_name}}",
+        "email": "{{$trigger.payload.email}}"
+      }
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "51776e27-4efd-41e2-9edd-6d374a4d3d1d"
+  }
+]

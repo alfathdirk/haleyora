@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "id": "51776e27-4efd-41e2-9edd-6d374a4d3d1d",
+    "name": "CreateUserOnEmployeeCreated",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "action",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "employee"
+      ]
+    },
+    "operation": "9157f85a-fbf0-455a-9299-096aca685328"
+  }
+]

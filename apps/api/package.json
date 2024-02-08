@@ -6,15 +6,34 @@
   "type": "module",
   "scripts": {
     "dev": "docker compose up",
+    "dev:up": "docker compose up -d",
+    "dev:down": "docker compose down",
+    "dev:logs": "docker compose logs -f directus",
     "dev:pull": "devtool pull",
     "dev:push": "devtool push",
-    "devtool": "devtool",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:test": "wireit",
+    "devtool": "wireit"
+  },
+  "wireit": {
+    "dev:test": {
+      "command": "node --loader ts-node/esm ./src/test/cli.ts",
+      "files": [
+        "./extensions",
+        "./src"
+      ]
+    },
+    "devtool": {
+      "command": "devtool",
+      "files": [
+        "./src"
+      ]
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@directus/sdk": "^14.0.0",
     "@roh/devtool": "workspace:^"
   }
 }
