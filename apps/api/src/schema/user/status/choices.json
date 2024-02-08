@@ -1,0 +1,14 @@
+[
+  {
+    "text": "Active",
+    "value": "active"
+  },
+  {
+    "text": "Offline",
+    "value": "offline"
+  },
+  {
+    "text": "Wait",
+    "value": "wait"
+  }
+]

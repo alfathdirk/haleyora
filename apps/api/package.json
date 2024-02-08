@@ -8,6 +8,7 @@
     "dev": "docker compose up",
     "dev:pull": "devtool pull",
     "dev:push": "devtool push",
+    "devtool": "devtool",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

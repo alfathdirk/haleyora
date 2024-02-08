@@ -9,7 +9,8 @@
     "dev": "tsc --pretty -p tsconfig.build.json -w",
     "build": "tsc --pretty -p tsconfig.build.json",
     "test": "vitest run --coverage",
-    "test:watch": "vitest watch --coverage"
+    "test:watch": "vitest watch",
+    "test:cover": "vitest watch --coverage"
   },
   "keywords": [],
   "author": "",
@@ -18,9 +19,10 @@
     "@directus/sdk": "^14.0.0",
     "commander": "^11.1.0",
     "fs-extra": "^11.2.0",
-    "promptly": "^3.2.0"
+    "inquirer": "^9.2.13"
   },
   "devDependencies": {
-    "@types/fs-extra": "^11.0.4"
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7"
   }
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "text": "$t:published",
+    "value": "published"
+  },
+  {
+    "text": "$t:draft",
+    "value": "draft"
+  },
+  {
+    "text": "$t:archived",
+    "value": "archived"
+  }
+]
