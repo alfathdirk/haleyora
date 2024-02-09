@@ -16,7 +16,7 @@ export async function pushSchema(client: Client, config: Config) {
     }
     field.meta.options = {
       ...field.meta.options,
-      options,
+      ...options,
     };
   }
 
