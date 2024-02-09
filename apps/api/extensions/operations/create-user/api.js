@@ -1,28 +1,51 @@
 export default {
   id: 'roh-create-user',
   handler: async({ role, template }, ctx) => {
-    const { services, getSchema } = ctx;
-    const { UsersService } = services;
-
     try {
-      const schema = await getSchema();
-      const service = new UsersService({
-        schema,
-      });
-
       const password = generateRandom();
-      const data = {
+      const user = {
         password,
         ...template,
-        role,
+        role: await getRoleId(ctx, role),
       };
-      await service.createOne(data);
+
+      await createUser(ctx, user);
     } catch (err) {
       console.error(err);
       throw err;
     }
   },
 };
+
+let roles;
+async function getRoleId(ctx, q) {
+  if (!roles) {
+    const { services, getSchema } = ctx;
+    const { RolesService } = services;
+    const schema = await getSchema();
+    const rolesService = new RolesService({
+      schema,
+    });
+    roles = await rolesService.readByQuery({});
+  }
+
+  const role = roles.find((role) => role.id === q || role.name === q);
+  if (!role) {
+    throw new Error('role not found. ' + q);
+  }
+  return role;
+}
+
+async function createUser(ctx, user) {
+  const { services, getSchema } = ctx;
+  const { UsersService } = services;
+  const schema = await getSchema();
+  const usersService = new UsersService({
+    schema,
+  });
+  const result = await usersService.createOne(user);
+  return result;
+}
 
 const alphabets = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

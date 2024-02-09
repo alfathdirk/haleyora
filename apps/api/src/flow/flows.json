@@ -34,7 +34,7 @@
         "items.create"
       ],
       "collections": [
-        "employee"
+        "user"
       ]
     },
     "operation": "0d34bedc-03b6-445a-bc52-4baacf453ddf"

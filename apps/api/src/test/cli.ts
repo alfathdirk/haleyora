@@ -5,14 +5,14 @@ import { Directus } from './directus.js';
   const directus = await Directus.login();
   let id = '';
   try {
-    const employee = await directus.createItem('employee', {
-      full_name: 'Reek O Heek',
+    const employee = await directus.createItem('user', {
+      full_name: 'Jafar Shadiq',
       email: 'reekoheek@gmail.com',
     });
     id = employee.id;
   } finally {
     if (id) {
-      await directus.deleteItem('employee', id);
+      await directus.deleteItem('user', id);
     }
   }
 })();

@@ -7,7 +7,7 @@
     "position_x": 21,
     "position_y": 1,
     "options": {
-      "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+      "role": "Administrator",
       "template": {
         "first_name": "{{$trigger.payload.full_name}}",
         "email": "{{$trigger.payload.email}}"
