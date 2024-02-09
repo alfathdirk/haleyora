@@ -1,4 +1,12 @@
-import { AuthenticationClient, RestClient, authentication, createDirectus, createItem, deleteItem, rest } from '@directus/sdk';
+import {
+  AuthenticationClient,
+  RestClient,
+  authentication,
+  createDirectus,
+  createItem,
+  deleteItem,
+  rest,
+} from '@directus/sdk';
 
 export const DIRECTUS_URL = 'http://localhost:8055';
 export const DIRECTUS_EMAIL = 'admin@example.com';
@@ -23,6 +31,7 @@ export class Directus {
     await this.client.login(DIRECTUS_EMAIL, DIRECTUS_PASSWORD);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createItem(collection: string, item: any): Promise<any> {
     const result = await this.client.request(createItem(collection as never, item as never));
     return result;

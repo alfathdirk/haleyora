@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
     "dev": "docker compose up",
     "dev:up": "docker compose up -d",
     "dev:down": "docker compose down",
@@ -13,7 +14,8 @@
     "dev:push": "devtool push",
     "dev:test": "wireit",
     "dev:clean": "rm -rf ./database ./uploads",
-    "devtool": "wireit"
+    "devtool": "devtool",
+    "devtool:run": "wireit"
   },
   "wireit": {
     "dev:test": {
@@ -23,7 +25,7 @@
         "./src"
       ]
     },
-    "devtool": {
+    "devtool:run": {
       "command": "devtool",
       "files": [
         "./src"

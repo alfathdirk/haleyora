@@ -4,11 +4,11 @@ export default {
   icon: 'box',
   description: 'ROH: Create User',
   overview: ({ role }) => [
-		{
-			label: 'Role',
-			text: role,
-		},
-	],
+    {
+      label: 'Role',
+      text: role,
+    },
+  ],
   options: [
     {
       field: 'role',
