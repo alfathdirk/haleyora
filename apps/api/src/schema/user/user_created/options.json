@@ -1,0 +1,3 @@
+{
+  "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+}

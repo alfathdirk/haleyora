@@ -12,6 +12,7 @@
     "dev:pull": "devtool pull",
     "dev:push": "devtool push",
     "dev:test": "wireit",
+    "dev:clean": "rm -rf ./database ./uploads",
     "devtool": "wireit"
   },
   "wireit": {

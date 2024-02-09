@@ -88,6 +88,62 @@
       }
     },
     {
+      "collection": "employee_course",
+      "meta": {
+        "accountability": "all",
+        "archive_app_filter": true,
+        "archive_field": null,
+        "archive_value": null,
+        "collapse": "open",
+        "collection": "employee_course",
+        "color": null,
+        "display_template": null,
+        "group": "employee",
+        "hidden": false,
+        "icon": null,
+        "item_duplication_fields": null,
+        "note": null,
+        "preview_url": null,
+        "singleton": false,
+        "sort": 1,
+        "sort_field": null,
+        "translations": null,
+        "unarchive_value": null,
+        "versioning": false
+      },
+      "schema": {
+        "name": "employee_course"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "meta": {
+        "accountability": "all",
+        "archive_app_filter": true,
+        "archive_field": null,
+        "archive_value": null,
+        "collapse": "open",
+        "collection": "employee_search",
+        "color": null,
+        "display_template": null,
+        "group": "employee",
+        "hidden": false,
+        "icon": null,
+        "item_duplication_fields": null,
+        "note": null,
+        "preview_url": null,
+        "singleton": false,
+        "sort": 2,
+        "sort_field": null,
+        "translations": null,
+        "unarchive_value": null,
+        "versioning": false
+      },
+      "schema": {
+        "name": "employee_search"
+      }
+    },
+    {
       "collection": "level",
       "meta": {
         "accountability": "all",
@@ -251,62 +307,6 @@
       "schema": {
         "name": "user"
       }
-    },
-    {
-      "collection": "user_course",
-      "meta": {
-        "accountability": "all",
-        "archive_app_filter": true,
-        "archive_field": null,
-        "archive_value": null,
-        "collapse": "open",
-        "collection": "user_course",
-        "color": null,
-        "display_template": null,
-        "group": "user",
-        "hidden": false,
-        "icon": null,
-        "item_duplication_fields": null,
-        "note": null,
-        "preview_url": null,
-        "singleton": false,
-        "sort": 1,
-        "sort_field": null,
-        "translations": null,
-        "unarchive_value": null,
-        "versioning": false
-      },
-      "schema": {
-        "name": "user_course"
-      }
-    },
-    {
-      "collection": "user_search",
-      "meta": {
-        "accountability": "all",
-        "archive_app_filter": true,
-        "archive_field": null,
-        "archive_value": null,
-        "collapse": "open",
-        "collection": "user_search",
-        "color": null,
-        "display_template": null,
-        "group": "user",
-        "hidden": false,
-        "icon": null,
-        "item_duplication_fields": null,
-        "note": null,
-        "preview_url": null,
-        "singleton": false,
-        "sort": 2,
-        "sort_field": null,
-        "translations": null,
-        "unarchive_value": null,
-        "versioning": false
-      },
-      "schema": {
-        "name": "user_search"
-      }
     }
   ],
   "fields": [
@@ -411,6 +411,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -504,6 +507,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -762,7 +768,23 @@
               "text": "$t:archived",
               "value": "archived"
             }
-          ]
+          ],
+          "options": {
+            "choices": [
+              {
+                "text": "$t:published",
+                "value": "published"
+              },
+              {
+                "text": "$t:draft",
+                "value": "draft"
+              },
+              {
+                "text": "$t:archived",
+                "value": "archived"
+              }
+            ]
+          }
         },
         "readonly": false,
         "required": false,
@@ -806,6 +828,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -899,6 +924,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -1325,7 +1353,19 @@
               "text": "Inactive",
               "value": "inactive"
             }
-          ]
+          ],
+          "options": {
+            "choices": [
+              {
+                "text": "Active",
+                "value": "active"
+              },
+              {
+                "text": "Inactive",
+                "value": "inactive"
+              }
+            ]
+          }
         },
         "readonly": false,
         "required": false,
@@ -1369,6 +1409,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -1462,6 +1505,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -1709,6 +1755,824 @@
       }
     },
     {
+      "collection": "employee",
+      "field": "image",
+      "type": "uuid",
+      "meta": {
+        "collection": "employee",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "image",
+        "group": null,
+        "hidden": false,
+        "interface": "file-image",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 11,
+        "special": [
+          "file"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "image",
+        "table": "employee",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "directus_files",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "id",
+        "group": null,
+        "hidden": true,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 1,
+        "special": [
+          "uuid"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "id",
+        "table": "employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": false,
+        "is_unique": true,
+        "is_primary_key": true,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "user_created",
+      "type": "string",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": "user",
+        "display_options": null,
+        "field": "user_created",
+        "group": null,
+        "hidden": true,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "readonly": true,
+        "required": false,
+        "sort": 2,
+        "special": [
+          "user-created"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "user_created",
+        "table": "employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "field": "date_created",
+        "group": null,
+        "hidden": true,
+        "interface": "datetime",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 3,
+        "special": [
+          "cast-timestamp",
+          "date-created"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "date_created",
+        "table": "employee_course",
+        "data_type": "datetime",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "user_updated",
+      "type": "string",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": "user",
+        "display_options": null,
+        "field": "user_updated",
+        "group": null,
+        "hidden": true,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "readonly": true,
+        "required": false,
+        "sort": 4,
+        "special": [
+          "user-updated"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "user_updated",
+        "table": "employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "field": "date_updated",
+        "group": null,
+        "hidden": true,
+        "interface": "datetime",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 5,
+        "special": [
+          "cast-timestamp",
+          "date-updated"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "date_updated",
+        "table": "employee_course",
+        "data_type": "datetime",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "course",
+      "type": "string",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "course",
+        "group": null,
+        "hidden": false,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 7,
+        "special": [
+          "m2o"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "course",
+        "table": "employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "course",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "section_progress",
+      "type": "float",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "section_progress",
+        "group": null,
+        "hidden": false,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 8,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "section_progress",
+        "table": "employee_course",
+        "data_type": "float",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "quiz_progress",
+      "type": "float",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "quiz_progress",
+        "group": null,
+        "hidden": false,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 9,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "quiz_progress",
+        "table": "employee_course",
+        "data_type": "float",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "completed",
+      "type": "boolean",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "completed",
+        "group": null,
+        "hidden": false,
+        "interface": "boolean",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": true,
+        "sort": 10,
+        "special": [
+          "cast-boolean"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "completed",
+        "table": "employee_course",
+        "data_type": "boolean",
+        "default_value": false,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "employee",
+      "type": "string",
+      "meta": {
+        "collection": "employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "employee",
+        "group": null,
+        "hidden": false,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 6,
+        "special": [
+          "m2o"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "employee",
+        "table": "employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "id",
+      "type": "uuid",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "id",
+        "group": null,
+        "hidden": true,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 1,
+        "special": [
+          "uuid"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "id",
+        "table": "employee_search",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": false,
+        "is_unique": true,
+        "is_primary_key": true,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "user_created",
+      "type": "string",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": "user",
+        "display_options": null,
+        "field": "user_created",
+        "group": null,
+        "hidden": true,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "readonly": true,
+        "required": false,
+        "sort": 2,
+        "special": [
+          "user-created"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "user_created",
+        "table": "employee_search",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "field": "date_created",
+        "group": null,
+        "hidden": true,
+        "interface": "datetime",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 3,
+        "special": [
+          "cast-timestamp",
+          "date-created"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "date_created",
+        "table": "employee_search",
+        "data_type": "datetime",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "user_updated",
+      "type": "string",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": "user",
+        "display_options": null,
+        "field": "user_updated",
+        "group": null,
+        "hidden": true,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
+          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+        },
+        "readonly": true,
+        "required": false,
+        "sort": 4,
+        "special": [
+          "user-updated"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "user_updated",
+        "table": "employee_search",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": "datetime",
+        "display_options": {
+          "relative": true
+        },
+        "field": "date_updated",
+        "group": null,
+        "hidden": true,
+        "interface": "datetime",
+        "note": null,
+        "options": null,
+        "readonly": true,
+        "required": false,
+        "sort": 5,
+        "special": [
+          "cast-timestamp",
+          "date-updated"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "half"
+      },
+      "schema": {
+        "name": "date_updated",
+        "table": "employee_search",
+        "data_type": "datetime",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "search",
+      "type": "string",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "search",
+        "group": null,
+        "hidden": false,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": true,
+        "sort": 7,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "search",
+        "table": "employee_search",
+        "data_type": "varchar",
+        "default_value": null,
+        "max_length": 255,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "employee",
+      "type": "string",
+      "meta": {
+        "collection": "employee_search",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "employee",
+        "group": null,
+        "hidden": false,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": true,
+        "sort": 6,
+        "special": [
+          "m2o"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "employee",
+        "table": "employee_search",
+        "data_type": "varchar",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": false,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id"
+      }
+    },
+    {
       "collection": "level",
       "field": "id",
       "type": "uuid",
@@ -1809,6 +2673,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -1902,6 +2769,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -2081,6 +2951,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -2174,6 +3047,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -2651,6 +3527,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -2744,6 +3623,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -2947,7 +3829,34 @@
                 "interface": null
               }
             }
-          ]
+          ],
+          "options": {
+            "fields": [
+              {
+                "field": "id",
+                "name": "id",
+                "type": "string",
+                "meta": {
+                  "field": "id",
+                  "width": "half",
+                  "type": "string",
+                  "note": null,
+                  "interface": null
+                }
+              },
+              {
+                "field": "label",
+                "name": "label",
+                "type": "string",
+                "meta": {
+                  "field": "label",
+                  "width": "half",
+                  "type": "string",
+                  "interface": null
+                }
+              }
+            ]
+          }
         },
         "readonly": false,
         "required": false,
@@ -3121,6 +4030,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -3214,6 +4126,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -3558,7 +4473,23 @@
               "text": "Wait",
               "value": "wait"
             }
-          ]
+          ],
+          "options": {
+            "choices": [
+              {
+                "text": "Active",
+                "value": "active"
+              },
+              {
+                "text": "Offline",
+                "value": "offline"
+              },
+              {
+                "text": "Wait",
+                "value": "wait"
+              }
+            ]
+          }
         },
         "readonly": false,
         "required": false,
@@ -3602,6 +4533,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -3695,6 +4629,9 @@
         "interface": "select-dropdown-m2o",
         "note": null,
         "options": {
+          "options": {
+            "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
+          },
           "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
         },
         "readonly": true,
@@ -3965,7 +4902,19 @@
               "text": "Female",
               "value": "f"
             }
-          ]
+          ],
+          "options": {
+            "choices": [
+              {
+                "text": "Male",
+                "value": "m"
+              },
+              {
+                "text": "Female",
+                "value": "f"
+              }
+            ]
+          }
         },
         "readonly": false,
         "required": false,
@@ -4051,7 +5000,10 @@
         "interface": "datetime",
         "note": null,
         "options": {
-          "includeSeconds": true
+          "includeSeconds": true,
+          "options": {
+            "includeSeconds": true
+          }
         },
         "readonly": false,
         "required": false,
@@ -4122,724 +5074,6 @@
         "has_auto_increment": false,
         "foreign_key_table": "directus_files",
         "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "id",
-      "type": "uuid",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "id",
-        "group": null,
-        "hidden": true,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 1,
-        "special": [
-          "uuid"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "id",
-        "table": "user_course",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": false,
-        "is_unique": true,
-        "is_primary_key": true,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user_created",
-      "type": "string",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": "user",
-        "display_options": null,
-        "field": "user_created",
-        "group": null,
-        "hidden": true,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": {
-          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
-        },
-        "readonly": true,
-        "required": false,
-        "sort": 2,
-        "special": [
-          "user-created"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "user_created",
-        "table": "user_course",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "date_created",
-      "type": "timestamp",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": "datetime",
-        "display_options": {
-          "relative": true
-        },
-        "field": "date_created",
-        "group": null,
-        "hidden": true,
-        "interface": "datetime",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 3,
-        "special": [
-          "cast-timestamp",
-          "date-created"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "date_created",
-        "table": "user_course",
-        "data_type": "datetime",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user_updated",
-      "type": "string",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": "user",
-        "display_options": null,
-        "field": "user_updated",
-        "group": null,
-        "hidden": true,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": {
-          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
-        },
-        "readonly": true,
-        "required": false,
-        "sort": 4,
-        "special": [
-          "user-updated"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "user_updated",
-        "table": "user_course",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "date_updated",
-      "type": "timestamp",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": "datetime",
-        "display_options": {
-          "relative": true
-        },
-        "field": "date_updated",
-        "group": null,
-        "hidden": true,
-        "interface": "datetime",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 5,
-        "special": [
-          "cast-timestamp",
-          "date-updated"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "date_updated",
-        "table": "user_course",
-        "data_type": "datetime",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user",
-      "type": "string",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "user",
-        "group": null,
-        "hidden": false,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": false,
-        "sort": 6,
-        "special": [
-          "m2o"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "user",
-        "table": "user_course",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "user",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "course",
-      "type": "string",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "course",
-        "group": null,
-        "hidden": false,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": false,
-        "sort": 7,
-        "special": [
-          "m2o"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "course",
-        "table": "user_course",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "course",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "section_progress",
-      "type": "float",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "section_progress",
-        "group": null,
-        "hidden": false,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": false,
-        "sort": 8,
-        "special": null,
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "section_progress",
-        "table": "user_course",
-        "data_type": "float",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "quiz_progress",
-      "type": "float",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "quiz_progress",
-        "group": null,
-        "hidden": false,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": false,
-        "sort": 9,
-        "special": null,
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "quiz_progress",
-        "table": "user_course",
-        "data_type": "float",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "completed",
-      "type": "boolean",
-      "meta": {
-        "collection": "user_course",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "completed",
-        "group": null,
-        "hidden": false,
-        "interface": "boolean",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": true,
-        "sort": 10,
-        "special": [
-          "cast-boolean"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "completed",
-        "table": "user_course",
-        "data_type": "boolean",
-        "default_value": false,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "id",
-      "type": "uuid",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "id",
-        "group": null,
-        "hidden": true,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 1,
-        "special": [
-          "uuid"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "id",
-        "table": "user_search",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": false,
-        "is_unique": true,
-        "is_primary_key": true,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "user_created",
-      "type": "string",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": "user",
-        "display_options": null,
-        "field": "user_created",
-        "group": null,
-        "hidden": true,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": {
-          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
-        },
-        "readonly": true,
-        "required": false,
-        "sort": 2,
-        "special": [
-          "user-created"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "user_created",
-        "table": "user_search",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "date_created",
-      "type": "timestamp",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": "datetime",
-        "display_options": {
-          "relative": true
-        },
-        "field": "date_created",
-        "group": null,
-        "hidden": true,
-        "interface": "datetime",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 3,
-        "special": [
-          "cast-timestamp",
-          "date-created"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "date_created",
-        "table": "user_search",
-        "data_type": "datetime",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "user_updated",
-      "type": "string",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": "user",
-        "display_options": null,
-        "field": "user_updated",
-        "group": null,
-        "hidden": true,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": {
-          "template": "{{avatar.$thumbnail}} {{first_name}} {{last_name}}"
-        },
-        "readonly": true,
-        "required": false,
-        "sort": 4,
-        "special": [
-          "user-updated"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "user_updated",
-        "table": "user_search",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "date_updated",
-      "type": "timestamp",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": "datetime",
-        "display_options": {
-          "relative": true
-        },
-        "field": "date_updated",
-        "group": null,
-        "hidden": true,
-        "interface": "datetime",
-        "note": null,
-        "options": null,
-        "readonly": true,
-        "required": false,
-        "sort": 5,
-        "special": [
-          "cast-timestamp",
-          "date-updated"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "half"
-      },
-      "schema": {
-        "name": "date_updated",
-        "table": "user_search",
-        "data_type": "datetime",
-        "default_value": null,
-        "max_length": null,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "search",
-      "type": "string",
-      "meta": {
-        "collection": "user_search",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "search",
-        "group": null,
-        "hidden": false,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": true,
-        "sort": 6,
-        "special": null,
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "search",
-        "table": "user_search",
-        "data_type": "varchar",
-        "default_value": null,
-        "max_length": 255,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
       }
     }
   ],
@@ -5088,6 +5322,206 @@
         "table": "employee",
         "column": "user_updated",
         "foreign_key_table": "directus_users",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee",
+      "field": "image",
+      "related_collection": "directus_files",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee",
+        "many_field": "image",
+        "one_allowed_collections": null,
+        "one_collection": "directus_files",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee",
+        "column": "image",
+        "foreign_key_table": "directus_files",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "user_created",
+      "related_collection": "directus_users",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_course",
+        "many_field": "user_created",
+        "one_allowed_collections": null,
+        "one_collection": "directus_users",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_course",
+        "column": "user_created",
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "user_updated",
+      "related_collection": "directus_users",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_course",
+        "many_field": "user_updated",
+        "one_allowed_collections": null,
+        "one_collection": "directus_users",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_course",
+        "column": "user_updated",
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "course",
+      "related_collection": "course",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_course",
+        "many_field": "course",
+        "one_allowed_collections": null,
+        "one_collection": "course",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_course",
+        "column": "course",
+        "foreign_key_table": "course",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
+      "collection": "employee_course",
+      "field": "employee",
+      "related_collection": "employee",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_course",
+        "many_field": "employee",
+        "one_allowed_collections": null,
+        "one_collection": "employee",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_course",
+        "column": "employee",
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "user_created",
+      "related_collection": "directus_users",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_search",
+        "many_field": "user_created",
+        "one_allowed_collections": null,
+        "one_collection": "directus_users",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_search",
+        "column": "user_created",
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "user_updated",
+      "related_collection": "directus_users",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_search",
+        "many_field": "user_updated",
+        "one_allowed_collections": null,
+        "one_collection": "directus_users",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_search",
+        "column": "user_updated",
+        "foreign_key_table": "directus_users",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee_search",
+      "field": "employee",
+      "related_collection": "employee",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "employee_search",
+        "many_field": "employee",
+        "one_allowed_collections": null,
+        "one_collection": "employee",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_search",
+        "column": "employee",
+        "foreign_key_table": "employee",
         "foreign_key_column": "id",
         "constraint_name": null,
         "on_update": "NO ACTION",
@@ -5467,156 +5901,6 @@
         "constraint_name": null,
         "on_update": "NO ACTION",
         "on_delete": "SET NULL"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user_created",
-      "related_collection": "directus_users",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_course",
-        "many_field": "user_created",
-        "one_allowed_collections": null,
-        "one_collection": "directus_users",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_course",
-        "column": "user_created",
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "NO ACTION"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user_updated",
-      "related_collection": "directus_users",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_course",
-        "many_field": "user_updated",
-        "one_allowed_collections": null,
-        "one_collection": "directus_users",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_course",
-        "column": "user_updated",
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "NO ACTION"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "user",
-      "related_collection": "user",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_course",
-        "many_field": "user",
-        "one_allowed_collections": null,
-        "one_collection": "user",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_course",
-        "column": "user",
-        "foreign_key_table": "user",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "SET NULL"
-      }
-    },
-    {
-      "collection": "user_course",
-      "field": "course",
-      "related_collection": "course",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_course",
-        "many_field": "course",
-        "one_allowed_collections": null,
-        "one_collection": "course",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_course",
-        "column": "course",
-        "foreign_key_table": "course",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "SET NULL"
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "user_created",
-      "related_collection": "directus_users",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_search",
-        "many_field": "user_created",
-        "one_allowed_collections": null,
-        "one_collection": "directus_users",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_search",
-        "column": "user_created",
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "NO ACTION"
-      }
-    },
-    {
-      "collection": "user_search",
-      "field": "user_updated",
-      "related_collection": "directus_users",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "user_search",
-        "many_field": "user_updated",
-        "one_allowed_collections": null,
-        "one_collection": "directus_users",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "user_search",
-        "column": "user_updated",
-        "foreign_key_table": "directus_users",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "NO ACTION"
       }
     }
   ]
