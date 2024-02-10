@@ -12,7 +12,7 @@ import { pushFixture } from './commands/pushFixture.js';
 import { pullAc } from './commands/pullAc.js';
 import { pushAc } from './commands/pushAc.js';
 
-export function run() {
+export function runCli() {
   const ctx = new AppContext();
 
   const program = new Command();

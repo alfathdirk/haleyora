@@ -1,4 +1,11 @@
-import { createFlows, createOperations, deleteFlows, readFlows } from '@directus/sdk';
+import {
+  createFlows,
+  createOperations,
+  deleteFlows,
+  deleteOperations,
+  readFlows,
+  readOperations,
+} from '@directus/sdk';
 import { Client } from '../Client.js';
 import { Config } from '../Config.js';
 import fs from 'fs-extra';
@@ -16,6 +23,12 @@ async function writeRemote(client: Client, flows: any, operations: any) {
   const existingFlowIds = existingFlows.map((flow) => flow.id);
   if (existingFlowIds.length > 0) {
     await client.request(deleteFlows(existingFlowIds));
+  }
+
+  const existingOperations = await client.request(readOperations());
+  const existingOperationIds = existingOperations.map((operation) => operation.id);
+  if (existingOperationIds.length > 0) {
+    await client.request(deleteOperations(existingOperationIds));
   }
 
   await client.request(createFlows(flows));

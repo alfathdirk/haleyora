@@ -1,4 +1,11 @@
-import { createPermission, createRole, readPermissions, readRoles, updatePermission, updateRole } from '@directus/sdk';
+import {
+  createPermission,
+  createRole,
+  readPermissions,
+  readRoles,
+  updatePermission,
+  updateRole,
+} from '@directus/sdk';
 import { Client } from '../Client.js';
 import { Config } from '../Config.js';
 import path from 'path';
@@ -43,9 +50,14 @@ async function syncPermissions(permissions: Permission[], client: Client) {
 
 async function syncRoles(roles: Role[], client: Client) {
   const remoteRoles = await client.request(readRoles());
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  remoteRoles.forEach((remoteRole: any) => {
+    delete remoteRole.users;
+  });
 
   for (const role of roles) {
-    const remoteRole = remoteRoles.find((remoteRole) => remoteRole.id === role.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const remoteRole: any = remoteRoles.find((remoteRole) => remoteRole.id === role.id);
     if (!remoteRole) {
       await client.request(createRole(role));
       continue;

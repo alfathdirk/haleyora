@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "field": "id",
+      "name": "id",
+      "type": "string",
+      "meta": {
+        "field": "id",
+        "width": "half",
+        "type": "string",
+        "note": null,
+        "interface": null
+      }
+    },
+    {
+      "field": "label",
+      "name": "label",
+      "type": "string",
+      "meta": {
+        "field": "label",
+        "width": "half",
+        "type": "string",
+        "interface": null
+      }
+    }
+  ]
+}

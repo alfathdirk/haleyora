@@ -5,16 +5,38 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
     "dev": "docker compose up",
+    "dev:up": "docker compose up -d",
+    "dev:down": "docker compose down",
+    "dev:logs": "docker compose logs -f directus",
     "dev:pull": "devtool pull",
     "dev:push": "devtool push",
+    "dev:test": "wireit",
+    "dev:clean": "rm -rf ./database ./uploads",
     "devtool": "devtool",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devtool:run": "wireit"
+  },
+  "wireit": {
+    "dev:test": {
+      "command": "node --loader ts-node/esm ./src/test/cli.ts",
+      "files": [
+        "./extensions",
+        "./src"
+      ]
+    },
+    "devtool:run": {
+      "command": "devtool",
+      "files": [
+        "./src"
+      ]
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@directus/sdk": "^14.0.0",
     "@roh/devtool": "workspace:^"
   }
 }

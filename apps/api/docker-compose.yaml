@@ -6,7 +6,8 @@ services:
       - 8025:8025
       - 1025:1025
   directus:
-    image: directus/directus:10.8.3
+    image: directus/directus:10.9.0
+    # image: directus/directus:10.8.3
     # build: ./
     ports:
       - 8055:8055

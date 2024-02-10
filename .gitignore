@@ -70,3 +70,6 @@ coverage
 
 # build
 dist
+
+# wireit
+.wireit
