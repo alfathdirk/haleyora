@@ -27,4 +27,5 @@ services:
       EMAIL_SMTP_HOST: "mailhog"
       EMAIL_SMTP_PORT: 1025
       CORS_ENABLED: true
+      CORS_ORIGIN: true
       EXTENSIONS_AUTO_RELOAD: true

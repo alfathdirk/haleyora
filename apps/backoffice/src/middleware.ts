@@ -22,22 +22,15 @@ const searchRole = (routesConfig: RouteConfig[], role: string) => {
 
 
 export default function middleware(request: NextRequest) {
-  // const authSession = request.cookies.get('auth')?.value;
+  const authSession = request.cookies.get('auth')?.value;
 
-  // if(authSession) {
-  //   let userData = JSON.parse(authSession) as UserData;
-  //   let allowedPath = searchRole(routeConfig, userData.role)
-
-  //   if(!allowedPath.includes(request.nextUrl.pathname) && !publicRoutes.includes(request.nextUrl.pathname) && authSession) {
-  //     return NextResponse.redirect(new URL('/login', request.url))
-  //   }
-  // }
-
-  // if (!publicRoutes.includes(request.nextUrl.pathname) && !authSession) {
-  //   return NextResponse.redirect(new URL('/login', request.url))
-  // }
-
-
+  if(authSession) {
+    let userData = JSON.parse(authSession) as UserData;
+    let allowedPath = searchRole(routeConfig, userData.role)
+    if(!allowedPath.includes(request.nextUrl.pathname) && !publicRoutes.includes(request.nextUrl.pathname) && authSession) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
   return NextResponse.next()
 }
 
