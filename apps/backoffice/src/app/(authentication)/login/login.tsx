@@ -37,7 +37,7 @@ export default function Login() {
 
     setSubmitting(true);
     try {
-      await login("admin@example.com", "1");
+      await login("alfath@example.com", "a");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

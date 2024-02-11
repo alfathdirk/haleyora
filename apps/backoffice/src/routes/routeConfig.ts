@@ -28,7 +28,7 @@ export const routeConfig: RouteConfig[] = [
   {
     path: '/',
     exact: true,
-    roles: ['e378a240-d535-4f57-b1bc-7c08c8ab7c12', 'staff'],
+    roles: ['e378a240-d535-4f57-b1bc-7c08c8ab7c12', '56828232-5ad4-4318-8f35-21bad6e7a981'],
     groupLabel: 'Main Menu',
     label: 'Dashboard',
     icon: './assets/svg/category.svg'
@@ -43,7 +43,7 @@ export const routeConfig: RouteConfig[] = [
   {
     path: '/lesson',
     exact: true,
-    roles: ['e378a240-d535-4f57-b1bc-7c08c8ab7c12', 'staff'],
+    roles: ['e378a240-d535-4f57-b1bc-7c08c8ab7c12', '56828232-5ad4-4318-8f35-21bad6e7a981'],
     label: 'Lesson',
     icon: './assets/svg/book-saved.svg'
   },

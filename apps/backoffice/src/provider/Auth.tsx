@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: Props) => {
   const checkCurrentUser = async () => {
     try {
       const result = await client.request(readMe());
-      console.log(result)
+      console.log('>>',result)
       if (result) {
         setCurrentUser(result as UserData)
         setCookie('auth', JSON.stringify(result), { path: '/' });
