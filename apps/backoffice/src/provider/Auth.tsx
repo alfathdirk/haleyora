@@ -1,5 +1,5 @@
 'use client'
-import { deleteCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { DirectusContext } from './Directus';
@@ -18,27 +18,30 @@ interface Props {
 
 export interface UserData {
   id: string;
-    first_name: string | null;
-    last_name: string | null;
-    email: string | null;
-    password: string | null;
-    location: string | null;
-    title: string | null;
-    description: string | null;
-    tags: string[] | null;
-    avatar:  string | null;
-    language: string | null;
-    theme: string | null;
-    tfa_secret: string | null;
-    status: string;
-    role: string;
-    token: string | null;
-    last_access: 'datetime' | null;
-    last_page: string | null;
-    provider: string;
-    external_identifier: string | null;
-    auth_data: Record<string, any> | null;
-    email_notifications: boolean | null;
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  password: string | null;
+  location: string | null;
+  title: string | null;
+  description: string | null;
+  tags: string[] | null;
+  avatar:  string | null;
+  language: string | null;
+  theme: string | null;
+  tfa_secret: string | null;
+  status: string;
+  role: {
+    id: string;
+    name: string;
+  } | null;
+  token: string | null;
+  last_access: 'datetime' | null;
+  last_page: string | null;
+  provider: string;
+  external_identifier: string | null;
+  auth_data: Record<string, any> | null;
+  email_notifications: boolean | null;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -56,23 +59,25 @@ export const AuthProvider = ({ children }: Props) => {
 
   const checkCurrentUser = async () => {
     try {
-      const result = await client.request(readMe());
-      console.log('>>',result)
+      const result = await client.request(readMe({ fields: ['*.*'] }));
       if (result) {
-        setCurrentUser(result as UserData)
-        setCookie('auth', JSON.stringify(result), { path: '/' });
+        setCurrentUser(result as unknown as UserData)
+        setIsAuthenticated(true);
+        return true
       }
+      setIsAuthenticated(false)
+      return false
     } catch (error) {
-
+      setIsAuthenticated(false)
     }
   }
 
   const login = async (username: string, password: string) => {
     let result = await client.login(username, password);
     if (result) {
-      await checkCurrentUser()
-      setIsAuthenticated(true);
-      router.push('/');
+      setCookie('auth', JSON.stringify({ accessToken: result.access_token }), { path: '/' });
+      checkCurrentUser()
+      router.replace('/')
     }
   };
 
@@ -80,23 +85,16 @@ export const AuthProvider = ({ children }: Props) => {
     deleteCookie('auth');
     client.logout();
     setIsAuthenticated(false);
-    router.push('/login');
+    router.replace('/login')
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        let response = await client.refresh();
-        if (response) {
-          setIsAuthenticated(true);
-          await checkCurrentUser()
-        }
-      } catch (error) {
-        console.warn('belum login gais > ', error)
-        setIsAuthenticated(false);
-        return router.push('/login');
-      }
-    })();
+    let cookie = getCookie('auth');
+    if(!cookie) {
+      router.replace('/login')
+      return;
+    }
+    checkCurrentUser()
   }, [])
 
   return (
