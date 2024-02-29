@@ -1,7 +1,7 @@
 "use client ";
 
-import { Image } from "react-bootstrap";
 import HeaderProfileNav from "../Dashboard/Header/HeaderProfileNav";
+import Image from "next/image";
 
 type Props = {
   title: string;
@@ -13,64 +13,36 @@ export default function CommentListCard(props: Props) {
 
   return (
     <>
-      <div
-        className="d-flex justify-content-between border border-2 rounded"
-        style={{
-          marginBottom: "12px",
-          paddingBottom: "10px",
-          paddingTop: "10px",
-          paddingLeft: "50px",
-          paddingRight: "50px",
-        }}
-      >
-        <div className="d-flex" style={{ paddingTop: "12px" }}>
+      <div className="d-flex justify-content-between border-2 rounded mb-3 py-3 px-12">
+        <div className="d-flex">
           <Image
             src="./assets/svg/idea.svg"
-            style={{
-              width: "20px",
-              marginRight: "16px",
-              paddingBottom: "12px",
-            }}
             alt=""
+            width={20}
+            height={20}
+            className="mr-4"
           />
           <div>
             <span className="fw-bold">{title}</span>
             <div>
               <div className="d-flex">
-                <p style={{ marginRight: "4px" }}>{date} by </p>
+                <p className="mr-1">{date} by </p>
                 <p className="fw-bold">{author}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="d-flex align-items-center ">
-          <p
-            className="fw-semibold"
-            style={{
-              color: "#4BA665",
-              backgroundColor: "#E8F2EB",
-              paddingLeft: "60px",
-              paddingRight: "60px",
-              paddingTop: "8px",
-              paddingBottom: "8px",
-              borderRadius: "50px",
-              marginTop: "12px",
-              cursor: "pointer",
-            }}
-          >
+          <p className="text-[#4BA665] bg-[#EBF5EE] py-2 px-16 rounded-full font-semibold cursor-pointer">
             View
           </p>
-          <div style={{ marginLeft: "40px", marginRight: "40px" }}>
+          <div className="mx-6">
             <HeaderProfileNav />
           </div>
           <Image
             src="./assets/svg/Comments.svg"
-            style={{
-              width: "20px",
-              marginRight: "10px",
-              paddingBottom: "12px",
-              marginTop: "16px",
-            }}
+            width={20}
+            height={20}
             alt=""
           />
         </div>
