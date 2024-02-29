@@ -1,49 +1,36 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Col, Row, Image, Container } from "react-bootstrap";
+import { Col, Row, Container } from "react-bootstrap";
 import LoginForm from "@/app/(authentication)/login/login";
+import Image from "next/image";
 
 export default function Page() {
   return (
     <Container>
-      <Row>
-        <Col
-          xs={12}
-          md={7}
-          className="d-flex align-items-center justify-content-center"
-        >
+      <div className="flex">
+        <div className="w-[60%] flex justify-center items-center">
           <Image
-            src="./assets/img/general/login-image.png"
-            style={{ width: "530px", height: "550px" }}
-            fluid
+            src="/assets/svg/logo-login.svg"
+            alt="icon-login"
+            width={550}
+            height={550}
           />
-        </Col>
-        <Col
-          xs={12}
-          md={5}
-          className="align-items-center d-flex justify-content-center"
-        >
-          <div className=" w-100">
+        </div>
+        <div className="w-[40%] flex justify-center items-center ">
+          <div className="w-full flex flex-col gap-2">
             <Image
-              src="./assets/img/general/haleyora-logo.png"
-              style={{ width: "200px" }}
-              fluid
+              src="/assets/svg/logo-haleyora.svg"
+              alt="icon-haleyora"
+              width={200}
+              height={10}
             />
-            <h3
-              style={{
-                marginTop: "12px",
-                marginBottom: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              Welcome back
-            </h3>
-            <p style={{ marginBottom: "24px", color: "#787486" }}>
+            <p className="text-3xl font-bold">Welcome back</p>
+            <p className="text-[#787486] mb-8">
               Please enter your email & password
             </p>
             <LoginForm />
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </Container>
   );
 }

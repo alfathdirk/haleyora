@@ -2,42 +2,46 @@
 
 import {
   Alert,
-  Button,
   Col,
   Form,
   FormControl,
   InputGroup,
-  Row,
   Spinner,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { SyntheticEvent, useContext, useEffect, useState } from "react";
-import { deleteCookie, getCookie } from "cookies-next";
-import axios from "axios";
+import { useContext, useState } from "react";
 import Link from "next/link";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import { AuthContext } from "@/provider/Auth";
 import { faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { DirectusContext } from "@/provider/Directus";
-import { readUsers } from "@directus/sdk";
-import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Inputs = {
+  username: string;
+  password: string;
+};
 
 export default function Login() {
   const { login } = useContext(AuthContext);
-  const { client } = useContext(DirectusContext);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
 
-  const loginForm = async (e: SyntheticEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>({
+    defaultValues: {},
+  });
+  const onSubmit: SubmitHandler<Inputs> = (data) => loginForm(data);
 
+  const loginForm = async (value: Inputs) => {
     setSubmitting(true);
     try {
-      await login("alfath@example.com", "a");
+      await login(value.username, value.password);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -46,7 +50,6 @@ export default function Login() {
       setSubmitting(false);
     }
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -61,14 +64,13 @@ export default function Login() {
       >
         {error}
       </Alert>
-      <Form onSubmit={loginForm} style={{ paddingRight: "100px" }}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <InputGroup className="mb-3">
           <InputGroupText>
-            <FontAwesomeIcon img={faUser} fixedWidth />
+            <FontAwesomeIcon icon={faUser} fixedWidth />
           </InputGroupText>
           <FormControl
-            name="username"
-            required
+            {...register("username", { required: true })}
             disabled={submitting}
             placeholder="Username"
             aria-label="Username"
@@ -78,12 +80,11 @@ export default function Login() {
 
         <InputGroup className="mb-3">
           <InputGroupText>
-            <FontAwesomeIcon img={faLock} fixedWidth />
+            <FontAwesomeIcon icon={faLock} fixedWidth />
           </InputGroupText>
           <FormControl
             type={showPassword ? "text" : "password"}
-            name="password"
-            required
+            {...register("password", { required: true })}
             placeholder="Password"
             aria-label="Password"
             defaultValue=""
@@ -92,20 +93,19 @@ export default function Login() {
             style={{ cursor: "pointer" }}
             onClick={togglePasswordVisibility}
           >
-            <FontAwesomeIcon img={showPassword ? faEyeSlash : faEye} />
+            <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
           </InputGroupText>
         </InputGroup>
 
         <Col className="align-items-center">
-          <div className="text-end mb-3 ">
+          <div className="text-end my-4 ">
             <Link className="px-0 text-dark" href="#">
               <p>Forgot password?</p>
             </Link>
           </div>
           <div>
-            <Button
-              className="px-4 py-2 w-100"
-              variant="dark"
+            <button
+              className="text-center py-2 w-full bg-black text-white rounded-md"
               type="submit"
               disabled={submitting}
             >
@@ -116,11 +116,10 @@ export default function Login() {
               ) : (
                 "log in"
               )}
-            </Button>
+            </button>
           </div>
         </Col>
       </Form>
     </>
   );
 }
-
