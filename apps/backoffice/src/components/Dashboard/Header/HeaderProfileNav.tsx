@@ -1,7 +1,5 @@
 import {
-  Badge,
   Dropdown,
-  DropdownDivider,
   DropdownHeader,
   DropdownItem,
   DropdownMenu,
@@ -11,23 +9,10 @@ import {
 } from "react-bootstrap";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBell,
-  faCreditCard,
-  faEnvelopeOpen,
-  faFile,
-  faMessage,
-  faUser,
-} from "@fortawesome/free-regular-svg-icons";
+
 import { PropsWithChildren } from "react";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import {
-  faGear,
-  faListCheck,
-  faLock,
-  faPowerOff,
-} from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
 import HeaderLogout from "@/components/Dashboard/Header/HeaderLogout";
 
 type ItemWithIconProps = {
@@ -39,7 +24,7 @@ const ItemWithIcon = (props: ItemWithIconProps) => {
 
   return (
     <>
-      <FontAwesomeIcon className="me-2" img={icon} fixedWidth />
+      <FontAwesomeIcon className="me-2" icon={icon} fixedWidth />
       {children}
     </>
   );
@@ -65,13 +50,8 @@ export default function HeaderProfileNav() {
             />
           </div>
         </DropdownToggle>
-        <DropdownMenu className="pt-0">
+        <DropdownMenu className="pt-0 mt-2">
           <DropdownHeader className="bg-light fw-bold">Settings</DropdownHeader>
-          <Link href="#" passHref legacyBehavior>
-            <DropdownItem>
-              <ItemWithIcon icon={faLock}>Edit Account</ItemWithIcon>
-            </DropdownItem>
-          </Link>
           <HeaderLogout>
             <DropdownItem>
               <ItemWithIcon icon={faPowerOff}>Logout</ItemWithIcon>
