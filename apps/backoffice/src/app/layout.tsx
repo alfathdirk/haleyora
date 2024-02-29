@@ -9,6 +9,7 @@ import ProgressBar from '@/components/ProgressBar/ProgressBar'
 import { deleteCookie } from 'cookies-next';
 import { AuthProvider } from '@/provider/Auth';
 import { DirectusProvider } from '@/provider/Directus';
+import '@/styles/tailwind.css'
 
 // You change this configuration value to false so that the Font Awesome core SVG library
 // will not try and insert <style> elements into the <head> of the page.
