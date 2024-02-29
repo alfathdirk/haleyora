@@ -3,8 +3,8 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { Image } from "react-bootstrap";
 import { SidebarContext } from "@/components/Dashboard/sidebar-provider";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
@@ -15,20 +15,12 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
     showSidebarMdState: [isShowSidebarMd, setIsShowSidebarMd],
   } = useContext(SidebarContext);
 
-  const toggleIsNarrow = () => {
-    const newValue = !isNarrow;
-    localStorage.setItem("isNarrow", newValue ? "true" : "false");
-    setIsNarrow(newValue);
-  };
-
-  // On first time load only
   useEffect(() => {
     if (localStorage.getItem("isNarrow")) {
       setIsNarrow(localStorage.getItem("isNarrow") === "true");
     }
   }, [setIsNarrow]);
 
-  // On first time load only
   useEffect(() => {
     if (localStorage.getItem("isShowSidebarMd")) {
       setIsShowSidebarMd(localStorage.getItem("isShowSidebarMd") === "true");
@@ -44,28 +36,26 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       })}
       id="sidebar"
     >
-      <Link
-        href="/"
-        className="sidebar-brand d-none d-md-flex align-items-center justify-content-left border-bottom border-right"
-      >
+      <Link href="/" className=" py-2 border-b-2 border-r-2">
         <Image
-          src="./assets/img/general/haleyora-logo.png"
-          style={{ width: "170px", paddingLeft: "20px" }}
-          fluid
+          src="/assets/img/general/haleyora-logo.png"
+          width={160}
+          height={10}
+          alt="haleyora-logo"
+          className="pl-4 my-1 pt-1"
         />
       </Link>
-      <div className="sidebar-nav flex-fill">{children}</div>
+      <div className="sidebar-nav flex-fill border-r-2">{children}</div>
 
-      <div
-        className="px-3 py-2 pt-3 d-flex align-center border-top"
-        style={{ cursor: "pointer" }}
-      >
+      <div className=" cursor-pointer border-r-2 flex p-3 border-t-2">
         <Image
-          src="./assets/svg/setting.svg"
-          style={{ width: "17px", marginRight: "20px" }}
+          src="/assets/svg/setting.svg"
+          width={17}
+          height={100}
           alt=""
+          className="mr-2"
         />
-        <p style={{ marginTop: "12px" }}>Logout</p>
+        <p className="">Logout</p>
       </div>
     </div>
   );

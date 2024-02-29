@@ -2,9 +2,10 @@
 
 import React, { PropsWithChildren, useContext } from "react";
 import { SidebarContext } from "@/components/Dashboard/sidebar-provider";
-import { NavItem, NavLink, Image } from "react-bootstrap";
+import { NavItem, NavLink } from "react-bootstrap";
 import Link from "next/link";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 type Props = {
   href: string;
@@ -33,8 +34,10 @@ export default function SidebarNavItem(props: Props) {
           {icon ? (
             <Image
               src={icon as string}
-              style={{ width: "17px", marginRight: "20px" }}
+              width={17}
+              height={17}
               alt=""
+              className="mr-2"
             />
           ) : (
             <span className="nav-icon ms-n3" />
