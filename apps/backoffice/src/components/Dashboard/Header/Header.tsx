@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 mb-4 py-3 border-b-2">
+    <header className="sticky top-0 mb-4 py-3 border-b-2 bg-white z-10">
       <Container fluid className="header-navbar d-flex align-items-center">
         <HeaderSidebarToggler />
         <Link href="/" className="header-brand d-md-none">

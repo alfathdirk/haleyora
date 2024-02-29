@@ -90,7 +90,7 @@ export default function Login() {
             defaultValue=""
           />
           <InputGroupText
-            style={{ cursor: "pointer" }}
+            className="cursor-pointer"
             onClick={togglePasswordVisibility}
           >
             <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />

@@ -1,22 +1,45 @@
 "use client";
 
 import "chart.js/auto";
+import { ChartOptions } from "chart.js/auto";
 import { Chart } from "react-chartjs-2";
 
-const LessonChart = () => {
+interface Props {
+  data: {
+    status: string;
+    count: number;
+  }[];
+}
+
+const LessonChart = ({ data: d }: Props) => {
   const data = {
     datasets: [
       {
-        data: [32, 25, 25, 18],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#238899"],
+        data: d.map((item) => item.count),
+        backgroundColor: ["#D32C20", "#39B4F3", "#625ED7", "#218191"],
       },
     ],
-    labels: ["Completed", "Exam", "Quiz", "On Going"],
+    labels: d.map((item) => item.status),
+  };
+
+  const options: ChartOptions<"pie"> = {
+    plugins: {
+      legend: {
+        position: "right",
+        display: true,
+        labels: {
+          boxWidth: 15,
+          boxHeight: 15,
+        },
+      },
+    },
+    aspectRatio: 2,
+    responsive: true,
   };
 
   return (
-    <div>
-      <Chart type="pie" data={data} />
+    <div className="p-6">
+      <Chart type="pie" data={data} options={options} />
     </div>
   );
 };
