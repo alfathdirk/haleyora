@@ -32,6 +32,7 @@ export default function EmployeePage() {
   const navigate = useRouter();
   const [data, setData] = useState<EmployeeData[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const exampleData = [
     {
@@ -139,7 +140,11 @@ export default function EmployeePage() {
         <CheckboxTable data={exampleData} columns={columns} />
       </div>
       <div>
-        <Pagination meta={exampleData} />
+        <Pagination
+          totalItems={10}
+          itemsPerPage={2}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

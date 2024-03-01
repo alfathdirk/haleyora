@@ -1,9 +1,14 @@
-import { Image } from "react-bootstrap";
+"use client";
+
+import Image from "next/image";
 import SearchCard from "@/components/Cards/SearchCard";
 import QuestionCard from "@/components/Cards/QuestionCard";
 import Pagination from "@/components/Pagination/Pagination";
+import { useState } from "react";
 
 export default function ExamPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const lessonsData = [
     {
       tittle: "Electric Power Systems Overview",
@@ -32,35 +37,23 @@ export default function ExamPage() {
   ];
   return (
     <div>
-      <h2>Exam page</h2>
-      <div style={{ marginTop: "26px" }}>
-        <div
-          className="d-flex justify-content-between align-items-center "
-          style={{ marginBottom: "24px" }}
-        >
-          <SearchCard />
-          <div className="d-flex">
-            <Image
-              src="./assets/svg/menu-blue.svg"
-              style={{ width: "36px", marginRight: "24px" }}
-              alt=""
-            />
-            <Image
-              src="./assets/svg/menu.svg"
-              style={{ width: "24px" }}
-              alt=""
-            />
-          </div>
+      <p className="font-semibold text-2xl mb-6">Exam page</p>
+      <div className="d-flex justify-content-between align-items-center mb-8">
+        <SearchCard onSearch={() => {}} />
+        <div className="flex gap-3">
+          <Image
+            src="./assets/svg/menu-blue.svg"
+            width={36}
+            height={36}
+            alt=""
+          />
+          <Image src="./assets/svg/menu.svg" width={24} height={24} alt="" />
         </div>
       </div>
-      <div style={{ paddingTop: "16px" }}>
+      <div>
         <div className="row">
           {lessonsData.map((lesson, index) => (
-            <div
-              key={index}
-              className="col-md-6"
-              style={{ marginBottom: "50px" }}
-            >
+            <div key={index} className="col-md-6 mb-8">
               <QuestionCard
                 tittle={lesson.tittle}
                 date={lesson.date}
@@ -77,7 +70,11 @@ export default function ExamPage() {
         </div>
       </div>
       <div>
-        <Pagination meta={lessonsData} />
+        <Pagination
+          totalItems={10}
+          itemsPerPage={2}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

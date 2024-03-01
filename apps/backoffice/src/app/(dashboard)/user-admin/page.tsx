@@ -149,7 +149,7 @@ export default function UserAdminPage() {
           </div>
         </div>
       </div>
-      <div style={{ marginBottom: "24px" }}>
+      <div className="mb-6">
         <CheckboxTable data={exampleData} columns={[]} />
       </div>
       <div>
