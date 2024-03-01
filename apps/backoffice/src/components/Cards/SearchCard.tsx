@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, ChangeEvent } from "react";
 import { Form, FormControl, InputGroup } from "react-bootstrap";
 import Image from "next/image";

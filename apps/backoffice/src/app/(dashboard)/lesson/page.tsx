@@ -9,6 +9,8 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function LessonPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const lessonsData = [
     {
       pic: "/assets/img/general/example-lessons-pic.png",
@@ -91,8 +93,6 @@ export default function LessonPage() {
       author: "Danaya",
     },
   ];
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div>
