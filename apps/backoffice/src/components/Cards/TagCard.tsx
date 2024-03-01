@@ -22,7 +22,7 @@ export default function TagCard(props: Props) {
             alt=""
           />
         </div>
-        <p className="mr-4 ml-2">{label}</p>
+        <p className="mr-4 ml-2 capitalize">{label}</p>
       </div>
     </>
   );

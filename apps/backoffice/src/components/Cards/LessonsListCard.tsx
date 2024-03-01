@@ -2,6 +2,7 @@
 "use client ";
 
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   pic: string;
@@ -10,21 +11,25 @@ type Props = {
   tittle: string;
   avatar: string;
   author: string;
+  id: string;
 };
 export default function LessonsListCard(props: Props) {
-  const { pic, author, avatar, date, tittle, totalStudent } = props;
+  const { pic, author, avatar, date, tittle, totalStudent, id } = props;
 
   return (
     <>
-      <div className="shadow border w-[full] rounded-xl">
+      <Link
+        href={`/lesson/section?id=${id}`}
+        className="shadow border w-[full] rounded-xl cursor-pointer"
+      >
         <Image src={pic} width={240} height={100} alt="image" />
         <div className="p-2 flex flex-col justify-between">
           <div className="flex justify-between items-center text-[#878787] my-2">
             <div className="flex items-center gap-1">
               <Image
                 src="./assets/svg/users.svg"
-                width={12}
-                height={4}
+                width={18}
+                height={0}
                 alt="image"
               />
               <p className="text-xs font-semibold">{totalStudent}</p>
@@ -32,11 +37,11 @@ export default function LessonsListCard(props: Props) {
             <div className="flex items-center gap-1">
               <Image
                 src="./assets/svg/time.svg"
-                width={12}
-                height={4}
+                width={18}
+                height={0}
                 alt="image"
               />
-              <p className="text-xs font-semibold">{date}</p>
+              <p className="text-xs font-semibold capitalize">{date}</p>
             </div>
           </div>
           <div className="mb-4">
@@ -64,7 +69,7 @@ export default function LessonsListCard(props: Props) {
             </p>
           </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 }
