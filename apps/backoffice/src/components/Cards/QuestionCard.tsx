@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client ";
 
-import { Button, Form, Image, Spinner } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import Image from "next/image";
 
 type Props = {
   tittle: string;
@@ -29,75 +30,53 @@ export default function QuestionCard(props: Props) {
 
   return (
     <>
-      <div
-        className=" justify-content-center border border-2 p-3"
-        style={{ borderRadius: "20px", backgroundColor: "white" }}
-      >
-        <h4 style={{ fontWeight: "bold" }}>{tittle}</h4>
-        <div
-          className="d-flex align-items-center"
-          style={{ borderBottom: "2px solid #D9DBE9" }}
-        >
-          <Image
-            src="./assets/svg/date-black.svg"
-            style={{ marginRight: "6px" }}
-          />
-          <p style={{ paddingTop: "14px", marginRight: "24px" }}>{date}</p>
-          <Image
-            src="./assets/svg/time-black.svg"
-            style={{ marginRight: "6px" }}
-          />
-          <p style={{ paddingTop: "14px", marginRight: "6px" }}>{time}</p>
-        </div>
-        <div className="row" style={{ marginTop: "12px" }}>
-          <div className="col-md-6">
-            <p style={{ fontWeight: "bold" }}>Duration(Minutes)</p>
-            <p
-              className="p-3 rounded"
-              style={{ backgroundColor: "#F5F6F7", marginTop: "-12px" }}
-            >
-              {duration}
-            </p>
-            <p style={{ fontWeight: "bold" }}>Number of Question</p>
-            <p
-              className="p-3 rounded"
-              style={{ backgroundColor: "#F5F6F7", marginTop: "-12px" }}
-            >
-              {numberOfQuestion}
-            </p>
-            <p style={{ fontWeight: "bold" }}>Score of Question</p>
-            <p
-              className="p-3 rounded"
-              style={{ backgroundColor: "#F5F6F7", marginTop: "-12px" }}
-            >
-              {scoreOfQuestion}
-            </p>
+      <div className=" justify-content-center border-2 p-3 bg-white rounded-xl">
+        <p className="text-xl font-semibold">{tittle}</p>
+        <div className="flex my-3 gap-6 pb-3 border-b-2">
+          <div className="flex gap-1 items-center">
+            <Image
+              src="./assets/svg/date-black.svg"
+              width={14}
+              height={14}
+              alt="date"
+            />
+            <p>{date}</p>
           </div>
-          <div className="col-md-6">
-            <p style={{ fontWeight: "bold" }}>Description</p>
-            <p
-              className="p-3 rounded"
-              style={{ backgroundColor: "#F5F6F7", marginTop: "-12px" }}
-            >
-              {description}
+          <div className="flex gap-2 items-center">
+            <Image
+              src="./assets/svg/time-black.svg"
+              width={14}
+              height={14}
+              alt="time"
+            />
+            <p>{time}</p>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-2 w-[50%]">
+            <p className="font-semibold">
+              Duration<span className="text-gray-500">(Minutes)</span>
             </p>
-            <p style={{ fontWeight: "bold" }}>Question Bank Used</p>
-            <p
-              className="p-3 rounded"
-              style={{ backgroundColor: "#F5F6F7", marginTop: "-12px" }}
-            >
-              {questionBank}
-            </p>
+            <p className="p-3 rounded bg-[#F5F6F7] mr-3">{duration}</p>
+            <p className="font-semibold">Number of Question</p>
+            <p className="p-3 rounded bg-[#F5F6F7] mr-3">{numberOfQuestion}</p>
+            <p className="font-semibold">Score of Question</p>
+            <p className="p-3 rounded bg-[#F5F6F7] mr-3">{scoreOfQuestion}</p>
+          </div>
+          <div className="flex flex-col gap-2 w-[50%]">
+            <p className="font-semibold">Description</p>
+            <p className="p-3 rounded bg-[#F5F6F7]">{description}</p>
+            <p className="font-semibold">Question Bank Used</p>
+            <p className="p-3 rounded bg-[#F5F6F7]">{questionBank}</p>
             <div className="d-flex">
               <Form.Check type="checkbox" checked />
-              <p style={{ marginLeft: "10px" }}>Randomize Questions</p>
+              <p className="pl-2">Randomize Questions</p>
             </div>
           </div>
         </div>
-        <div style={{ marginTop: "12px", marginBottom: "12px" }}>
-          <Button
-            className="px-4 py-2 w-100"
-            variant="dark"
+        <div className="mt-6">
+          <button
+            className="py-2 text-white w-full bg-black rounded-md"
             type="submit"
             // disabled={submitting}
           >
@@ -109,7 +88,7 @@ export default function QuestionCard(props: Props) {
               "log in"
             )} */}
             Edit
-          </Button>
+          </button>
         </div>
       </div>
     </>
