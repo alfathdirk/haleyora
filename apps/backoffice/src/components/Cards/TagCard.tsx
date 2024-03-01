@@ -1,6 +1,6 @@
 "use client ";
 
-import { Image } from "react-bootstrap";
+import Image from "next/image";
 
 type Props = {
   label: string;
@@ -12,42 +12,17 @@ export default function TagCard(props: Props) {
   return (
     <>
       <div
-        className="d-flex justify-content-center border border-2"
-        style={{
-          width: "150px",
-          marginRight: "10px",
-          cursor: "pointer",
-          borderRadius: "15px",
-          borderColor: `${color} !important`,
-        }}
+        className={`flex p-1 justify-center items-center border-2 cursor-pointer rounded-xl border-red-500`}
       >
-        <div
-          style={{
-            color: color,
-            backgroundColor: color,
-            width: "34px",
-            height: "34px",
-            borderRadius: "50px",
-            marginTop: "4px",
-          }}
-          className="d-flex justify-content-center"
-        >
+        <div className="p-2 rounded-full bg-red-500">
           <Image
             src="./assets/svg/tags-icon.svg"
-            style={{ width: "17px" }}
+            width={17}
+            height={17}
             alt=""
           />
         </div>
-        <p
-          style={{
-            marginTop: "6px",
-            marginRight: "16px",
-            marginLeft: "16px",
-            height: "20px",
-          }}
-        >
-          {label}
-        </p>
+        <p className="mr-4 ml-2">{label}</p>
       </div>
     </>
   );

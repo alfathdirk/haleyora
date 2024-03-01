@@ -1,8 +1,26 @@
-"use client";
+import { useState, useEffect, ChangeEvent } from "react";
+import { Form, FormControl, InputGroup } from "react-bootstrap";
+import Image from "next/image";
 
-import { Form, FormControl, Image, InputGroup } from "react-bootstrap";
+interface SearchCardProps {
+  onSearch: (searchTerm: string) => void;
+}
 
-export default function SearchCard() {
+const SearchCard: React.FC<SearchCardProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      onSearch(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(delaySearch);
+  }, [searchTerm, onSearch]);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <>
       <Form>
@@ -10,7 +28,8 @@ export default function SearchCard() {
           <InputGroup.Text id="search-icon">
             <Image
               src="./assets/svg/search.svg"
-              style={{ width: "17px" }}
+              width={16}
+              height={16}
               alt=""
             />
           </InputGroup.Text>
@@ -18,10 +37,13 @@ export default function SearchCard() {
             placeholder="Search..."
             aria-label="Search"
             aria-describedby="search-icon"
-            style={{ border: "2px solid #ced4da", borderRadius: "0.375rem" }}
+            className="border-2 border-[#ced4da]"
+            onChange={handleInputChange}
           />
         </InputGroup>
       </Form>
     </>
   );
-}
+};
+
+export default SearchCard;

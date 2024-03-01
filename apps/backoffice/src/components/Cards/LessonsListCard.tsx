@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client ";
 
-import { Image } from "react-bootstrap";
+import Image from "next/image";
 
 type Props = {
   pic: string;
@@ -16,51 +16,50 @@ export default function LessonsListCard(props: Props) {
 
   return (
     <>
-      <div
-        className="shadow border"
-        style={{ width: "220px", borderRadius: "30px" }}
-      >
-        <Image src={pic} style={{ width: "100%" }} />
-        <div className="p-2">
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex " style={{ color: "#878787" }}>
+      <div className="shadow border w-[full] rounded-xl">
+        <Image src={pic} width={240} height={100} alt="image" />
+        <div className="p-2 flex flex-col justify-between">
+          <div className="flex justify-between items-center text-[#878787] my-2">
+            <div className="flex items-center gap-1">
               <Image
                 src="./assets/svg/users.svg"
-                width="12px"
-                style={{ marginBottom: "15px", marginRight: "6px" }}
+                width={12}
+                height={4}
+                alt="image"
               />
-              <p style={{ fontSize: "12px" }}>{totalStudent}</p>
+              <p className="text-xs font-semibold">{totalStudent}</p>
             </div>
-            <div className="d-flex " style={{ color: "#878787" }}>
+            <div className="flex items-center gap-1">
               <Image
                 src="./assets/svg/time.svg"
-                width="12px"
-                style={{ marginBottom: "15px", marginRight: "6px" }}
+                width={12}
+                height={4}
+                alt="image"
               />
-              <p style={{ fontSize: "12px" }}>{date}</p>
+              <p className="text-xs font-semibold">{date}</p>
             </div>
           </div>
-          <div style={{ marginBottom: "20px" }}>
-            <h4>{tittle}</h4>
+          <div className="mb-4">
+            <p className="text-xl font-semibold text-[#515151]">{tittle}</p>
           </div>
-          <div className="d-flex justify-content-between">
-            <div className="d-flex">
+          <div className="d-flex justify-content-between ">
+            <div className="d-flex items-center gap-1">
               <Image
                 className="rounded-circle"
                 src={avatar}
-                width="32px"
-                height="32px"
-                style={{ marginRight: "6px" }}
+                width={25}
+                height={25}
+                alt="image"
               />
-              <p>{author}</p>
+              <p className="text-xs text-[#878787] font-semibold">{author}</p>
             </div>
             <p>
               <Image
                 className="rounded-circle"
-                src="/assets/svg/love.svg"
-                width="30px"
-                height="30px"
-                style={{ marginRight: "6px" }}
+                src="./assets/svg/love.svg"
+                width={20}
+                height={20}
+                alt="image"
               />
             </p>
           </div>
