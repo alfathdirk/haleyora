@@ -19,7 +19,7 @@ export default function LessonsListCard(props: Props) {
   return (
     <>
       <Link
-        href={`/lesson/section?id=${id}`}
+        href={`/lesson/section/${id}`}
         className="shadow border w-[full] rounded-xl cursor-pointer"
       >
         <Image src={pic} width={240} height={100} alt="image" />
