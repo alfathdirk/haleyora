@@ -3,17 +3,19 @@
 
 import { Button, Form } from "react-bootstrap";
 import Image from "next/image";
+import { formatDateTime } from "@/utils/helper";
+import { useState } from "react";
 
 type Props = {
   tittle: string;
   date: string;
-  time: string;
+  time?: string;
   duration: string;
   numberOfQuestion: string;
   scoreOfQuestion: string;
   description: string;
   questionBank: string;
-  randomize: boolean;
+  randomize: boolean | undefined;
 };
 export default function QuestionCard(props: Props) {
   const {
@@ -22,11 +24,15 @@ export default function QuestionCard(props: Props) {
     duration,
     numberOfQuestion,
     questionBank,
-    randomize,
     scoreOfQuestion,
     time,
     tittle,
   } = props;
+  const [randomize, setRandomize] = useState(true);
+
+  const handleCheckboxChange = (e: any) => {
+    setRandomize(e.target.checked);
+  };
 
   return (
     <>
@@ -40,17 +46,17 @@ export default function QuestionCard(props: Props) {
               height={14}
               alt="date"
             />
-            <p>{date}</p>
+            <p>{formatDateTime(date, true)}</p>
           </div>
-          <div className="flex gap-2 items-center">
+          {/* <div className="flex gap-2 items-center">
             <Image
               src="./assets/svg/time-black.svg"
               width={14}
               height={14}
               alt="time"
             />
-            <p>{time}</p>
-          </div>
+            <p>{time}</p> 
+          </div>*/}
         </div>
         <div className="flex justify-between">
           <div className="flex flex-col gap-2 w-[50%]">
@@ -69,7 +75,11 @@ export default function QuestionCard(props: Props) {
             <p className="font-semibold">Question Bank Used</p>
             <p className="p-3 rounded bg-[#F5F6F7]">{questionBank}</p>
             <div className="d-flex">
-              <Form.Check type="checkbox" checked />
+              <Form.Check
+                type="checkbox"
+                checked={randomize}
+                onChange={handleCheckboxChange}
+              />
               <p className="pl-2">Randomize Questions</p>
             </div>
           </div>

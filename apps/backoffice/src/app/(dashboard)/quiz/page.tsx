@@ -4,11 +4,30 @@ import Image from "next/image";
 import SearchCard from "@/components/Cards/SearchCard";
 import QuestionCard from "@/components/Cards/QuestionCard";
 import Pagination from "@/components/Pagination/Pagination";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DirectusContext } from "@/provider/Directus";
+import { readItems } from "@directus/sdk";
+
+export interface QuizData {
+  id: string;
+  randomize?: boolean;
+  score_per_question: string;
+  title: string;
+  description: string;
+  duration: string;
+  user_created: { last_access: string };
+  question_bank: string;
+  course: [];
+}
 
 export default function QuizPage() {
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [loading, setLoading] = useState(false);
+  const { client } = useContext(DirectusContext);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<string | null>("");
+  const [dataQuis, setDataQuis] = useState<QuizData[]>([]);
   const lessonsData = [
     {
       tittle: "Electric Power Systems Overview",
@@ -35,6 +54,28 @@ export default function QuizPage() {
       duration: "10 minutes",
     },
   ];
+
+  const getQuis = async () => {
+    try {
+      setLoading(true);
+      const result = (await client.request(
+        readItems("quiz", {
+          fields: ["*", "course.*", "user_created.*"],
+        })
+      )) as unknown as QuizData[];
+
+      setLoading(false);
+      setDataQuis(result);
+      console.log("dataQuis:", dataQuis);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getQuis();
+  }, []);
+
   return (
     <div>
       <p className="font-semibold text-2xl mb-6">Quiz page</p>
@@ -52,18 +93,17 @@ export default function QuizPage() {
       </div>
       <div>
         <div className="row">
-          {lessonsData.map((lesson, index) => (
+          {dataQuis.map((lesson, index) => (
             <div key={index} className="col-md-6 mb-8">
               <QuestionCard
-                tittle={lesson.tittle}
-                date={lesson.date}
-                time={lesson.time}
+                tittle={lesson.title}
+                date={lesson.user_created.last_access}
                 duration={lesson.duration}
-                numberOfQuestion={lesson.numberOfQuestion}
-                scoreOfQuestion={lesson.scoreOfQuestion}
+                numberOfQuestion={lesson.score_per_question}
+                scoreOfQuestion={lesson.score_per_question}
                 description={lesson.description}
-                questionBank={lesson.questionBank}
-                randomize={false}
+                questionBank={lesson.question_bank}
+                randomize={lesson.randomize}
               />
             </div>
           ))}
