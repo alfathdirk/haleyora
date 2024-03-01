@@ -17,11 +17,8 @@ export default function LessonsListCard(props: Props) {
   const { pic, author, avatar, date, tittle, totalStudent, id } = props;
 
   return (
-    <>
-      <Link
-        href={`/lesson/section/${id}`}
-        className="shadow border w-[full] rounded-xl cursor-pointer"
-      >
+    <div className="shadow border w-[full] rounded-xl cursor-pointer">
+      <Link href={`/lesson/section/${id}`}>
         <Image src={pic} width={240} height={100} alt="image" />
         <div className="p-2 flex flex-col justify-between">
           <div className="flex justify-between items-center text-[#878787] my-2">
@@ -70,6 +67,6 @@ export default function LessonsListCard(props: Props) {
           </div>
         </div>
       </Link>
-    </>
+    </div>
   );
 }
