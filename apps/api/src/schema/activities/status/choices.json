@@ -1,0 +1,17 @@
+[
+  {
+    "text": "$t:published",
+    "value": "published",
+    "color": "var(--theme--primary)"
+  },
+  {
+    "text": "$t:draft",
+    "value": "draft",
+    "color": "var(--theme--foreground)"
+  },
+  {
+    "text": "$t:archived",
+    "value": "archived",
+    "color": "var(--theme--warning)"
+  }
+]
