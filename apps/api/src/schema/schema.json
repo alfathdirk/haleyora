@@ -105,7 +105,7 @@
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 7,
+        "sort": 6,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -133,7 +133,7 @@
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 8,
+        "sort": 7,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -245,7 +245,7 @@
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 9,
+        "sort": 8,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -301,7 +301,7 @@
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 6,
+        "sort": 5,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -350,14 +350,14 @@
         "collection": "quiz",
         "color": null,
         "display_template": null,
-        "group": null,
+        "group": "course",
         "hidden": false,
         "icon": null,
         "item_duplication_fields": null,
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 4,
+        "sort": 1,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -378,14 +378,14 @@
         "collection": "quiz_question",
         "color": null,
         "display_template": null,
-        "group": "quiz",
+        "group": "course",
         "hidden": false,
         "icon": null,
         "item_duplication_fields": null,
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 1,
+        "sort": 2,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -441,7 +441,7 @@
         "note": null,
         "preview_url": null,
         "singleton": false,
-        "sort": 5,
+        "sort": 4,
         "sort_field": null,
         "translations": null,
         "unarchive_value": null,
@@ -1873,6 +1873,50 @@
         "has_auto_increment": false,
         "foreign_key_table": null,
         "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "course",
+      "field": "exam_quiz",
+      "type": "string",
+      "meta": {
+        "collection": "course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "exam_quiz",
+        "group": null,
+        "hidden": false,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 19,
+        "special": [
+          "m2o"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "exam_quiz",
+        "table": "course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "quiz",
+        "foreign_key_column": "id"
       }
     },
     {
@@ -5161,50 +5205,6 @@
     },
     {
       "collection": "quiz",
-      "field": "course",
-      "type": "string",
-      "meta": {
-        "collection": "quiz",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "course",
-        "group": null,
-        "hidden": false,
-        "interface": "select-dropdown-m2o",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": true,
-        "sort": 6,
-        "special": [
-          "m2o"
-        ],
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "course",
-        "table": "quiz",
-        "data_type": "char",
-        "default_value": null,
-        "max_length": 36,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": "course",
-        "foreign_key_column": "id"
-      }
-    },
-    {
-      "collection": "quiz",
       "field": "duration",
       "type": "integer",
       "meta": {
@@ -5331,48 +5331,6 @@
     },
     {
       "collection": "quiz",
-      "field": "question_bank",
-      "type": "string",
-      "meta": {
-        "collection": "quiz",
-        "conditions": null,
-        "display": null,
-        "display_options": null,
-        "field": "question_bank",
-        "group": null,
-        "hidden": false,
-        "interface": "input",
-        "note": null,
-        "options": null,
-        "readonly": false,
-        "required": false,
-        "sort": 11,
-        "special": null,
-        "translations": null,
-        "validation": null,
-        "validation_message": null,
-        "width": "full"
-      },
-      "schema": {
-        "name": "question_bank",
-        "table": "quiz",
-        "data_type": "varchar",
-        "default_value": null,
-        "max_length": 255,
-        "numeric_precision": null,
-        "numeric_scale": null,
-        "is_nullable": true,
-        "is_unique": false,
-        "is_primary_key": false,
-        "is_generated": false,
-        "generation_expression": null,
-        "has_auto_increment": false,
-        "foreign_key_table": null,
-        "foreign_key_column": null
-      }
-    },
-    {
-      "collection": "quiz",
       "field": "randomize",
       "type": "boolean",
       "meta": {
@@ -5413,6 +5371,33 @@
         "has_auto_increment": false,
         "foreign_key_table": null,
         "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "quiz",
+      "field": "quiz_question",
+      "type": "alias",
+      "meta": {
+        "collection": "quiz",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "quiz_question",
+        "group": null,
+        "hidden": false,
+        "interface": "list-o2m",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 13,
+        "special": [
+          "o2m"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
       }
     },
     {
@@ -5916,6 +5901,50 @@
         "has_auto_increment": false,
         "foreign_key_table": null,
         "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "quiz_question",
+      "field": "quiz_id",
+      "type": "string",
+      "meta": {
+        "collection": "quiz_question",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "quiz_id",
+        "group": null,
+        "hidden": false,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 11,
+        "special": [
+          "m2o"
+        ],
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "quiz_id",
+        "table": "quiz_question",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "quiz",
+        "foreign_key_column": "id"
       }
     },
     {
@@ -7212,6 +7241,31 @@
       }
     },
     {
+      "collection": "course",
+      "field": "exam_quiz",
+      "related_collection": "quiz",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "course",
+        "many_field": "exam_quiz",
+        "one_allowed_collections": null,
+        "one_collection": "quiz",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "course",
+        "column": "exam_quiz",
+        "foreign_key_table": "quiz",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
       "collection": "course_files",
       "field": "directus_files_id",
       "related_collection": "directus_files",
@@ -7862,31 +7916,6 @@
       }
     },
     {
-      "collection": "quiz",
-      "field": "course",
-      "related_collection": "course",
-      "meta": {
-        "junction_field": null,
-        "many_collection": "quiz",
-        "many_field": "course",
-        "one_allowed_collections": null,
-        "one_collection": "course",
-        "one_collection_field": null,
-        "one_deselect_action": "nullify",
-        "one_field": null,
-        "sort_field": null
-      },
-      "schema": {
-        "table": "quiz",
-        "column": "course",
-        "foreign_key_table": "course",
-        "foreign_key_column": "id",
-        "constraint_name": null,
-        "on_update": "NO ACTION",
-        "on_delete": "SET NULL"
-      }
-    },
-    {
       "collection": "quiz_question",
       "field": "user_created",
       "related_collection": "directus_users",
@@ -7955,6 +7984,31 @@
         "table": "quiz_question",
         "column": "image",
         "foreign_key_table": "directus_files",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
+      "collection": "quiz_question",
+      "field": "quiz_id",
+      "related_collection": "quiz",
+      "meta": {
+        "junction_field": null,
+        "many_collection": "quiz_question",
+        "many_field": "quiz_id",
+        "one_allowed_collections": null,
+        "one_collection": "quiz",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": "quiz_question",
+        "sort_field": null
+      },
+      "schema": {
+        "table": "quiz_question",
+        "column": "quiz_id",
+        "foreign_key_table": "quiz",
         "foreign_key_column": "id",
         "constraint_name": null,
         "on_update": "NO ACTION",
