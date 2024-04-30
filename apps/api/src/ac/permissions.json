@@ -335,20 +335,8 @@
     ]
   },
   {
-    "id": 25,
-    "role": null,
-    "collection": "category",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 26,
-    "role": null,
+    "id": 31,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "course",
     "action": "read",
     "permissions": {},
@@ -359,9 +347,9 @@
     ]
   },
   {
-    "id": 27,
-    "role": null,
-    "collection": "sector",
+    "id": 32,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course",
     "action": "read",
     "permissions": {},
     "validation": {},
@@ -371,8 +359,68 @@
     ]
   },
   {
-    "id": 28,
-    "role": null,
+    "id": 33,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "quiz",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 34,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 35,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_search",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 36,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "quiz_question",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 37,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 38,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "employee",
     "action": "read",
     "permissions": {},
@@ -383,8 +431,32 @@
     ]
   },
   {
-    "id": 29,
-    "role": null,
+    "id": 39,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "sector",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 40,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "notification",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 41,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "sub_sector",
     "action": "read",
     "permissions": {},
@@ -395,9 +467,57 @@
     ]
   },
   {
-    "id": 30,
-    "role": null,
+    "id": 42,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "activities",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 43,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 44,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files_1",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 45,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 46,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
     "action": "read",
     "permissions": {},
     "validation": {},

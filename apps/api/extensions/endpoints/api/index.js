@@ -22559,23 +22559,40 @@ const useItemService = async (ctx, collection) => {
   const { services, getSchema } = ctx;
   const { ItemsService } = services;
   return new ItemsService(collection, {
+    schema: await getSchema(),
+    accountability: false
+  });
+};
+
+const useAuthService = async (ctx) => {
+  const { services, getSchema } = ctx;
+  const { AuthenticationService } = services;
+  return new AuthenticationService({
     schema: await getSchema()
   });
 };
 
 var index = defineEndpoint((router, ctx) => {
   router.get("/hello", async (req, res) => {
-    const users = await useItemService(ctx, "course");
-    const result = await users.readByQuery({
-      fields: ["*.*.*.*.*"]
-    });
-    res.send(result);
+    try {
+      res.send({ message: "Hello, world!" });
+    } catch (error) {
+      res.send({ message: "Hello, world!", error: error.message });
+    }
   });
   router.post("/login", async (req, res) => {
     const body = req.body;
     const formData = new FormData();
     formData.append("iduser", body.username);
     formData.append("password", body.password);
+    const login = async (email, password) => {
+      const authService = await useAuthService(ctx);
+      const resultAuth = await authService.login("default", {
+        email,
+        password: body.password
+      });
+      return res.send(resultAuth);
+    };
     try {
       const result = await axios$1.post("https://amanda.hpgroup.co.id/index.php?r=api%2Flogin", formData);
       const users = await useItemService(ctx, "employee");
@@ -22586,26 +22603,27 @@ var index = defineEndpoint((router, ctx) => {
           }
         }
       });
+      const email = `${result.data.userid}_elearning@haleyorapower.co.id`;
       if (!data) {
         const directusUsers = await useItemService(ctx, "directus_users");
         await users.createOne({
           employee_id: result.data.userid,
           username: result.data.userid,
           full_name: result.data.username,
-          email: `${result.data.userid}_elearning@haleyorapower.co.id`,
+          email,
           status: "active"
         });
         setTimeout(() => {
           directusUsers.updateByQuery({
             filter: {
-              email: `${result.data.userid}_elearning@haleyorapower.co.id`
+              email
             }
           }, {
             password: body.password
           });
         }, 1e3);
       }
-      res.send(result.data);
+      login(email, body.password);
     } catch (error) {
       if (axios$1.isAxiosError(error)) {
         if (error.response) {

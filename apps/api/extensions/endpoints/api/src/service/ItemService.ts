@@ -5,5 +5,6 @@ export const useItemService = async(ctx: EndpointExtensionContext, collection: s
   const { ItemsService } = services;
   return new ItemsService(collection, {
     schema: await getSchema(),
+    accountability: false,
   });
 };
