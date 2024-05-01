@@ -22586,12 +22586,16 @@ var index = defineEndpoint((router, ctx) => {
     formData.append("iduser", body.username);
     formData.append("password", body.password);
     const login = async (email, password) => {
-      const authService = await useAuthService(ctx);
-      const resultAuth = await authService.login("default", {
-        email,
-        password: body.password
-      });
-      return res.send(resultAuth);
+      try {
+        const authService = await useAuthService(ctx);
+        const resultAuth = await authService.login("default", {
+          email,
+          password
+        });
+        return res.send(resultAuth);
+      } catch (error) {
+        return res.status(400).send({ message: "Login failed" });
+      }
     };
     try {
       const result = await axios$1.post("https://amanda.hpgroup.co.id/index.php?r=api%2Flogin", formData);
@@ -22627,10 +22631,10 @@ var index = defineEndpoint((router, ctx) => {
     } catch (error) {
       if (axios$1.isAxiosError(error)) {
         if (error.response) {
-          return res.send(error.response.data);
+          return res.status(400).send(error.response.data);
         }
       }
-      res.send({ message: "Login failed" });
+      return res.status(400).send({ message: "Login failed" });
     }
   });
 });

@@ -20,12 +20,16 @@ export default defineEndpoint((router, ctx) => {
     formData.append('password', body.password);
 
     const login = async(email: string, password: string) => {
-      const authService = await useAuthService(ctx);
-      const resultAuth = await authService.login('default', {
-        email,
-        password: body.password,
-      });
-      return res.send(resultAuth);
+      try {
+        const authService = await useAuthService(ctx);
+        const resultAuth = await authService.login('default', {
+          email,
+          password,
+        });
+        return res.send(resultAuth);
+      } catch (error) {
+        return res.status(400).send({ message: 'Login failed' });
+      }
     };
 
     try {
@@ -65,10 +69,10 @@ export default defineEndpoint((router, ctx) => {
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          return res.send(error.response.data);
+          return res.status(400).send(error.response.data);
         }
       }
-      res.send({ message: 'Login failed' });
+      return res.status(400).send({ message: 'Login failed' });
     }
   });
 });
