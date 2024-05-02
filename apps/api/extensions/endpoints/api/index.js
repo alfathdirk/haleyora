@@ -22580,6 +22580,185 @@ var index = defineEndpoint((router, ctx) => {
       res.send({ message: "Hello, world!", error: error.message });
     }
   });
+  router.get("/me", async (req, res) => {
+    try {
+      const bearerToken = req.headers.authorization;
+      const parseJwt = (token) => {
+        if (token) {
+          return JSON.parse(
+            Buffer.from(String(token.split(".")[1]), "base64").toString()
+          );
+        } else {
+          throw new Error("Token not found");
+        }
+      };
+      const payloadToken = parseJwt(bearerToken);
+      const employee = await useItemService(ctx, "employee");
+      const [user] = await employee.readByQuery({
+        filter: {
+          employee_id: {
+            _eq: String(payloadToken.id)
+          }
+        },
+        fields: [
+          "user_id",
+          "employee_id",
+          "full_name",
+          "email",
+          "username",
+          "role",
+          "image",
+          "status"
+        ],
+        alias: {
+          user_id: "id"
+        }
+      });
+      const employeeCourse = await useItemService(ctx, "employee_course");
+      const employeeCourseRecommendation = await useItemService(ctx, "employee_course_recommendation");
+      const employeeOngoingCourse = await employeeCourse.readByQuery({
+        filter: {
+          employee: {
+            _eq: String(user.user_id)
+          },
+          completed: {
+            _eq: 0
+          }
+        },
+        fields: [
+          "id",
+          "course.id",
+          "course.status",
+          "course.title",
+          "course.image",
+          "course.duration",
+          "exam_score",
+          "task_score",
+          "last_video_duration",
+          "tasks"
+        ]
+      });
+      const employeeCompletedCourse = await employeeCourse.readByQuery({
+        filter: {
+          employee: {
+            _eq: String(user.user_id)
+          },
+          completed: {
+            _eq: 1
+          }
+        },
+        fields: [
+          "id",
+          "course.id",
+          "course.status",
+          "course.title",
+          "course.image",
+          "course.duration",
+          "exam_score",
+          "task_score",
+          "last_video_duration",
+          "tasks"
+        ]
+      });
+      const employeeRecommendedCourse = await employeeCourseRecommendation.readByQuery({
+        filter: {
+          employee: {
+            _eq: String(user.user_id)
+          }
+        },
+        fields: [
+          "id",
+          "course.id",
+          "course.status",
+          "course.title",
+          "course.image",
+          "course.duration"
+        ]
+      });
+      const employeeCertificate = await useItemService(ctx, "employee_certificate");
+      const employeeValidCertificates = await employeeCertificate.readByQuery({
+        filter: {
+          employee: {
+            _eq: String(user.user_id)
+          },
+          expired_days: {
+            _gt: 0
+          }
+        },
+        fields: [
+          "id",
+          "course.id",
+          "course.status",
+          "course.title",
+          "course.image",
+          "course.duration",
+          "expired_days"
+        ]
+      });
+      const employeeNotification = await useItemService(ctx, "notification");
+      const employeeUnreadNotifications = await employeeNotification.readByQuery({
+        filter: {
+          employee_id: {
+            _eq: String(user.user_id)
+          },
+          is_read: {
+            _eq: 0
+          }
+        },
+        fields: [
+          "id",
+          "title",
+          "description"
+        ]
+      });
+      const employeeReadNotifications = await employeeNotification.readByQuery({
+        filter: {
+          employee_id: {
+            _eq: String(user.user_id)
+          },
+          is_read: {
+            _eq: 1
+          }
+        },
+        fields: [
+          "id",
+          "title",
+          "description"
+        ]
+      });
+      const employeeSearch = await useItemService(ctx, "employee_search");
+      const employeeSearchHistory = await employeeSearch.readByQuery({
+        filter: {
+          employee: {
+            _eq: String(user.user_id)
+          }
+        },
+        fields: [
+          "id",
+          "search"
+        ]
+      });
+      res.send({
+        message: {
+          EmployeeData: user,
+          EmployeeCourseData: {
+            Ongoing: employeeOngoingCourse,
+            Completed: employeeCompletedCourse,
+            Recommendation: employeeRecommendedCourse
+          },
+          EmployeeCertificateData: employeeValidCertificates,
+          OngoingQuizData: {},
+          SearchHistoryData: employeeSearchHistory,
+          NotificationData: {
+            Unread: employeeUnreadNotifications,
+            Read: employeeReadNotifications
+          }
+        }
+      });
+    } catch (error) {
+      res.send({ message: "Fetch user detail failed!", error });
+    }
+  });
   router.post("/login", async (req, res) => {
     const body = req.body;
     const formData = new FormData();
@@ -22594,7 +22773,10 @@ var index = defineEndpoint((router, ctx) => {
       return res.send(resultAuth);
     };
     try {
-      const result = await axios$1.post("https://amanda.hpgroup.co.id/index.php?r=api%2Flogin", formData);
+      const result = await axios$1.post(
+        "https://amanda.hpgroup.co.id/index.php?r=api%2Flogin",
+        formData
+      );
       const users = await useItemService(ctx, "employee");
       const [data] = await users.readByQuery({
         filter: {
@@ -22614,13 +22796,16 @@ var index = defineEndpoint((router, ctx) => {
           status: "active"
         });
         setTimeout(() => {
-          directusUsers.updateByQuery({
-            filter: {
-              email
+          directusUsers.updateByQuery(
+            {
+              filter: {
+                email
+              }
+            },
+            {
+              password: body.password
             }
-          }, {
-            password: body.password
-          });
+          );
         }, 1e3);
       }
       login(email, body.password);
