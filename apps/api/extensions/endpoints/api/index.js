@@ -22572,6 +22572,7 @@ const useAuthService = async (ctx) => {
   });
 };
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 var index = defineEndpoint((router, ctx) => {
   router.get("/hello", async (req, res) => {
     try {
@@ -22765,12 +22766,16 @@ var index = defineEndpoint((router, ctx) => {
     formData.append("iduser", body.username);
     formData.append("password", body.password);
     const login = async (email, password) => {
-      const authService = await useAuthService(ctx);
-      const resultAuth = await authService.login("default", {
-        email,
-        password: body.password
-      });
-      return res.send(resultAuth);
+      try {
+        const authService = await useAuthService(ctx);
+        const resultAuth = await authService.login("default", {
+          email,
+          password
+        });
+        return res.send(resultAuth);
+      } catch (error) {
+        return res.status(400).send({ message: "Login failed!" });
+      }
     };
     try {
       const result = await axios$1.post(
@@ -22788,34 +22793,31 @@ var index = defineEndpoint((router, ctx) => {
       const email = `${result.data.userid}_elearning@haleyorapower.co.id`;
       if (!data) {
         const directusUsers = await useItemService(ctx, "directus_users");
-        await users.createOne({
+        users.createOne({
           employee_id: result.data.userid,
           username: result.data.userid,
           full_name: result.data.username,
           email,
           status: "active"
         });
-        setTimeout(() => {
-          directusUsers.updateByQuery(
-            {
-              filter: {
-                email
-              }
-            },
-            {
-              password: body.password
-            }
-          );
-        }, 1e3);
+        await sleep(1e3);
+        directusUsers.updateByQuery({
+          filter: {
+            email
+          }
+        }, {
+          password: body.password
+        });
       }
       login(email, body.password);
     } catch (error) {
+      console.log("error kesini", error.message);
       if (axios$1.isAxiosError(error)) {
         if (error.response) {
-          return res.send(error.response.data);
+          return res.status(400).send(error.response.data);
         }
       }
-      res.send({ message: "Login failed" });
+      return res.status(400).send({ message: "Login failed" });
     }
   });
 });

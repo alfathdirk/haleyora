@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useItemService } from './service/ItemService';
 import { useAuthService } from './service/AuthService';
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export default defineEndpoint((router, ctx) => {
   router.get('/hello', async(req, res) => {
     try {
@@ -233,12 +235,16 @@ export default defineEndpoint((router, ctx) => {
     formData.append('password', body.password);
 
     const login = async(email: string, password: string) => {
-      const authService = await useAuthService(ctx);
-      const resultAuth = await authService.login('default', {
-        email,
-        password: body.password,
-      });
-      return res.send(resultAuth);
+      try {
+        const authService = await useAuthService(ctx);
+        const resultAuth = await authService.login('default', {
+          email,
+          password,
+        });
+        return res.send(resultAuth);
+      } catch (error) {
+        return res.status(400).send({ message: 'Login failed!' });
+      }
     };
 
     try {
@@ -259,35 +265,31 @@ export default defineEndpoint((router, ctx) => {
 
       if (!data) {
         const directusUsers = await useItemService(ctx, 'directus_users');
-        await users.createOne({
+        users.createOne({
           employee_id: result.data.userid,
           username: result.data.userid,
           full_name: result.data.username,
           email,
           status: 'active',
         });
-
-        setTimeout(() => {
-          directusUsers.updateByQuery(
-            {
-              filter: {
-                email,
-              },
-            },
-            {
-              password: body.password,
-            },
-          );
-        }, 1000);
+        await sleep(1000);
+        directusUsers.updateByQuery({
+          filter: {
+            email,
+          },
+        }, {
+          password: body.password,
+        });
       }
       login(email, body.password);
     } catch (error: unknown) {
+      console.log('error kesini', error.message);
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          return res.send(error.response.data);
+          return res.status(400).send(error.response.data);
         }
       }
-      res.send({ message: 'Login failed' });
+      return res.status(400).send({ message: 'Login failed' });
     }
   });
 });
