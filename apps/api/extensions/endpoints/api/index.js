@@ -22756,20 +22756,20 @@ var index = defineEndpoint((router, ctx) => {
       });
       res.send({
         message: {
-          EmployeeData: employeeData,
-          EmployeeCourseData: {
-            Ongoing: employeeOngoingCourseData,
-            Completed: employeeCompletedCourseData,
-            Recommendation: employeeRecommendedCourseData
+          employeeData,
+          employeeCourseData: {
+            ongoing: employeeOngoingCourseData,
+            completed: employeeCompletedCourseData,
+            recommendation: employeeRecommendedCourseData
           },
-          EmployeeCertificateData: employeeValidCertificatesData,
-          OngoingQuizData: {
+          employeeCertificateData: employeeValidCertificatesData,
+          ongoingQuizData: {
             message: "TODO!!"
           },
-          SearchHistoryData: employeeSearchHistoryData,
-          NotificationData: {
-            Unread: employeeUnreadNotificationsData,
-            Read: employeeReadNotificationsData
+          searchHistoryData: employeeSearchHistoryData,
+          notificationData: {
+            unread: employeeUnreadNotificationsData,
+            read: employeeReadNotificationsData
           }
         }
       });
