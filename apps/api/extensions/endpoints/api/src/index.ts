@@ -30,15 +30,29 @@ export default defineEndpoint((router, ctx) => {
       };
       const payloadToken = parseJwt(bearerToken);
 
-      const employee = await useItemService(ctx, 'employee');
-      const [user] = await employee.readByQuery({
+      const userItem = await useItemService(ctx, 'directus_users');
+      const [userData] = await userItem.readByQuery({
         filter: {
-          employee_id: {
-            _eq: String(payloadToken.id),
+          id: {
+            _eq: payloadToken.id,
           },
         },
         fields: [
-          'user_id',
+          'id',
+          'email',
+        ],
+      });
+      const username = userData.email.split('_')[0];
+
+      const employeeItem = await useItemService(ctx, 'employee');
+      const [employeeData] = await employeeItem.readByQuery({
+        filter: {
+          employee_id: {
+            _eq: String(username),
+          },
+        },
+        fields: [
+          'id',
           'employee_id',
           'full_name',
           'email',
@@ -47,22 +61,19 @@ export default defineEndpoint((router, ctx) => {
           'image',
           'status',
         ],
-        alias: {
-          user_id: 'id',
-        },
       });
 
       /**
        * OK Employee Course
        */
-      const employeeCourse = await useItemService(ctx, 'employee_course');
-      const employeeCourseRecommendation = await useItemService(ctx, 'employee_course_recommendation');
+      const employeeCourseItem = await useItemService(ctx, 'employee_course');
+      const employeeCourseRecommendationItem = await useItemService(ctx, 'employee_course_recommendation');
 
       // OK Ongoing Course
-      const employeeOngoingCourse = await employeeCourse.readByQuery({
+      const employeeOngoingCourseData = await employeeCourseItem.readByQuery({
         filter: {
           employee: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
           completed: {
             _eq: 0,
@@ -83,10 +94,10 @@ export default defineEndpoint((router, ctx) => {
       });
 
       // OK Completed Course
-      const employeeCompletedCourse = await employeeCourse.readByQuery({
+      const employeeCompletedCourseData = await employeeCourseItem.readByQuery({
         filter: {
           employee: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
           completed: {
             _eq: 1,
@@ -107,10 +118,10 @@ export default defineEndpoint((router, ctx) => {
       });
 
       // OK Recommended Course
-      const employeeRecommendedCourse = await employeeCourseRecommendation.readByQuery({
+      const employeeRecommendedCourseData = await employeeCourseRecommendationItem.readByQuery({
         filter: {
           employee: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
         },
         fields: [
@@ -130,11 +141,11 @@ export default defineEndpoint((router, ctx) => {
       /**
        * OK Employee Certificate
        */
-      const employeeCertificate = await useItemService(ctx, 'employee_certificate');
-      const employeeValidCertificates = await employeeCertificate.readByQuery({
+      const employeeCertificateItem = await useItemService(ctx, 'employee_certificate');
+      const employeeValidCertificatesData = await employeeCertificateItem.readByQuery({
         filter: {
           employee: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
           expired_days: {
             _gt: 0,
@@ -143,10 +154,15 @@ export default defineEndpoint((router, ctx) => {
         fields: [
           'id',
           'course.id',
-          'course.status',
-          'course.title',
-          'course.image',
-          'course.duration',
+          'course.completed',
+          'course.exam_score',
+          'course.task_score',
+          'course.tasks',
+          'course.course.id',
+          'course.course.status',
+          'course.course.title',
+          'course.course.image',
+          'course.course.duration',
           'expired_days',
         ],
       });
@@ -154,13 +170,13 @@ export default defineEndpoint((router, ctx) => {
       /**
        * OK Employee Notification
        */
-      const employeeNotification = await useItemService(ctx, 'notification');
+      const employeeNotificationItem = await useItemService(ctx, 'notification');
 
       // OK Unread Notifications
-      const employeeUnreadNotifications = await employeeNotification.readByQuery({
+      const employeeUnreadNotificationsData = await employeeNotificationItem.readByQuery({
         filter: {
           employee_id: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
           is_read: {
             _eq: 0,
@@ -174,10 +190,10 @@ export default defineEndpoint((router, ctx) => {
       });
 
       // OK Read Notifications
-      const employeeReadNotifications = await employeeNotification.readByQuery({
+      const employeeReadNotificationsData = await employeeNotificationItem.readByQuery({
         filter: {
           employee_id: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
           is_read: {
             _eq: 1,
@@ -194,10 +210,10 @@ export default defineEndpoint((router, ctx) => {
        * OK Employee Search History
        */
       const employeeSearch = await useItemService(ctx, 'employee_search');
-      const employeeSearchHistory = await employeeSearch.readByQuery({
+      const employeeSearchHistoryData = await employeeSearch.readByQuery({
         filter: {
           employee: {
-            _eq: String(user.user_id),
+            _eq: String(employeeData.id),
           },
         },
         fields: [
@@ -208,18 +224,20 @@ export default defineEndpoint((router, ctx) => {
 
       res.send({
         message: {
-          EmployeeData: user,
-          EmployeeCourseData: {
-            Ongoing: employeeOngoingCourse,
-            Completed: employeeCompletedCourse,
-            Recommendation: employeeRecommendedCourse,
+          employeeData,
+          employeeCourseData: {
+            ongoing: employeeOngoingCourseData,
+            completed: employeeCompletedCourseData,
+            recommendation: employeeRecommendedCourseData,
           },
-          EmployeeCertificateData: employeeValidCertificates,
-          OngoingQuizData: {},
-          SearchHistoryData: employeeSearchHistory,
-          NotificationData: {
-            Unread: employeeUnreadNotifications,
-            Read: employeeReadNotifications,
+          employeeCertificateData: employeeValidCertificatesData,
+          ongoingQuizData: {
+            message: 'TODO!!',
+          },
+          searchHistoryData: employeeSearchHistoryData,
+          notificationData: {
+            unread: employeeUnreadNotificationsData,
+            read: employeeReadNotificationsData,
           },
         },
       });
