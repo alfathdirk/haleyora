@@ -11,6 +11,15 @@ import { AuthProvider } from '@/provider/Auth';
 import { DirectusProvider } from '@/provider/Directus';
 import '@/styles/tailwind.css'
 
+import { Inter as FontSans } from "next/font/google"
+
+import { cn } from "@/lib/utils"
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
 // You change this configuration value to false so that the Font Awesome core SVG library
 // will not try and insert <style> elements into the <head> of the page.
 // Next.js blocks this from happening anyway so you might as well not even try.
@@ -26,7 +35,13 @@ export default function RootLayout({
     <DirectusProvider>
       <AuthProvider>
         <html lang="en">
-          <body suppressHydrationWarning={true}>
+          <body
+            className={cn(
+              "min-h-screen bg-background font-sans antialiased",
+              fontSans.variable
+            )}
+            suppressHydrationWarning={true}
+          >
             <ProgressBar />
             {children}
           </body>
