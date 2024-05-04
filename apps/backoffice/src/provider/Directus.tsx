@@ -11,8 +11,6 @@ import {
 import { getCookie, getCookies } from "cookies-next";
 import { createContext, useEffect } from "react";
 
-const DIRECTUS_HOSTS = "http://localhost:8055/";
-
 interface DirectusContextProps {
   client: DirectusClient<object> &
     RestClient<object> &
@@ -31,8 +29,9 @@ export const DirectusContext = createContext<DirectusContextProps>({
 
 export const DirectusProvider = ({ children }: Props) => {
   let { accessToken } = JSON.parse(getCookie("auth") ?? "{}");
-  const client = createDirectus(DIRECTUS_HOSTS)
-    .with(authentication())
+  const client = createDirectus(process.env.NEXT_PUBLIC_BACKEND_URL)
+    // .with(authentication())
+    .with(authentication("cookie", { credentials: "include", autoRefresh: true }))
     .with(rest());
 
   if (accessToken) {

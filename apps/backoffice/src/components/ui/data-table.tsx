@@ -7,11 +7,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ChevronDown,
-  Filter,
-  LucideSearch,
-} from "lucide-react";
+import { ChevronDown, Filter, LucideSearch } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -24,9 +20,7 @@ import { Input } from "./input";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import Image from "next/image";
-import {
-  Pagination,
-} from "@/components/ui/pagination";
+import { Pagination } from "@/components/ui/pagination";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,15 +33,27 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  onPageChange: (val: number) => void;
+  setCurrentPage: (val: number) => void;
+  setPageSize: (val: number) => void;
+  handleSearchChange: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   searchKey,
+  currentPage,
+  pageSize,
+  totalItems,
+  handleSearchChange,
+  onPageChange,
+  setCurrentPage,
+  setPageSize,
 }: DataTableProps<TData, TValue>) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
   const [layout, setLayout] = useState("table");
 
   const table = useReactTable({
@@ -56,18 +62,19 @@ export function DataTable<TData, TValue>({
     state: {
       pagination: {
         pageIndex: currentPage - 1,
-        pageSize,
+        pageSize: pageSize,
       },
     },
     onPaginationChange: (updater: any) => {
       const { pageIndex, pageSize } = updater(table.getState().pagination);
+      onPageChange(pageIndex + 1);
       setCurrentPage(pageIndex + 1);
       setPageSize(pageSize);
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
-    pageCount: Math.ceil(data.length / pageSize),
+    pageCount: Math.ceil(totalItems / pageSize),
   });
 
   return (
@@ -104,6 +111,7 @@ export function DataTable<TData, TValue>({
               <Input
                 className="!border-none shadow-none px-0"
                 placeholder="Search"
+                onChange={handleSearchChange}
               />
             </div>
           </div>
@@ -189,10 +197,7 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <div key={cell.id} className="px-2 py-3">
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </div>
                 ))}
               </div>
@@ -204,7 +209,7 @@ export function DataTable<TData, TValue>({
 
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(table.getFilteredRowModel().rows.length / pageSize)}
+        totalPages={Math.ceil(totalItems / pageSize)}
         onPageChange={(page) => table.setPageIndex(page - 1)}
       />
     </>
