@@ -22627,6 +22627,27 @@ var index = defineEndpoint((router, ctx) => {
       });
       const employeeCourseItem = await useItemService(ctx, "employee_course");
       const employeeCourseRecommendationItem = await useItemService(ctx, "employee_course_recommendation");
+      const employeeCourseDataFields = [
+        "course.id",
+        "course.status",
+        "course.title",
+        "course.image",
+        "course.duration",
+        // Category detail
+        "course.activities.sub_sector.sector_id.category_id.id",
+        "course.activities.sub_sector.sector_id.category_id.name",
+        "course.activities.sub_sector.sector_id.category_id.image",
+        // Sector detail
+        "course.activities.sub_sector.sector_id.id",
+        "course.activities.sub_sector.sector_id.title",
+        // Sub Sector detail
+        "course.activities.sub_sector.id",
+        "course.activities.sub_sector.title",
+        // Activity detail
+        "course.activities.id",
+        "course.activities.title",
+        "course.activities.status"
+      ];
       const employeeOngoingCourseData = await employeeCourseItem.readByQuery({
         filter: {
           employee: {
@@ -22638,11 +22659,7 @@ var index = defineEndpoint((router, ctx) => {
         },
         fields: [
           "id",
-          "course.id",
-          "course.status",
-          "course.title",
-          "course.image",
-          "course.duration",
+          ...employeeCourseDataFields,
           "exam_score",
           "task_score",
           "last_video_duration",
@@ -22660,11 +22677,7 @@ var index = defineEndpoint((router, ctx) => {
         },
         fields: [
           "id",
-          "course.id",
-          "course.status",
-          "course.title",
-          "course.image",
-          "course.duration",
+          ...employeeCourseDataFields,
           "exam_score",
           "task_score",
           "last_video_duration",
@@ -22679,11 +22692,7 @@ var index = defineEndpoint((router, ctx) => {
         },
         fields: [
           "id",
-          "course.id",
-          "course.status",
-          "course.title",
-          "course.image",
-          "course.duration"
+          ...employeeCourseDataFields
         ]
       });
       const employeeCertificateItem = await useItemService(ctx, "employee_certificate");
