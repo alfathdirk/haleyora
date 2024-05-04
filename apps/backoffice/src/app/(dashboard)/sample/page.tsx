@@ -8,18 +8,19 @@ import { DirectusContext } from "@/provider/Directus";
 
 import { readItems } from "@directus/sdk";
 import { useContext } from "react";
+import directus from "@/lib/directus";
 
 const breadcrumbItems = [{ title: "Employees", link: "/dashboard/employees" }];
 
-export default function EmployeePage() {
+export default function Page() {
   const { client } = useContext(DirectusContext);
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const result: any = await client.request(
-          readItems("employee", {
+        const result: any = await directus.request(
+          readItems("Employee", {
             fields: ["*"],
           }),
         );
@@ -27,6 +28,11 @@ export default function EmployeePage() {
         // Map over the result data and convert specific keys to lowercase
         const processedData = result.map((item: any) => ({
           ...item,
+          name: item.Name,
+          country: item.Country,
+          company: item.Company,
+          Gender: item.Gender.toUpperCase(),
+          status: item.status.toUpperCase(),
         }));
 
         setEmployees(processedData);
@@ -36,7 +42,6 @@ export default function EmployeePage() {
     }
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log({ employees });

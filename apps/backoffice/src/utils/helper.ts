@@ -27,3 +27,8 @@ export const formatDateTime = (date: string | null, withTime?: boolean) => {
   const time = withTime ? ` ${d.toLocaleTimeString()}` : "";
   return `${day} ${month} ${year}${time}`;
 };
+
+
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

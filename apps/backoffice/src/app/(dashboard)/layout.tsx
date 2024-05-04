@@ -14,9 +14,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SidebarNav />
       </Sidebar>
 
-      <div className="wrapper d-flex flex-column min-vh-100 bg-light">
+      <div className="bg-white wrapper d-flex flex-column min-vh-100">
         <Header />
-        <div className="body flex-grow-1 px-sm-2 mb-4">
+        <div className="mb-4 body flex-grow-1 px-sm-2 ">
           <Container fluid="lg">{children}</Container>
         </div>
       </div>
