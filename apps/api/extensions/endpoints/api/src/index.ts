@@ -74,25 +74,40 @@ export default defineEndpoint((router, ctx) => {
         'course.title',
         'course.image',
         'course.duration',
-
-        // Category detail
-        'course.activities.sub_sector.sector_id.category_id.id',
-        'course.activities.sub_sector.sector_id.category_id.name',
-        'course.activities.sub_sector.sector_id.category_id.image',
-
-        // Sector detail
-        'course.activities.sub_sector.sector_id.id',
-        'course.activities.sub_sector.sector_id.title',
-
-        // Sub Sector detail
-        'course.activities.sub_sector.id',
-        'course.activities.sub_sector.title',
-
-        // Activity detail
-        'course.activities.id',
-        'course.activities.title',
-        'course.activities.status',
+        'course.activities.*.*.*.*',
       ];
+      const concatEmployeeCourseActivity = (employeeCourseData: {
+        course: {
+          activities: {
+            sub_sector: {
+              sector_id: {
+                category_id: {
+                  name: string;
+                };
+                title: string;
+              };
+              title: string;
+            };
+            title: string;
+          };
+        };
+      }[]) => {
+        return employeeCourseData.map((item) => {
+          const categoryName = item.course.activities.sub_sector.sector_id.category_id.name;
+          const sectorName = item.course.activities.sub_sector.sector_id.title;
+          const subSectorName = item.course.activities.sub_sector.title;
+          const activityName = item.course.activities.title;
+
+          const activities = `${categoryName} | ${sectorName} | ${subSectorName} | ${activityName}`;
+          return {
+            ...item,
+            course: {
+              ...item.course,
+              activities,
+            },
+          };
+        });
+      };
 
       // OK Ongoing Course
       const employeeOngoingCourseData = await employeeCourseItem.readByQuery({
@@ -155,6 +170,44 @@ export default defineEndpoint((router, ctx) => {
        * OK Employee Certificate
        */
       const employeeCertificateItem = await useItemService(ctx, 'employee_certificate');
+      const concatEmployeeCertificateCourseActivity = (employeeCertificateCourseData: {
+        course: {
+          course: {
+            activities: {
+              sub_sector: {
+                sector_id: {
+                  category_id: {
+                    name: string;
+                  };
+                  title: string;
+                };
+                title: string;
+              };
+              title: string;
+            };
+          }
+        }
+      }[]) => {
+        return employeeCertificateCourseData.map((item) => {
+          const categoryName = item.course.course.activities.sub_sector.sector_id.category_id.name;
+          const sectorName = item.course.course.activities.sub_sector.sector_id.title;
+          const subSectorName = item.course.course.activities.sub_sector.title;
+          const activityName = item.course.course.activities.title;
+
+          const activities = `${categoryName} | ${sectorName} | ${subSectorName} | ${activityName}`;
+          return {
+            ...item,
+            course: {
+              ...item.course,
+              course: {
+                ...item.course.course,
+                activities,
+              },
+            },
+          };
+        });
+      };
+
       const employeeValidCertificatesData = await employeeCertificateItem.readByQuery({
         filter: {
           employee: {
@@ -176,6 +229,7 @@ export default defineEndpoint((router, ctx) => {
           'course.course.title',
           'course.course.image',
           'course.course.duration',
+          'course.course.activities.*.*.*.*',
           'expired_days',
         ],
       });
@@ -239,11 +293,11 @@ export default defineEndpoint((router, ctx) => {
         message: {
           employeeData,
           employeeCourseData: {
-            ongoing: employeeOngoingCourseData,
-            completed: employeeCompletedCourseData,
-            recommendation: employeeRecommendedCourseData,
+            ongoing: concatEmployeeCourseActivity(employeeOngoingCourseData),
+            completed: concatEmployeeCourseActivity(employeeCompletedCourseData),
+            recommendation: concatEmployeeCourseActivity(employeeRecommendedCourseData),
           },
-          employeeCertificateData: employeeValidCertificatesData,
+          employeeCertificateData: concatEmployeeCertificateCourseActivity(employeeValidCertificatesData),
           ongoingQuizData: {
             message: 'TODO!!',
           },
