@@ -8,6 +8,7 @@ import { DirectusContext } from "@/provider/Directus";
 
 import { readItems } from "@directus/sdk";
 import { useContext } from "react";
+import { faker } from '@faker-js/faker';
 import directus from "@/lib/directus";
 
 const breadcrumbItems = [{ title: "Employees", link: "/dashboard/employees" }];
@@ -19,11 +20,15 @@ export default function Page() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result: any = await directus.request(
-          readItems("Employee", {
-            fields: ["*"],
-          }),
-        );
+        const result: any = async () => {
+          for (let i = 0; i < 10; i++) {
+            await client.items('course').createOne({
+                title: faker.lorem.sentence(),
+                content: faker.lorem.paragraph(),
+                publish_date: faker.date.recent(),
+            });
+        }
+        }
 
         // Map over the result data and convert specific keys to lowercase
         const processedData = result.map((item: any) => ({
@@ -49,8 +54,7 @@ export default function Page() {
   return (
     <>
       <div className="flex-1 p-4 pt-6 space-y-4 md:p-8">
-        <BreadCrumb items={breadcrumbItems} />
-        <EmployeesTable data={employees} />
+        Seeding
       </div>
     </>
   );
