@@ -16,9 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "./input";
-import { Button } from "./button";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import { Pagination } from "@/components/ui/pagination";
 import {
@@ -27,19 +27,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { cn } from "@/lib/utils";
+import { ClassValue, clsx } from "clsx";
+import { PauseHorizontalIcon } from "../SVGs/PauseHorizontalIcon";
+import { DotsIcon } from "../SVGs/DotsIcon";
 
 interface DataTableProps<TData, TValue> {
+  layout?: "table" | "card";
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
   currentPage: number;
   pageSize: number;
   totalItems: number;
+  // methods
   onPageChange: (val: number) => void;
   setCurrentPage: (val: number) => void;
   setPageSize: (val: number) => void;
-  handleSearchChange: () => void;
+  onLayoutChange?: (val: string) => void;
+  handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  // Styling
+  cardContainerStyles?: ClassValue;
+  cardStyles?: ClassValue;
 }
 
 export function DataTable<TData, TValue>({
@@ -49,12 +59,16 @@ export function DataTable<TData, TValue>({
   currentPage,
   pageSize,
   totalItems,
+  layout = "table",
   handleSearchChange,
   onPageChange,
   setCurrentPage,
   setPageSize,
+  onLayoutChange,
+  cardContainerStyles,
+  cardStyles,
 }: DataTableProps<TData, TValue>) {
-  const [layout, setLayout] = useState("table");
+  const [currentLayout, setLayout] = useState(layout);
 
   const table = useReactTable({
     data,
@@ -79,7 +93,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between !mb-8">
         <DropdownMenu>
           <DropdownMenuTrigger
             asChild
@@ -115,33 +129,63 @@ export function DataTable<TData, TValue>({
               />
             </div>
           </div>
-          <div className="flex">
-            <Image
-              src="./assets/svg/menu-blue.svg"
-              width={36}
-              height={36}
-              className={`mr-6 cursor-pointer ${
-                layout === "table" ? "opacity-100" : "opacity-50"
-              }`}
-              alt=""
-              onClick={() => setLayout("table")}
-            />
-            <Image
+          <div className="flex items-center gap-x-2">
+            <div
+              className={clsx('h-fit p-2 text-[#787486] rounded-lg cursor-pointer flex items-center',
+                {
+                  "bg-[#00A9E3] !text-white": currentLayout === "table"
+                }
+              )}
+              onClick={() => {
+                if (onLayoutChange) {
+                  onLayoutChange('table')
+                }
+                setLayout("table")
+              }}
+            >
+              <PauseHorizontalIcon
+                className="w-full h-5 cursor-pointer"
+              />
+            </div>
+            <div
+              className={clsx('h-fit p-2 text-[#787486] rounded-lg cursor-pointer flex items-center',
+                {
+                  "bg-[#00A9E3] !text-white": currentLayout === "card"
+                }
+              )}
+              onClick={() => {
+                if (onLayoutChange) {
+                  onLayoutChange('card')
+                }
+                setLayout("card")
+              }}
+            >
+              <DotsIcon
+                className="w-full h-5 cursor-pointer"
+              />
+            </div>
+
+            {/* <Image
               src="./assets/svg/menu.svg"
               width={24}
               height={24}
               className={`cursor-pointer ${
-                layout === "card" ? "opacity-100" : "opacity-50"
+                currentLayout === "card" ? "bg-[#00A9E3]" : "text-[#787486]"
               }`}
               alt=""
-              onClick={() => setLayout("card")}
-            />
+              onClick={() => {
+                if (onLayoutChange) {
+                  onLayoutChange('card')
+                }
+                setLayout("card")
+              }}
+            /> */}
           </div>
         </div>
       </div>
 
       <ScrollArea className="rounded-md h-[calc(80vh-220px)]">
-        {layout === "table" ? (
+        {currentLayout === "table" ? (
           <Table className="relative">
             <TableHeader className="bg-[#FAFBFB]">
               {table.getHeaderGroups().map((headerGroup) => (
@@ -189,14 +233,14 @@ export function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className={cn("grid gap-4 md:grid-cols-2 lg:grid-cols-3", cardContainerStyles)}>
             {table.getRowModel().rows.map((row) => (
               <div
                 key={row.id}
-                className="p-4 bg-white border rounded-md shadow-sm"
+                className={cn("p-4 bg-white border rounded-md shadow-sm", cardStyles)}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <div key={cell.id} className="px-2 py-3">
+                  <div key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </div>
                 ))}

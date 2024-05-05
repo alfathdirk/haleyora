@@ -1,0 +1,19 @@
+"use client";
+
+import BreadCrumb from "@/components/breadcrumb";
+import { MonitoringTable } from "@/components/Tables/Monitoring/table";
+import { Heading } from "@/components/ui/heading";
+
+export default function MonitoringPage() {
+  return (
+    <div className="flex-1 p-4 pt-6 space-y-4 md:p-8">
+      <BreadCrumb items={[{ title: "Monitoring", link: "/monitoring" }]} />
+
+      <div className="flex items-start justify-between !mb-10">
+        <Heading title={`Monitoring`} description="Manejemen Kategori" />
+      </div>
+
+      <MonitoringTable />
+    </div>
+  );
+}

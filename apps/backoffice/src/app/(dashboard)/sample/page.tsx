@@ -8,8 +8,7 @@ import { DirectusContext } from "@/provider/Directus";
 
 import { readItems } from "@directus/sdk";
 import { useContext } from "react";
-import { faker } from '@faker-js/faker';
-import directus from "@/lib/directus";
+import { faker } from "@faker-js/faker";
 
 const breadcrumbItems = [{ title: "Employees", link: "/dashboard/employees" }];
 
@@ -22,13 +21,13 @@ export default function Page() {
       try {
         const result: any = async () => {
           for (let i = 0; i < 10; i++) {
-            await client.items('course').createOne({
-                title: faker.lorem.sentence(),
-                content: faker.lorem.paragraph(),
-                publish_date: faker.date.recent(),
+            await client.items("course").createOne({
+              title: faker.lorem.sentence(),
+              content: faker.lorem.paragraph(),
+              publish_date: faker.date.recent(),
             });
-        }
-        }
+          }
+        };
 
         // Map over the result data and convert specific keys to lowercase
         const processedData = result.map((item: any) => ({
@@ -47,15 +46,14 @@ export default function Page() {
     }
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log({ employees });
 
   return (
     <>
-      <div className="flex-1 p-4 pt-6 space-y-4 md:p-8">
-        Seeding
-      </div>
+      <div className="flex-1 p-4 pt-6 space-y-4 md:p-8">Seeding</div>
     </>
   );
 }
