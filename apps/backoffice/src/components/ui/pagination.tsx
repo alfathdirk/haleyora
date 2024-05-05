@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
+import clsx from "clsx";
 
 interface PaginationProps extends React.ComponentProps<"nav"> {
   currentPage: number;
@@ -26,14 +27,16 @@ const Pagination = ({
     {...props}
   >
     <PaginationContent>
-      <PaginationItem>
-        <PaginationPrevious
-          onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
-        />
-      </PaginationItem>
+      {totalPages > 1 && (
+        <PaginationItem>
+          <PaginationPrevious
+            onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
+          />
+        </PaginationItem>
+      )}
 
       {/* Displaying page 1 */}
-      {currentPage > 3 && (
+      {currentPage > 2 && (
         <>
           <PaginationItem>
             <PaginationLink
@@ -50,9 +53,9 @@ const Pagination = ({
       )}
 
       {/* Displaying pages around the current page */}
-      {Array.from({ length: Math.min(totalPages, 5) }, (_, index) => {
+      {Array.from({ length: Math.min(totalPages, 4) }, (_, index) => {
         const page = Math.max(
-          Math.min(currentPage - 2 + index, totalPages - 4 + index),
+          Math.min((currentPage - 1) + index, (totalPages - 3) + index),
           index + 1
         );
         return (
@@ -60,6 +63,7 @@ const Pagination = ({
             <PaginationLink
               isActive={currentPage === page}
               onClick={() => onPageChange(page)}
+              className={clsx('hover:bg-[#F9FAFC] hover:border hover:border-[#E4E4E4]', currentPage === page && 'bg-[#F9FAFC] border border-[#E4E4E4]')}
             >
               {String(page).padStart(2, "0")}
             </PaginationLink>
@@ -84,11 +88,13 @@ const Pagination = ({
         </>
       )}
 
-      <PaginationItem>
-        <PaginationNext
-          onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
-        />
-      </PaginationItem>
+      {totalPages > 1 && (
+        <PaginationItem>
+          <PaginationNext
+            onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+          />
+        </PaginationItem>
+      )}
     </PaginationContent>
   </nav>
 );

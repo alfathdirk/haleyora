@@ -11,7 +11,7 @@ export const EmployeesTable = () => {
 
   const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalItems, setTotalItems] = useState(0);
 
