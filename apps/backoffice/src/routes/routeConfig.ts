@@ -40,7 +40,7 @@ export const routeConfig: RouteConfig[] = [
     path: "/employee",
     exact: true,
     roles: ["staff"],
-    label: "Employee",
+    label: "Karyawan",
     icon: "../assets/svg/profile-2user.svg",
   },
   {
@@ -50,20 +50,26 @@ export const routeConfig: RouteConfig[] = [
       "e378a240-d535-4f57-b1bc-7c08c8ab7c12",
       "56828232-5ad4-4318-8f35-21bad6e7a981",
     ],
-    label: "Lesson",
+    label: "Pembelajaran",
     icon: "../assets/svg/book-saved.svg",
   },
   {
     path: "/quiz",
     exact: true,
     roles: ["e378a240-d535-4f57-b1bc-7c08c8ab7c12", "staff"],
-    label: "Quiz",
+    label: "Kuis",
     icon: "../assets/svg/message.svg",
+  },
+  {
+    path: "/monitoring",
+    roles: ["e378a240-d535-4f57-b1bc-7c08c8ab7c12"],
+    label: "Monitoring",
+    icon: "../assets/svg/category.svg",
   },
   {
     path: "/exam",
     roles: ["e378a240-d535-4f57-b1bc-7c08c8ab7c12"],
-    label: "Exam",
+    label: "Ujian",
     icon: "../assets/svg/edit-2.svg",
   },
   {
