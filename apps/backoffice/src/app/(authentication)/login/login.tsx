@@ -74,7 +74,7 @@ export default function Login() {
             disabled={submitting}
             placeholder="Username"
             aria-label="Username"
-            defaultValue=""
+            defaultValue="admin@example.com"
           />
         </InputGroup>
 
@@ -87,7 +87,7 @@ export default function Login() {
             {...register("password", { required: true })}
             placeholder="Password"
             aria-label="Password"
-            defaultValue=""
+            defaultValue="1"
           />
           <InputGroupText
             className="cursor-pointer"
@@ -98,14 +98,14 @@ export default function Login() {
         </InputGroup>
 
         <Col className="align-items-center">
-          <div className="text-end my-4 ">
+          <div className="my-4 text-end ">
             <Link className="px-0 text-dark" href="#">
               <p>Forgot password?</p>
             </Link>
           </div>
           <div>
             <button
-              className="text-center py-2 w-full bg-black text-white rounded-md"
+              className="w-full py-2 text-center text-white bg-black rounded-md"
               type="submit"
               disabled={submitting}
             >
