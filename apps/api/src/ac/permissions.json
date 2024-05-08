@@ -657,5 +657,149 @@
     "fields": [
       "*"
     ]
+  },
+  {
+    "id": 58,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 59,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 60,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 61,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files_1",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 62,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files_1",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 63,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course_files_1",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 64,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 65,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 66,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 67,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "notification",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 68,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "notification",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 69,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "notification",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
   }
 ]

@@ -30,3 +30,5 @@ services:
       CORS_ENABLED: true
       CORS_ORIGIN: true
       EXTENSIONS_AUTO_RELOAD: true
+      ACCESS_TOKEN_TTL: "30d"
+      REFRESH_TOKEN_TTL: "60d"
