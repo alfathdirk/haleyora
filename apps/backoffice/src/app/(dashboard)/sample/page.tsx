@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { EmployeesTable } from "@/components/Tables/employees-table/table";
+import { EmployeesTable } from "@/components/Tables/Employee/table";
 import { DirectusContext } from "@/provider/Directus";
 
 import { readItems } from "@directus/sdk";

@@ -1,7 +1,7 @@
 "use client";
 
 import BreadCrumb from "@/components/breadcrumb";
-import { EmployeesTable } from "@/components/Tables/employees-table/table";
+import { EmployeesTable } from "@/components/Tables/Employee/table";
 import { Heading } from "@/components/ui/heading";
 
 const breadcrumbItems = [{ title: "Employees", link: "/employees" }];

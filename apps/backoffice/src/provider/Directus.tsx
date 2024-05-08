@@ -32,7 +32,9 @@ export const DirectusProvider = ({ children }: Props) => {
   const client = createDirectus(process.env.NEXT_PUBLIC_BACKEND_URL)
     // .with(authentication())
     .with(authentication("cookie", { credentials: "include", autoRefresh: true }))
-    .with(rest());
+    .with(rest({
+      onRequest: (options) => ({ ...options, cache: 'no-store' }),
+    }));
 
   if (accessToken) {
     client.setToken(accessToken);

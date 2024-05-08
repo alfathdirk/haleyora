@@ -8,11 +8,16 @@ import { DirectusContext } from "@/provider/Directus";
 import { readItems, aggregate } from "@directus/sdk";
 import { useRouter } from "next/navigation";
 
-export const MonitoringTable = () => {
+interface SectorTableProps {
+  categoryId: string;
+  defaultLayout?: string;
+}
+
+export const SectorTable = ({ categoryId, defaultLayout = 'table' }: SectorTableProps) => {
   const router = useRouter();
   const { client } = useContext(DirectusContext);
 
-  const [currentLayout, setCurrentLayout] = useState("card");
+  const [currentLayout, setCurrentLayout] = useState(defaultLayout);
 
   const [data, setData] = useState<Array<any>>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,14 +26,19 @@ export const MonitoringTable = () => {
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
+    let filters = searchQuery ? { title: { _contains: searchQuery } } : {};
+    Object.assign(filters, {
+      category_id: {
+        _eq: categoryId,
+      },
+    })
+
     // TODO: get total with search
     async function fetchTotalCount() {
       try {
         const data = await client.request(
-          aggregate("category", {
-            filter: searchQuery
-              ? { full_name: { _contains: searchQuery } }
-              : {}, // # not working
+          aggregate("sector", {
+            filter: filters,
             aggregate: { count: ["id"] },
           })
         );
@@ -41,26 +51,14 @@ export const MonitoringTable = () => {
 
     async function fetchData() {
       try {
-        const filters = searchQuery
-          ? { full_name: { _contains: searchQuery } }
-          : {};
-
         const result = await client.request(
-          readItems("category", {
+          readItems("sector", {
             fields: ["*"],
             limit: pageSize,
             offset: (currentPage - 1) * pageSize,
             filter: filters,
           })
         );
-
-        const token = await client.getToken();
-
-        result.forEach(category => {
-            if (category.image) {
-                category.imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${category.image}?access_token=${token}`;
-            }
-        });
 
         setData(result ?? []);
       } catch (error) {
@@ -70,7 +68,7 @@ export const MonitoringTable = () => {
 
     fetchTotalCount();
     fetchData();
-  }, [client, currentPage, pageSize, searchQuery]);
+  }, [categoryId, client, currentPage, pageSize, searchQuery]);
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchQuery(event.target.value);
@@ -84,9 +82,9 @@ export const MonitoringTable = () => {
   return (
     <>
       <DataTable
-        columns={currentLayout === 'card' ? cardColumns : columns}
-        layout="card"
+        columns={currentLayout === "card" ? cardColumns : columns}
         onLayoutChange={(val: string) => setCurrentLayout(val)}
+        tableHeader={false}
         searchKey="Name"
         data={data}
         currentPage={currentPage}
@@ -98,7 +96,9 @@ export const MonitoringTable = () => {
         handleSearchChange={handleSearchChange}
         cardContainerStyles="!grid-cols-5"
         cardStyles="py-3 px-2 rounded-xl shadow-xl shadow-[#F4F4F4] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        onClickRow={(id) => router.push(`/monitoring/sector/${id}`)}
+        tableRowStyles="!border-0 !mx-8 hover:bg-transparent"
+        tableCellStyles="flex flex-col w-full px-3 py-3 mb-4 shadow-sm rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100 cursor-pointer"
+        onClickRow={(id) => router.push(`/monitoring/subsector/${id}`)}
       />
     </>
   );

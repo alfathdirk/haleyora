@@ -19,7 +19,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import Image from "next/image";
 import { Pagination } from "@/components/ui/pagination";
 import {
   DropdownMenu,
@@ -41,13 +40,18 @@ interface DataTableProps<TData, TValue> {
   currentPage: number;
   pageSize: number;
   totalItems: number;
+  tableHeader?: boolean;
   // methods
+  onClickRow?: (val: string | number) => void;
   onPageChange: (val: number) => void;
   setCurrentPage: (val: number) => void;
   setPageSize: (val: number) => void;
   onLayoutChange?: (val: string) => void;
   handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
   // Styling
+  tableRowContainerStyles?: ClassValue;
+  tableRowStyles?: ClassValue;
+  tableCellStyles?: ClassValue;
   cardContainerStyles?: ClassValue;
   cardStyles?: ClassValue;
 }
@@ -60,11 +64,16 @@ export function DataTable<TData, TValue>({
   pageSize,
   totalItems,
   layout = "table",
+  tableHeader = true,
+  onClickRow,
   handleSearchChange,
   onPageChange,
   setCurrentPage,
   setPageSize,
   onLayoutChange,
+  tableRowContainerStyles,
+  tableRowStyles,
+  tableCellStyles,
   cardContainerStyles,
   cardStyles,
 }: DataTableProps<TData, TValue>) {
@@ -120,7 +129,7 @@ export function DataTable<TData, TValue>({
 
         <div className="d-flex gap-x-4">
           <div className="pr-4 border-r border-[#787486]">
-            <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2">
+            <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
               <LucideSearch className="w-6 h-6 text-[#959595]" />
               <Input
                 className="!border-none shadow-none px-0"
@@ -129,57 +138,40 @@ export function DataTable<TData, TValue>({
               />
             </div>
           </div>
+
           <div className="flex items-center gap-x-2">
             <div
-              className={clsx('h-fit p-2 text-[#787486] rounded-lg cursor-pointer flex items-center',
+              className={clsx(
+                "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
                 {
-                  "bg-[#00A9E3] !text-white": currentLayout === "table"
+                  "bg-[#00A9E3] !text-white": currentLayout === "table",
                 }
               )}
               onClick={() => {
                 if (onLayoutChange) {
-                  onLayoutChange('table')
+                  onLayoutChange("table");
                 }
-                setLayout("table")
+                setLayout("table");
               }}
             >
-              <PauseHorizontalIcon
-                className="w-full h-5 cursor-pointer"
-              />
+              <PauseHorizontalIcon className="w-full h-5 cursor-pointer" />
             </div>
             <div
-              className={clsx('h-fit p-2 text-[#787486] rounded-lg cursor-pointer flex items-center',
+              className={clsx(
+                "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
                 {
-                  "bg-[#00A9E3] !text-white": currentLayout === "card"
+                  "bg-[#00A9E3] !text-white": currentLayout === "card",
                 }
               )}
               onClick={() => {
                 if (onLayoutChange) {
-                  onLayoutChange('card')
+                  onLayoutChange("card");
                 }
-                setLayout("card")
+                setLayout("card");
               }}
             >
-              <DotsIcon
-                className="w-full h-5 cursor-pointer"
-              />
+              <DotsIcon className="w-full h-5 cursor-pointer" />
             </div>
-
-            {/* <Image
-              src="./assets/svg/menu.svg"
-              width={24}
-              height={24}
-              className={`cursor-pointer ${
-                currentLayout === "card" ? "bg-[#00A9E3]" : "text-[#787486]"
-              }`}
-              alt=""
-              onClick={() => {
-                if (onLayoutChange) {
-                  onLayoutChange('card')
-                }
-                setLayout("card")
-              }}
-            /> */}
           </div>
         </div>
       </div>
@@ -187,35 +179,49 @@ export function DataTable<TData, TValue>({
       <ScrollArea className="rounded-md h-[calc(80vh-220px)]">
         {currentLayout === "table" ? (
           <Table className="relative">
-            <TableHeader className="bg-[#FAFBFB]">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="px-2">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
+            {tableHeader && (
+              <TableHeader className="bg-[#FAFBFB] sticky top-0 left-0 z-30">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id} className="px-2">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHeader>
+            )}
             <TableBody>
               {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className={cn(tableRowStyles)}
+                    onClick={() => {
+                      console.log("onClickRow", row.original?.id);
+                      if (onClickRow) {
+                        onClickRow(row.original?.id);
+                      }
+                    }}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="px-2 py-3">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <TableCell
+                        key={cell.id}
+                        className={cn("px-2 py-3", tableCellStyles)}
+                      >
+                        <div className="">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </div>
                       </TableCell>
                     ))}
                   </TableRow>
@@ -232,12 +238,26 @@ export function DataTable<TData, TValue>({
               )}
             </TableBody>
           </Table>
-        ) : (
-          <div className={cn("grid gap-4 md:grid-cols-2 lg:grid-cols-3", cardContainerStyles)}>
+        ) : table.getRowModel().rows.length ? (
+          <div
+            className={cn(
+              "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
+              cardContainerStyles
+            )}
+          >
             {table.getRowModel().rows.map((row) => (
               <div
                 key={row.id}
-                className={cn("p-4 bg-white border rounded-md shadow-sm", cardStyles)}
+                className={cn(
+                  "p-4 bg-white border rounded-md shadow-sm",
+                  cardStyles
+                )}
+                onClick={() => {
+                  console.log("onClickRow", row.original?.id);
+                  if (onClickRow) {
+                    onClickRow(row.original?.id);
+                  }
+                }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <div key={cell.id}>
@@ -247,6 +267,8 @@ export function DataTable<TData, TValue>({
               </div>
             ))}
           </div>
+        ) : (
+          <div className="h-24 text-center">No results.</div>
         )}
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
