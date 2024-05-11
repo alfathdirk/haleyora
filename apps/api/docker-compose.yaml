@@ -1,16 +1,16 @@
 version: "3"
 services:
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - 8025:8025
-      - 1025:1025
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - 8025:8025
+  #     - 1025:1025
   directus:
     # image: directus/directus:10.9.0
     # image: directus/directus:10.8.3
     build: ./
     ports:
-      - 8055:8055
+      - 8056:8056
     volumes:
       - ./database:/directus/database
       - ./uploads:/directus/uploads
