@@ -125,7 +125,9 @@ export default defineEndpoint((router, ctx) => {
           'exam_score',
           'task_score',
           'last_video_duration',
+          'video_duration',
           'tasks',
+          'exam_attempt',
         ],
       });
 
@@ -145,6 +147,7 @@ export default defineEndpoint((router, ctx) => {
           'exam_score',
           'task_score',
           'last_video_duration',
+          'video_duration',
           'tasks',
         ],
       });
