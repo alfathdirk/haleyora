@@ -10,11 +10,12 @@ services:
     # image: directus/directus:10.8.3
     build: ./
     ports:
-      - 8056:8056
+      - 8066:8066
     volumes:
       - ./database:/directus/database
       - ./uploads:/directus/uploads
       - ./extensions:/directus/extensions
+      - ./.env:/directus/.env
     environment:
       KEY: "directus-key"
       SECRET: "directus-secret"
