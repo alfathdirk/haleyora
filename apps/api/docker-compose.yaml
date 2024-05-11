@@ -5,7 +5,7 @@ services:
   #   ports:
   #     - 8025:8025
   #     - 1025:1025
-  directus:
+  elearning-api:
     # image: directus/directus:10.9.0
     # image: directus/directus:10.8.3
     build: ./
