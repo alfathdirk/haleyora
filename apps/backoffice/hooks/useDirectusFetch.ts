@@ -9,7 +9,7 @@ interface ApiResponse<T> {
 
 interface FetchOptions<T = any> {
   headers?: HeadersInit;
-  body?: BodyInit | null; // Adjusted to BodyInit or null
+  body?: BodyInit | Record<string, any> | null;
   params?: Record<string, any>;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   transformResponse?: (data: any) => T;
@@ -92,10 +92,13 @@ export const useDirectusFetch = (): FetchMethods => {
 
     try {
       const response = await fetch(endpoint.toString(), finalOptions);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
+
+      const data =
+        response?.statusText !== "No Content" ? await response?.json() : {};
       return { data: transformResponse(data) }; // Apply any transformation to the data
     } catch (error) {
       console.error("Error making fetch call:", error);
