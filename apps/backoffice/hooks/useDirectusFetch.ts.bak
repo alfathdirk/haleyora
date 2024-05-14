@@ -9,7 +9,7 @@ interface ApiResponse<T> {
 
 interface FetchOptions<T = any> {
   headers?: HeadersInit;
-  body?: BodyInit | null; // Adjusted to BodyInit or null
+  body?: BodyInit | Record<string, any> | null;
   params?: Record<string, any>;
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   transformResponse?: (data: any) => T;
@@ -36,11 +36,6 @@ interface FetchMethods {
     endpoint: string,
     options?: FetchOptions<T>,
   ) => Promise<ApiResponse<T>>;
-  upload: <T = any>(
-    endpoint: string,
-    files: File[],
-    options?: Omit<FetchOptions<T>, "body">,
-  ) => Promise<ApiResponse<T>>;
 }
 
 export const useDirectusFetch = (): FetchMethods => {
@@ -62,32 +57,26 @@ export const useDirectusFetch = (): FetchMethods => {
       transformResponse = (data: any) => data as T,
     } = {} as FetchOptions<T>,
   ): Promise<ApiResponse<T>> => {
+
     const endpoint = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`);
 
-    // Handle params
+    // # Handling params
     Object.keys(params).forEach((key) => {
       endpoint.searchParams.append(key, params[key]);
     });
 
-    const defaultHeaders: HeadersInit = {
+    const defaultHeaders = {
       Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
     };
 
-    if (!(body instanceof FormData)) {
-      defaultHeaders["Content-Type"] = "application/json";
-    }
-
-    // Convert body to JSON string if it's a plain object
-    const finalBody =
-      body && !(body instanceof FormData) && typeof body === "object"
-        ? JSON.stringify(body)
-        : body;
-
-    // Final options
+    // # Final Combine.
     const finalOptions: RequestInit = {
       method,
       headers: new Headers({ ...defaultHeaders, ...headers }),
-      body: ["POST", "PUT", "PATCH"].includes(method) ? finalBody : null,
+      body: ["POST", "PUT", "PATCH"].includes(method)
+        ? JSON.stringify(body)
+        : null,
     };
 
     try {
@@ -98,26 +87,10 @@ export const useDirectusFetch = (): FetchMethods => {
       const data = await response.json();
       return { data: transformResponse(data) }; // Apply any transformation to the data
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error("Error making fetch call:", error);
       throw error;
     }
-  };
-
-  const upload = async <T>(
-    endpoint: string,
-    files: File[],
-    options: Omit<FetchOptions<T>, "body"> = {},
-  ): Promise<ApiResponse<T>> => {
-    const formData = new FormData();
-    files.forEach((file, index) => {
-      formData.append(`file${index}`, file);
-    });
-
-    return baseFetch(endpoint, {
-      ...options,
-      method: "POST",
-      body: formData,
-    });
   };
 
   return {
@@ -131,6 +104,5 @@ export const useDirectusFetch = (): FetchMethods => {
       baseFetch(endpoint, { ...options, method: "DELETE" }),
     patch: (endpoint, options) =>
       baseFetch(endpoint, { ...options, method: "PATCH" }),
-    upload,
   };
 };
