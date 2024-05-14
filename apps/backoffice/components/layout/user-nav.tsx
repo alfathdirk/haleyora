@@ -26,7 +26,7 @@ export function UserNav() {
             {currentUser?.first_name} {currentUser?.last_name}
           </p>
           <p className="text-sm leading-none text-muted-foreground">
-            {currentUser?.email}
+            {currentUser?.role?.name}
           </p>
         </div>
         <DropdownMenuTrigger asChild>
