@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmployeeOverview } from "@/components/EmployeeOverview";
 import { useContext } from "react";
 import { AuthContext } from "@/provider/Auth";
+import LatestCompletedQuiz from "@/components/LatestCompletedQuiz";
 
 export default function page() {
   const { currentUser } = useContext(AuthContext);
@@ -31,7 +32,7 @@ export default function page() {
               Others
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="overview" className="space-y-4">
+          <TabsContent value="overview" className="space-y-16">
             <div className="grid grid-cols-1 gap-14 md:grid-cols-2 lg:grid-cols-7 min-h-96">
               <Card className="col-span-3">
                 <CardHeader>
@@ -53,6 +54,9 @@ export default function page() {
                   <EmployeeOverview />
                 </CardContent>
               </Card>
+            </div>
+            <div>
+              <LatestCompletedQuiz />
             </div>
           </TabsContent>
         </Tabs>
