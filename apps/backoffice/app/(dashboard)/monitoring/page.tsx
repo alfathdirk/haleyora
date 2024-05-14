@@ -29,26 +29,12 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-// import Dropzone from "@/components/dropzone";
-// import { FileCheck2Icon } from "lucide-react";
-
-// const ImgSchema = z.object({
-//   fileName: z.string(),
-//   name: z.string(),
-//   fileSize: z.number(),
-//   size: z.number(),
-//   fileKey: z.string(),
-//   key: z.string(),
-//   fileUrl: z.string(),
-//   url: z.string(),
-// });
-
+import FileUpload from "@/components/FileUpload";
 const formSchema = z.object({
   name: z
     .string()
     .min(3, { message: "Nama kategori harus lebih dari 3 karakter." }),
-  // image: z
-  //   .array(ImgSchema),
+  image: z.array(z.instanceof(File)).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -69,38 +55,22 @@ export default function MonitoringPage() {
     shouldUseNativeValidation: false,
     defaultValues: {
       name: "",
-      // image: [],
+      image: [],
     },
   });
-
-  // function handleOnDrop(acceptedFiles: FileList | null) {
-  //   if (acceptedFiles && acceptedFiles.length > 0) {
-  //     const allowedTypes = [{ name: "png", types: ["image/png"] }];
-  //     const fileType = allowedTypes.find((allowedType) =>
-  //       allowedType.types.find((type) => type === acceptedFiles[0].type)
-  //     );
-  //     if (!fileType) {
-  //       form.setValue("image", []);
-  //       form.setError("image", {
-  //         message: "Masukkan tipe file gambar.",
-  //         type: "typeError",
-  //       });
-  //     } else {
-  //       form.setValue("image", [acceptedFiles]);
-  //       form.clearErrors("image");
-  //     }
-  //   } else {
-  //     form.setValue("image", []);
-  //     form.setError("image", {
-  //       message: "File is required",
-  //       type: "typeError",
-  //     });
-  //   }
-  // }
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
     try {
+
+      // # Upload image
+      if (data.image && data.image.length > 0) {
+        const resImage = await fetch.upload("files", data.image);
+        data.image = resImage?.data?.data?.id ?? null;
+      } else {
+        delete data.image;
+      }
+
       await fetch.post("items/category", { body: data });
 
       toast({
@@ -165,30 +135,19 @@ export default function MonitoringPage() {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="image"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Files</FormLabel>
                       <FormControl>
-                        <Dropzone
-                          {...field}
-                          dropMessage="Drop files or click here"
-                          handleOnDrop={handleOnDrop}
-                        />
+                        <FileUpload name="image" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                {form.watch("image") && (
-                  <div className="relative flex items-center justify-center gap-3 p-4">
-                    <FileCheck2Icon className="w-4 h-4" />
-                    <p className="text-sm font-medium">
-                      {form.watch("image")?.name}
-                    </p>
-                  </div>
-                )} */}
               </form>
             </Form>
             <DialogFooter>

@@ -42,7 +42,7 @@ export const MonitoringTable = () => {
   async function fetchData() {
     try {
       const filters = searchValue
-        ? { full_name: { _contains: searchValue } }
+        ? { name: { _contains: searchValue } }
         : {};
 
       const { data: res } = await fetch.get("items/category", {
