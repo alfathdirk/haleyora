@@ -402,7 +402,7 @@ export default defineEndpoint((router, ctx) => {
 
         const result = await axios({
           method: 'post',
-          url: 'http://localhost:3000/generate-certificate',
+          url: 'http://localhost:3999/generate-certificate',
           headers: {},
           data: objectData,
         });
@@ -445,7 +445,7 @@ export default defineEndpoint((router, ctx) => {
 
       const result = await axios({
         method: 'get',
-        url: `http://localhost:3000/certificate/${certificateId}`,
+        url: `http://localhost:3999/certificate/${certificateId}`,
       });
 
       return res.send({
