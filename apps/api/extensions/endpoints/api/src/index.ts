@@ -2,6 +2,8 @@ import { defineEndpoint } from '@directus/extensions-sdk';
 import axios from 'axios';
 import { useItemService } from './service/ItemService';
 import { useAuthService } from './service/AuthService';
+import fs from 'fs';
+import path from 'path';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -316,6 +318,145 @@ export default defineEndpoint((router, ctx) => {
     }
   });
 
+  router.post('/generate-certificate/:certificate_id', async(req, res) => {
+    try {
+      // OK Decode token
+      const bearerToken = req.headers.authorization;
+      const parseJwt = (token: string | undefined) => {
+        if (token) {
+          return JSON.parse(
+            Buffer.from(String(token.split('.')[1]), 'base64').toString(),
+          );
+        } else {
+          throw new Error('Token not found');
+        }
+      };
+      const payloadToken = parseJwt(bearerToken);
+      if (!payloadToken) {
+        throw new Error('UNAUTHORIZED!');
+      }
+
+      const params = req.params;
+      const certificateId = params.certificate_id;
+      if (!certificateId) {
+        throw new Error('certificate_id is empty!');
+      }
+
+      const employeeCertificateItem = await useItemService(ctx, 'employee_certificate');
+      const [employeeValidCertificateData] = await employeeCertificateItem.readByQuery({
+        filter: {
+          id: {
+            _eq: String(certificateId),
+          },
+        },
+        fields: [
+          'id',
+          'employee.full_name',
+          'user_created',
+          'course.course.title',
+          'expired_days',
+        ],
+      });
+
+      const certificateSettingItem = await useItemService(ctx, 'certificate_setting');
+      const [certificateSettingData] = await certificateSettingItem.readByQuery({
+        fields: [
+          'id',
+          'title',
+          'signature',
+          'pic',
+        ],
+      });
+
+      // Read the contents of the uploads directory
+      const files = fs.readdirSync('uploads');
+
+      // Find the file that starts with "a"
+      const file = files.find(f => f.startsWith(`${certificateSettingData.signature}`));
+
+      // If the file is found, read its contents
+      if (file) {
+        const filePath = path.join('uploads', file);
+        const fileContent = fs.readFileSync(filePath, 'base64');
+
+        // const formData = new FormData();
+        // formData.append('employeeName', employeeValidCertificateData.employee.full_name);
+        // formData.append('courseName', employeeValidCertificateData.course.course.title);
+        // formData.append('courseTaken', employeeValidCertificateData.user_created);
+        // formData.append('validUntil', employeeValidCertificateData.expired_days);
+        // formData.append('certificateId', employeeValidCertificateData.id);
+        // formData.append('picTitle', certificateSettingData.title);
+        // formData.append('picSignatureBase64', fileContent);
+        // formData.append('picName', certificateSettingData.pic);
+
+        const objectData = {
+          employeeName: employeeValidCertificateData.employee.full_name,
+          courseName: employeeValidCertificateData.course.course.title,
+          courseTaken: employeeValidCertificateData.user_created,
+          validUntil: employeeValidCertificateData.expired_days,
+          certificateId: employeeValidCertificateData.id,
+          picTitle: certificateSettingData.title,
+          picSignatureBase64: fileContent,
+          picName: certificateSettingData.pic,
+        };
+
+        const result = await axios({
+          method: 'post',
+          url: 'http://localhost:3000/generate-certificate',
+          headers: {},
+          data: objectData,
+        });
+
+        return res.send({
+          message: result,
+        });
+      } else {
+        throw new Error('Signature file not found!');
+      }
+    } catch (error: unknown) {
+      console.log('🚀 ~ router.post ~ error:', error.message);
+      res.send({ message: 'Generate employee certificate failed!', error: error.message });
+    }
+  });
+
+  router.get('/get-certificate/:certificate_id', async(req, res) => {
+    try {
+      // OK Decode token
+      const bearerToken = req.headers.authorization;
+      const parseJwt = (token: string | undefined) => {
+        if (token) {
+          return JSON.parse(
+            Buffer.from(String(token.split('.')[1]), 'base64').toString(),
+          );
+        } else {
+          throw new Error('Token not found');
+        }
+      };
+      const payloadToken = parseJwt(bearerToken);
+      if (!payloadToken) {
+        throw new Error('UNAUTHORIZED!');
+      }
+
+      const params = req.params;
+      const certificateId = params.certificate_id;
+      if (!certificateId) {
+        throw new Error('certificate_id is empty!');
+      }
+
+      const result = await axios({
+        method: 'get',
+        url: `http://localhost:3000/certificate/${certificateId}`,
+      });
+
+      return res.send({
+        message: result,
+      });
+    } catch (error: unknown) {
+      console.log('🚀 ~ router.post ~ error:', error.message);
+      res.send({ message: 'Generate employee certificate failed!', error: error.message });
+    }
+  })
+
   router.post('/login', async(req, res) => {
     const body = req.body;
     const formData = new FormData();
@@ -325,6 +466,7 @@ export default defineEndpoint((router, ctx) => {
     const login = async(email: string, password: string) => {
       try {
         const authService = await useAuthService(ctx);
+        console.log('🚀 ~ login ~ authService:', authService);
         const resultAuth = await authService.login('default', {
           email,
           password,
