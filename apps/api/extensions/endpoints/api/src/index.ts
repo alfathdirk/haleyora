@@ -466,7 +466,6 @@ export default defineEndpoint((router, ctx) => {
     const login = async(email: string, password: string) => {
       try {
         const authService = await useAuthService(ctx);
-        console.log('🚀 ~ login ~ authService:', authService);
         const resultAuth = await authService.login('default', {
           email,
           password,
