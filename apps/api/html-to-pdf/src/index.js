@@ -6,12 +6,12 @@ const Handlebars = require('handlebars');
 const express = require('express');
 require('dotenv').config();
 
-const { env } = process;
+const { processEnv } = process;
 
 const app = express();
 app.use(express.json());
 app.use('/files', express.static('certificates'));
-const port = env.PORT;
+const port = processEnv.PORT;
 
 app.post(
   '/generate-certificate',
@@ -29,7 +29,11 @@ app.post(
         picName,
       } = req.body;
       // Create a browser instance
-      const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch({
+        env: {
+          DISPLAY: ':10.0',
+        },
+      });
 
       // Create a new page
       const page = await browser.newPage();
