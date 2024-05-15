@@ -33,3 +33,15 @@ services:
       EXTENSIONS_AUTO_RELOAD: true
       ACCESS_TOKEN_TTL: "30d"
       REFRESH_TOKEN_TTL: "60d"
+  htmltopdf:
+    image: htmltopdf
+    build:
+      context: ./html-to-pdf
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./html-to-pdf/src/certificates:/directus/certificates
+    environment:
+      NODE_ENV: production
+      PORT: 3999
+    ports:
+      - 3999:3999
