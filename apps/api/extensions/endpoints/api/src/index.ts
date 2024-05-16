@@ -402,7 +402,7 @@ export default defineEndpoint((router, ctx) => {
 
         const result = await axios({
           method: 'post',
-          url: 'http://localhost:3999/generate-certificate',
+          url: 'http://htmltopdf:3999/generate-certificate',
           headers: {},
           data: objectData,
         });
@@ -445,7 +445,7 @@ export default defineEndpoint((router, ctx) => {
 
       const result = await axios({
         method: 'get',
-        url: `http://localhost:3999/certificate/${certificateId}`,
+        url: `http://htmltopdf:3999/certificate/${certificateId}`,
       });
 
       return res.send({
@@ -455,7 +455,7 @@ export default defineEndpoint((router, ctx) => {
       console.log('🚀 ~ router.post ~ error:', error.message);
       res.send({ message: 'Generate employee certificate failed!', error: error.message });
     }
-  })
+  });
 
   router.post('/login', async(req, res) => {
     const body = req.body;
