@@ -1,5 +1,5 @@
 export interface Data {
-  meta: Meta;
+  meta?: Meta;
   data: Employee[];
 }
 
