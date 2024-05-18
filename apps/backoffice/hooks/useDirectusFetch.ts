@@ -15,7 +15,7 @@ interface FetchOptions<T = any> {
   transformResponse?: (data: any) => T;
 }
 
-interface FetchMethods {
+export interface DirectusFetchMethods {
   get: <T = any>(
     endpoint: string,
     options?: FetchOptions<T>,
@@ -43,7 +43,7 @@ interface FetchMethods {
   ) => Promise<ApiResponse<T>>;
 }
 
-export const useDirectusFetch = (): FetchMethods => {
+export const useDirectusFetch = (): DirectusFetchMethods => {
   const { accessToken } = useDirectusContext();
 
   if (!accessToken) {
