@@ -134,19 +134,19 @@ export const navItems: NavItem[] = [
   //   icon: "userRole",
   // },
   {
-    path: "/master-data/sector",
+    path: "/masterdata/sector",
     title: "Bidang",
     label: "Bidang",
     icon: "parameter",
   },
   {
-    path: "/master-data/sub-sector",
+    path: "/masterdata/subsector",
     title: "Sub Bidang",
     label: "Sub Bidang",
     icon: "parameter",
   },
   {
-    path: "/master-data/activities",
+    path: "/masterdata/activities",
     title: "Aktifitas",
     label: "Aktifitas",
     icon: "report",
