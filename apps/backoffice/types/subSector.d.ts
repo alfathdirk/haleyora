@@ -4,6 +4,7 @@ export interface SubSectorResponse {
 
 export interface SubSector {
   id: string;
-  title: string;
   sector_id: string;
+  title: string;
+  name?: string;
 }
