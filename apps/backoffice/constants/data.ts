@@ -80,7 +80,7 @@ export const routeConfig = [
 
 export const navItems: NavItem[] = [
   {
-    path: "/",
+    path: "#",
     groupLabel: "Menu Utama",
     title: "Menu Utama",
     label: "Menu Utama",
@@ -122,33 +122,33 @@ export const navItems: NavItem[] = [
     icon: "lessons",
   },
   {
-    path: "/",
+    path: "#",
     groupLabel: "Master Data",
     title: "Master Data",
     label: "Master Data",
   },
+  // {
+  //   path: "/admin-management",
+  //   title: "Data Admin",
+  //   label: "Data Admin",
+  //   icon: "userRole",
+  // },
   {
-    path: "/admin-management",
-    title: "Data Admin",
-    label: "Data Admin",
-    icon: "userRole",
-  },
-  {
-    path: "/access",
-    title: "Hak Akses",
-    label: "Hak Akses",
+    path: "/master-data/sector",
+    title: "Bidang",
+    label: "Bidang",
     icon: "parameter",
   },
   {
-    path: "/parameters",
-    title: "Parameters",
-    label: "Parameters",
+    path: "/master-data/sub-sector",
+    title: "Sub Bidang",
+    label: "Sub Bidang",
     icon: "parameter",
   },
   {
-    path: "/work-report",
-    title: "Data Pekerjaan",
-    label: "Data Pekerjaan",
+    path: "/master-data/activities",
+    title: "Aktifitas",
+    label: "Aktifitas",
     icon: "report",
   },
 ];
