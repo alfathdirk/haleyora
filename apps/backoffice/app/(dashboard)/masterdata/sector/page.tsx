@@ -5,17 +5,18 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import BreadCrumb from "@/components/breadcrumb";
 import { SectorTable } from "@/components/tables/Sector/table";
 import { Heading } from "@/components/ui/heading";
+import useCategoriesStore from "@/stores/useCategoriesStore";
+import SectorFormDialog from "@/components/forms/SectorFormDialog";
 import { debounce } from "@/lib/utils";
+import { ColumnDef } from "@tanstack/react-table";
+import { Sector } from "@/types/sector";
+import { Edit3 } from "lucide-react";
+import { DeleteAction } from "@/components/tables/Sector/columns/delete-action";
 
-export default function SectorPage({
-  params,
-}: {
-  params: {
-    id: string;
-  };
-}) {
+export default function MasterDataSectorPage() {
   const pageName = "Bidang";
   const fetch = useDirectusFetch();
+  const { setCategories } = useCategoriesStore();
 
   const [data, setData] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,15 +44,7 @@ export default function SectorPage({
   };
 
   async function fetchData() {
-    let filters = { category_id: { _eq: params?.id } };
-
-    if (searchValue) {
-      Object.assign(filters, {
-        title: {
-          _contains: searchValue,
-        },
-      });
-    }
+    let filters = searchValue ? { title: { _contains: searchValue } } : {};
 
     try {
       const { data: res } = await fetch.get("items/sector", {
@@ -60,6 +53,7 @@ export default function SectorPage({
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: JSON.stringify(filters),
+          sort: '-id',
           meta: "total_count,filter_count",
         },
       });
@@ -77,21 +71,75 @@ export default function SectorPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, pageSize, searchValue]);
 
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: res } = await fetch.get("items/category", {
+          params: {
+            fields: ["id, name"],
+          },
+        });
+
+        setCategories(res?.data ?? []);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching:", error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
+  const columnsWithAction: ColumnDef<Sector>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div
+          id={row.original?.id}
+          className="flex items-center justify-between font-semibold"
+        >
+          {row.original?.title}
+          <div>
+            <SectorFormDialog
+              initialData={row?.original}
+              triggerTitle={
+                <Edit3 className="w-4 h-auto text-gray-400 group-hover:text-[#00A9E3]" />
+              }
+              dialogTriggerProps={{
+                className: "p-2 h-fit group hover:bg-transparent",
+                variant: "ghost",
+              }}
+              onSubmitCallback={() => fetchData()}
+            />
+            <DeleteAction
+              data={row.original}
+              onConfirmCallback={() => fetchData()}
+            />
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="flex-1">
       <BreadCrumb
         items={[
-          { title: "Monitoring", link: "/monitoring" },
-          { title: pageName, link: "/monitoring/sector" },
+          { title: "Master Data", link: "#" },
+          { title: pageName, link: "/masterdata/sector" },
         ]}
       />
 
       <div className="flex items-start justify-between !mb-10">
         <Heading title={pageName} description={`Manajemen ${pageName}`} />
+
+        <SectorFormDialog onSubmitCallback={() => fetchData()} />
       </div>
 
       <SectorTable
         data={data}
+        customColumns={columnsWithAction}
         onClickRow={false}
         currentPage={currentPage}
         pageSize={pageSize}

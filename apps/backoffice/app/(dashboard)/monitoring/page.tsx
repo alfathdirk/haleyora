@@ -30,6 +30,7 @@ import { useState, useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import FileUpload from "@/components/FileUpload";
+
 const formSchema = z.object({
   name: z
     .string()

@@ -84,11 +84,12 @@ export const CourseForm: React.FC<ProductFormProps> = ({
   quiz,
 }) => {
   const fetch = useDirectusFetch();
-  const { client } = useDirectusContext();
   const router = useRouter();
   const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const title = initialData
     ? `Ubah ${initialData?.title ?? ""}`
     : "Buat materi pembelajaran";
