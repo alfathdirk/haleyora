@@ -61,12 +61,12 @@ export const navItems: NavItem[] = [
     label: "Monitoring",
     icon: "dashboard",
   },
-  {
-    path: "/exam",
-    title: "Ujian",
-    label: "Ujian",
-    icon: "lessons",
-  },
+  // {
+  //   path: "/exam",
+  //   title: "Ujian",
+  //   label: "Ujian",
+  //   icon: "lessons",
+  // },
   {
     path: "#",
     groupLabel: "Master Data",
