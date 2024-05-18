@@ -5,10 +5,8 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import BreadCrumb from "@/components/breadcrumb";
 import { Heading } from "@/components/ui/heading";
 import useCategoriesStore from "@/stores/useCategoriesStore";
-import SectorFormDialog from "@/components/forms/SectorFormDialog";
 import { debounce } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Sector } from "@/types/sector";
 import { Edit3 } from "lucide-react";
 import { DeleteAction } from "@/components/tables/SubSector/columns/delete-action";
 import { SubSector } from "@/types/subSector";
@@ -55,7 +53,7 @@ export default function MasterDataSubSectorPage() {
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: JSON.stringify(filters),
-          sort: '-id',
+          sort: "-id",
           meta: "total_count,filter_count",
         },
       });
@@ -96,7 +94,7 @@ export default function MasterDataSubSectorPage() {
     fetchCategories();
   }, []);
 
-  const columnsWithAction: ColumnDef<Sector>[] = [
+  const columnsWithAction: ColumnDef<SubSector>[] = [
     {
       accessorKey: "title",
       header: "Title",
@@ -107,7 +105,7 @@ export default function MasterDataSubSectorPage() {
         >
           {row.original?.title}
           <div>
-            <SectorFormDialog
+            <SubSectorFormDialog
               initialData={row?.original}
               triggerTitle={
                 <Edit3 className="w-4 h-auto text-gray-400 group-hover:text-[#00A9E3]" />
@@ -146,7 +144,6 @@ export default function MasterDataSubSectorPage() {
       <SubSectorTable
         data={data}
         customColumns={columnsWithAction}
-        onClickRow={false}
         currentPage={currentPage}
         pageSize={pageSize}
         totalItems={totalItems}

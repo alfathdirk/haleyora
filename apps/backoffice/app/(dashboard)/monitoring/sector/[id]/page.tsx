@@ -6,6 +6,7 @@ import BreadCrumb from "@/components/breadcrumb";
 import { SectorTable } from "@/components/tables/Sector/table";
 import { Heading } from "@/components/ui/heading";
 import { debounce } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SectorPage({
   params,
@@ -15,6 +16,8 @@ export default function SectorPage({
   };
 }) {
   const pageName = "Bidang";
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const fetch = useDirectusFetch();
 
   const [data, setData] = useState<Array<any>>([]);
@@ -87,12 +90,11 @@ export default function SectorPage({
       />
 
       <div className="flex items-start justify-between !mb-10">
-        <Heading title={pageName} description={`Manajemen ${pageName}`} />
+        <Heading title={pageName} description={searchParams.get('title') ?? ''} />
       </div>
 
       <SectorTable
         data={data}
-        onClickRow={false}
         currentPage={currentPage}
         pageSize={pageSize}
         totalItems={totalItems}
@@ -100,6 +102,7 @@ export default function SectorPage({
         handlePageChange={handlePageChange}
         setCurrentPage={setCurrentPage}
         setPageSize={setPageSize}
+        onClickRow={(item) => router.push(`/monitoring/subsector/${item?.id}?title=${encodeURIComponent(item?.title)}`)}
       />
     </div>
   );

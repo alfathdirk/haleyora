@@ -6,13 +6,11 @@ import { LucideSearch } from "lucide-react";
 import { columns } from "./columns/columns";
 import { cardColumns } from "./columns/columns-card";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 interface SectorTableProps<TData, TValue> {
   defaultLayout?: string;
-  onClickRow?: boolean;
   customColumns?: ColumnDef<TData, TValue>[];
   data: TData[];
   currentPage: number;
@@ -20,6 +18,7 @@ interface SectorTableProps<TData, TValue> {
   totalItems: number;
   tableHeader?: boolean;
   // methods
+  onClickRow?: (data: TData) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePageChange: (val: number) => void;
   setCurrentPage: (val: number) => void;
@@ -32,15 +31,13 @@ export const SubSectorTable = <TData, TValue>({
   pageSize,
   totalItems,
   defaultLayout = "table",
-  onClickRow = true,
   customColumns,
+  onClickRow,
   handleInputChange,
   handlePageChange,
   setCurrentPage,
   setPageSize,
 }: SectorTableProps<TData, TValue>) => {
-  const router = useRouter();
-
   const [currentLayout, setCurrentLayout] = useState(defaultLayout);
 
   const headerActions = () => {
@@ -62,7 +59,9 @@ export const SubSectorTable = <TData, TValue>({
 
   return (
     <DataTable
-      columns={currentLayout === "card" ? cardColumns : (customColumns ?? columns)}
+      columns={
+        currentLayout === "card" ? cardColumns : customColumns ?? columns
+      }
       onLayoutChange={(val: string) => setCurrentLayout(val)}
       tableHeader={false}
       data={data}
@@ -80,9 +79,7 @@ export const SubSectorTable = <TData, TValue>({
         "flex flex-col w-full px-3 py-3 mb-4 shadow-sm rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100",
         onClickRow ? "cursor-pointer" : "cursor-default",
       )}
-      onClickRow={(id) =>
-        onClickRow ? router.push(`/monitoring/subsector/${id}`) : {}
-      }
+      onClickRow={onClickRow}
     />
   );
 };

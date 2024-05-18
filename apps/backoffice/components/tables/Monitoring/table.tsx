@@ -111,7 +111,7 @@ export const MonitoringTable = () => {
         setPageSize={setPageSize}
         cardContainerStyles="!grid-cols-5"
         cardStyles="py-3 px-2 rounded-xl shadow-xl shadow-[#F4F4F4] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        onClickRow={(id) => router.push(`/monitoring/sector/${id}`)}
+        onClickRow={(item) => router.push(`/monitoring/sector/${item?.id}?title=${encodeURIComponent(item?.name)}`)}
       />
     </>
   );
