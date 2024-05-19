@@ -28,29 +28,12 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
 import { useEffect, useState } from "react";
-import { createItem, deleteItem, updateItem } from "@directus/sdk";
 import { Checkbox } from "../ui/checkbox";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { AlertModal } from "../modal/alert-modal";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import FileUpload from "../FileUpload";
 
-const ImgSchema = z.object({
-  fileName: z.string(),
-  name: z.string(),
-  fileSize: z.number(),
-  size: z.number(),
-  fileKey: z.string(),
-  key: z.string(),
-  fileUrl: z.string(),
-  url: z.string(),
-});
-
-export const IMG_MAX_LIMIT = 3;
-
 const formSchema = z.object({
-  // material_content: "",
-  // video_content: "",
   title: z.string().min(1, { message: "Judul harus di isi." }),
   activities: z.string().min(1, { message: "Pilih satu aktifitas" }),
   exam_quiz: z.string().min(1, { message: "Pilih satu quiz" }),
@@ -61,14 +44,21 @@ const formSchema = z.object({
   description: z.string().max(225),
   task_description: z.string().optional(),
   status: z.string().min(1, { message: "Select status" }),
-  material_content: z.array(z.instanceof(File)).optional(),
-  // imgUrl: z
-  //   .array(ImgSchema)
-  //   .max(IMG_MAX_LIMIT, { message: "You can only add up to 3 images" })
-  //   .optional(),
+  material_content: z
+    .array(z.instanceof(File))
+    .min(1, "Material content is required")
+    .max(1, "Only one file is allowed"),
+  video_content: z
+    .array(z.instanceof(File))
+    .min(1, "Video content is required")
+    .max(1, "Only one file is allowed"),
+  image: z
+    .array(z.instanceof(File))
+    .min(1, "Image is required")
+    .max(1, "Only one file is allowed"),
 });
 
-type ProductFormValues = z.infer<typeof formSchema>;
+type CourseFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
   initialData: any | null;
@@ -103,8 +93,6 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     : {
         title: "",
         duration: "",
-        material_content: "",
-        // video_content: "",
         is_open_exam: false,
         is_open_task: false,
         min_score: "",
@@ -112,13 +100,17 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         task_description: "",
         activities: "",
         exam_quiz: "",
-        status: "Published",
-        imgUrl: [],
+        status: "published",
+        image: [],
+        material_content: [],
+        video_content: [],
       };
 
-  const form = useForm<ProductFormValues>({
+  const form = useForm<CourseFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
+    mode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
   useEffect(() => {
@@ -127,7 +119,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     }
   }, [initialData, form]);
 
-  const onSubmit = async (data: ProductFormValues) => {
+  const onSubmit = async (data: CourseFormValues) => {
     try {
       setLoading(true);
 
@@ -136,11 +128,25 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         description: `Materi pembelajaran ${data?.title} telah dibuat.`,
       };
 
+      if (data.image && data.image.length > 0) {
+        const resImage = await fetch.upload("files", data.image);
+        data.image = resImage?.data?.data?.id ?? null;
+      } else {
+        delete data.image;
+      }
+
       if (data.material_content && data.material_content.length > 0) {
         const resImage = await fetch.upload("files", data.material_content);
         data.material_content = resImage?.data?.data?.id ?? null;
       } else {
         delete data.material_content;
+      }
+
+      if (data.video_content && data.video_content.length > 0) {
+        const resImage = await fetch.upload("files", data.video_content);
+        data.video_content = resImage?.data?.data?.id ?? null;
+      } else {
+        delete data.video_content;
       }
 
       if (initialData === null) {
@@ -152,8 +158,8 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         notify.description = `Materi pembelajaran ${data?.title} telah diubah.`;
       }
 
-      router.refresh();
-      router.push(`/course`);
+      // router.refresh();
+      // router.push(`/course`);
 
       toast({
         variant: "success",
@@ -191,8 +197,6 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     }
   };
 
-  // const triggerImgUrlValidation = () => form.trigger("imgUrl");
-
   return (
     <>
       <AlertModal
@@ -220,38 +224,8 @@ export const CourseForm: React.FC<ProductFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full px-1 space-y-8"
         >
-          {/* <FormField
-            control={form.control}
-            name="imgUrl"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Images</FormLabel>
-                <FormControl>
-                  <FileUpload
-                    onChange={field.onChange}
-                    value={field.value || []}
-                    onRemove={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
           <div className="gap-8 md:grid md:grid-cols-3">
-            <div className="gap-4 md:grid md:col-span-2 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="material_content"
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Content</FormLabel>
-                    <FormControl>
-                      <FileUpload name="material_content" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="gap-4 md:grid md:col-span-2 md:grid-cols-2 h-fit">
               <FormField
                 control={form.control}
                 name="title"
@@ -378,13 +352,11 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="gap-4 h-fit md:grid md:col-span-1 md:grid-cols-1">
               <FormField
                 control={form.control}
                 name="is_open_exam"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start py-4 space-x-3 space-y-0 rounded-md">
+                  <FormItem className="flex flex-row items-start col-span-2 py-4 space-x-3 space-y-0 rounded-md">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
@@ -405,7 +377,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   control={form.control}
                   name="exam_quiz"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-2">
                       <FormLabel>Kuis</FormLabel>
                       <Select
                         disabled={loading}
@@ -440,7 +412,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 control={form.control}
                 name="is_open_task"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start py-4 space-x-3 space-y-0 rounded-md">
+                  <FormItem className="flex flex-row items-start col-span-2 py-4 space-x-3 space-y-0 rounded-md">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
@@ -461,7 +433,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   control={form.control}
                   name="task_description"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="col-span-2">
                       <FormLabel>Deskripsi Tugas</FormLabel>
                       <FormControl>
                         <Textarea
@@ -476,6 +448,60 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   )}
                 />
               )}
+            </div>
+            <div className="gap-4 h-fit md:grid md:col-span-1 md:grid-cols-1">
+              <FormField
+                control={form.control}
+                name="image"
+                render={() => (
+                  <FormItem>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Gambar</FormLabel>
+                      <FormDescription>
+                        Preview gambar pada baner Pembelajaran
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <FileUpload name="image" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="material_content"
+                render={() => (
+                  <FormItem>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Konten Tambahan</FormLabel>
+                      <FormDescription>
+                        File tambahan untuk pembelajaran
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <FileUpload name="material_content" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="video_content"
+                render={() => (
+                  <FormItem>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Konten Video</FormLabel>
+                      <FormDescription>Video Pembelajaran</FormDescription>
+                    </div>
+                    <FormControl>
+                      <FileUpload name="video_content" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
