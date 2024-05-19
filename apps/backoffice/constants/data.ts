@@ -56,17 +56,17 @@ export const navItems: NavItem[] = [
     icon: "quiz",
   },
   {
+    path: "/task",
+    title: "Tugas",
+    label: "Tugas",
+    icon: "parameter",
+  },
+  {
     path: "/monitoring",
     title: "Monitoring",
     label: "Monitoring",
     icon: "dashboard",
   },
-  // {
-  //   path: "/exam",
-  //   title: "Ujian",
-  //   label: "Ujian",
-  //   icon: "lessons",
-  // },
   {
     path: "#",
     groupLabel: "Master Data",

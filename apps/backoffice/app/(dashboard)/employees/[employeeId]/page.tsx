@@ -77,8 +77,8 @@ export default function Page() {
 
       const averageExamScore = res?.data?.[0]?.avg?.exam_score;
       const averageTaskScore = res?.data?.[0]?.avg?.task_score;
-      setTotalAvgQuizScore(averageExamScore);
-      setTotalAvgTaskScore(averageTaskScore);
+      setTotalAvgQuizScore(averageExamScore ?? 0);
+      setTotalAvgTaskScore(averageTaskScore ?? 0);
     } catch (error) {
       console.error("Error fetching average scores:", error);
     }
