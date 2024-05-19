@@ -164,7 +164,7 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     tabIndex={0}
                     aria-label={`Row ${row.id}`}
-                    className={cn(tableRowStyles)}
+                    className={cn('', tableRowStyles)}
                     onClick={() => onClickRow && onClickRow(row.original)}
                     onKeyPress={(event) =>
                       event.key === "Enter" &&
