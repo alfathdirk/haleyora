@@ -4,14 +4,11 @@ const validation = require('./utils/validation');
 const fs = require('fs');
 const Handlebars = require('handlebars');
 const express = require('express');
-require('dotenv').config();
-
-const { processEnv } = process;
 
 const app = express();
 app.use(express.json());
-app.use('/files', express.static('certificates'));
-const port = processEnv.PORT;
+app.use('/files', express.static('/directus/certificates'));
+const port = 3998;
 
 app.post(
   '/generate-certificate',
@@ -30,16 +27,27 @@ app.post(
       } = req.body;
       // Create a browser instance
       const browser = await puppeteer.launch({
+        bindAddress: '0.0.0.0',
         env: {
           DISPLAY: ':10.0',
         },
+        pipe: true,
+        headless: true,
+        dumpio: true,
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--remote-debugging-port=9222',
+          '--remote-debugging-address=0.0.0.0',
+        ],
       });
 
       // Create a new page
       const page = await browser.newPage();
 
       // Get HTML content from HTML file
-      const templateHBS = fs.readFileSync('templates/certificate.hbs', 'utf-8');
+      const templateHBS = fs.readFileSync('/directus/templates/certificate.hbs', 'utf-8');
 
       // Compile the template
       const template = Handlebars.compile(templateHBS);
@@ -66,7 +74,7 @@ app.post(
 
       // Download the PDF
       await page.pdf({
-        path: `certificates/${certificateId}.pdf`,
+        path: `/directus/certificates/${certificateId}.pdf`,
         printBackground: true,
         format: 'A4',
       });
@@ -88,7 +96,8 @@ app.post(
 app.get('/certificate/:certificateId', (req, res) => {
   const certificateId = req.params.certificateId;
   try {
-    fs.readFileSync(`certificates/${certificateId}.pdf`, 'utf-8');
+    // /directus/certificates
+    fs.readFileSync(`/directus/certificates/${certificateId}.pdf`, 'utf-8');
     const certificateUrl =
       req.protocol +
       '://' +
@@ -97,12 +106,15 @@ app.get('/certificate/:certificateId', (req, res) => {
       certificateId +
       '.pdf';
 
+    console.log('🚀 ~ app.get ~ certificateUrl:', certificateUrl);
+
     res.send({
       message: {
         certificateUrl,
       },
     });
   } catch (error) {
+    console.log('🚀 ~ app.get ~ error:', error);
     res.status(500).send({
       message: 'Error: Certificate not found!',
     });

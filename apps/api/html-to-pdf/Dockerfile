@@ -1,20 +1,15 @@
-# Use the official Node.js 18 image as the base image
-FROM node:18
+FROM zenika/alpine-chrome:with-node
 
-# Set the working directory inside the container
-WORKDIR /usr/src/
-
-# Copy package.json and package-lock.json (if available)
-COPY package*.json ./
-
-# Install the dependencies
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+WORKDIR /usr/src/app
+COPY --chown=chrome package.json package-lock.json ./
 RUN npm install
-
-# Copy the rest of the application code
-COPY . .
+COPY --chown=chrome . ./
+ENTRYPOINT ["tini", "--"]
 
 # Expose the port your application will run on
-EXPOSE 3999
+EXPOSE 3998
 
 # Define the command to start the application
 CMD ["npm", "run", "dev"]
