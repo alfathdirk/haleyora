@@ -39,7 +39,9 @@ const formSchema = z.object({
     .array(
       z.object({
         title: z.string().min(1, "Question title is required."),
-        image: z.string().optional(),
+        image: z
+          .array(z.instanceof(File))
+          .optional(),
         choices: z
           .array(
             z.object({
@@ -82,7 +84,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
         quiz_question: [
           {
             title: "",
-            image: "",
+            image: [],
             choices: [{ id: "", label: "" }],
             answer: "",
           },
@@ -195,7 +197,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Judul</FormLabel>
+                  <FormLabel required>Judul</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
@@ -212,7 +214,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="duration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Durasi</FormLabel>
+                  <FormLabel required>Durasi</FormLabel>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
                   </FormControl>
@@ -225,7 +227,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="score_per_question"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Minimum Nilai</FormLabel>
+                  <FormLabel required>Minimum Nilai</FormLabel>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
                   </FormControl>
@@ -238,7 +240,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="description"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>Deskripsi</FormLabel>
+                  <FormLabel required>Deskripsi</FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={loading}

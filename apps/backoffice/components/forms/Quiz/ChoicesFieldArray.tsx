@@ -18,7 +18,7 @@ const ChoicesFieldArray = ({ qIndex, control, register, errors }: any) => {
 
   return (
     <div className="space-y-4">
-      <FormLabel className="">Pilihan Jawaban</FormLabel>
+      <FormLabel className="" required>Pilihan Jawaban</FormLabel>
       <div className="p-4 border rounded-xl">
         {fields.map((item, k) => {
           return (

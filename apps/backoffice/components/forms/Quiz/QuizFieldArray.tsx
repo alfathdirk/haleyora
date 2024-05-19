@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import ChoicesFieldArray from "./ChoicesFieldArray";
+import FileUpload from "@/components/FileUpload";
 
 const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
   const { fields, append, remove } = useFieldArray({
@@ -44,10 +45,12 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                           : ""
                       }`}
                     >
-                      Image
+                      Gambar
                     </FormLabel>
                     <FormControl>
-                      <Input {...register(`quiz_question.${index}.image`)} />
+                      <FileUpload
+                        {...register(`quiz_question.${index}.image`)}
+                      />
                     </FormControl>
                     {errors?.quiz_question &&
                       errors?.quiz_question[index]?.image && (
@@ -64,6 +67,7 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                           ? "text-destructive"
                           : ""
                       }`}
+                      required
                     >
                       Pertanyaan
                     </FormLabel>
@@ -90,6 +94,7 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                           ? "text-destructive"
                           : ""
                       }`}
+                      required
                     >
                       Jawaban Benar
                     </FormLabel>
