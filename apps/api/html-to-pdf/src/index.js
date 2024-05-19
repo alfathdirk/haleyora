@@ -95,30 +95,32 @@ app.post(
 
 app.get('/certificate/:certificateId', (req, res) => {
   const certificateId = req.params.certificateId;
-  try {
-    // /directus/certificates
-    fs.readFileSync(`/directus/certificates/${certificateId}.pdf`, 'utf-8');
-    const certificateUrl =
+  // try {
+  // /directus/certificates
+  fs.readFileSync(`/directus/certificates/${certificateId}.pdf`, 'utf-8');
+  const certificateUrl =
       req.protocol +
       '://' +
-      req.get('host') +
+      // req.get('host') +
+      'localhost:3998' + // !! NEED TO RESOLVE FOR PRODUCTION
       '/files/' +
       certificateId +
       '.pdf';
 
-    console.log('🚀 ~ app.get ~ certificateUrl:', certificateUrl);
+  console.log('🚀 ~ app.get ~ certificateUrl:', certificateUrl);
 
-    res.send({
-      message: {
-        certificateUrl,
-      },
-    });
-  } catch (error) {
-    console.log('🚀 ~ app.get ~ error:', error);
-    res.status(500).send({
-      message: 'Error: Certificate not found!',
-    });
-  }
+  res.send({
+    message: {
+      certificateUrl,
+    },
+  });
+  // }
+  // catch (error) {
+  //   console.log('🚀 ~ app.get ~ error:', error);
+  //   res.status(500).send({
+  //     message: 'Error: Certificate not found!',
+  //   });
+  // }
 });
 
 app.listen(port, () => {

@@ -33,6 +33,8 @@ services:
       EXTENSIONS_AUTO_RELOAD: true
       ACCESS_TOKEN_TTL: "30d"
       REFRESH_TOKEN_TTL: "60d"
+    depends_on:
+      - htmltopdf
   htmltopdf:
     image: htmltopdf
     build:

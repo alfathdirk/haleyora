@@ -379,22 +379,12 @@ export default defineEndpoint((router, ctx) => {
         const filePath = path.join('uploads', file);
         const fileContent = fs.readFileSync(filePath, 'base64');
 
-        // const formData = new FormData();
-        // formData.append('employeeName', employeeValidCertificateData.employee.full_name);
-        // formData.append('courseName', employeeValidCertificateData.course.course.title);
-        // formData.append('courseTaken', employeeValidCertificateData.user_created);
-        // formData.append('validUntil', employeeValidCertificateData.expired_days);
-        // formData.append('certificateId', employeeValidCertificateData.id);
-        // formData.append('picTitle', certificateSettingData.title);
-        // formData.append('picSignatureBase64', fileContent);
-        // formData.append('picName', certificateSettingData.pic);
-
         const objectData = {
           employeeName: employeeValidCertificateData.employee.full_name,
           courseName: employeeValidCertificateData.course.course.title,
-          courseTaken: employeeValidCertificateData.user_created,
-          validUntil: employeeValidCertificateData.expired_days,
-          certificateId: employeeValidCertificateData.id,
+          courseTaken: employeeValidCertificateData.date_created || '01 Maret 2023', // !! DATE_CREATED NOT AUTOMATICALLY FILLED ON CREATED?
+          validUntil: String(employeeValidCertificateData.expired_days), // !! NEED EXPIRED_DAYS IN DATETIME
+          certificateId: String(employeeValidCertificateData.id),
           picTitle: certificateSettingData.title,
           picSignatureBase64: fileContent,
           picName: certificateSettingData.pic,
@@ -402,18 +392,18 @@ export default defineEndpoint((router, ctx) => {
 
         const result = await axios({
           method: 'post',
-          url: 'http://htmltopdf:3999/generate-certificate',
-          headers: {},
+          url: 'http://htmltopdf:3998/generate-certificate',
           data: objectData,
         });
 
         return res.send({
-          message: result,
+          message: result.data.message,
         });
       } else {
         throw new Error('Signature file not found!');
       }
-    } catch (error: unknown) {
+    }
+    catch (error: unknown) {
       console.log('🚀 ~ router.post ~ error:', error.message);
       res.send({ message: 'Generate employee certificate failed!', error: error.message });
     }
@@ -445,11 +435,11 @@ export default defineEndpoint((router, ctx) => {
 
       const result = await axios({
         method: 'get',
-        url: `http://htmltopdf:3999/certificate/${certificateId}`,
+        url: `http://htmltopdf:3998/certificate/${certificateId}`,
       });
 
       return res.send({
-        message: result,
+        message: result.data.message,
       });
     } catch (error: unknown) {
       console.log('🚀 ~ router.post ~ error:', error.message);
