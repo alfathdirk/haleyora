@@ -140,7 +140,6 @@ export default function MasterDataSectorPage() {
       <SectorTable
         data={data}
         customColumns={columnsWithAction}
-        onClickRow={false}
         currentPage={currentPage}
         pageSize={pageSize}
         totalItems={totalItems}

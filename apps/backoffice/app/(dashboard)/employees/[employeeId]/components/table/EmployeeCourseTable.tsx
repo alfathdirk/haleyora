@@ -3,14 +3,13 @@
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
-import { columns } from "./columns";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
-import { cardColumns } from "./columns-card";
 import { useRouter } from "next/navigation";
+import { columns } from "./columns";
 
-export const EmployeesTable = () => {
+export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
@@ -38,13 +37,19 @@ export const EmployeesTable = () => {
 
   async function fetchData() {
     try {
-      const filters = searchValue
-        ? { full_name: { _contains: searchValue } }
-        : {};
+      let filters = { employee: { _eq: employeeId } };
 
-      const { data: res } = await fetch.get("items/employee", {
+      if (searchValue) {
+        Object.assign(filters, {
+          course: {
+            title: { _contains: searchValue },
+          },
+        });
+      }
+
+      const { data: res } = await fetch.get("items/employee_course", {
         params: {
-          fields: ["*", "employee_course.id"],
+          fields: ["*", "course.id", "course.title", "course.min_score"],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: JSON.stringify(filters),
@@ -89,7 +94,7 @@ export const EmployeesTable = () => {
   return (
     <DataTable
       layout={currentLayout}
-      columns={currentLayout === "card" ? cardColumns : columns}
+      columns={currentLayout === "card" ? columns : columns}
       onLayoutChange={(val: any) => setCurrentLayout(val)}
       data={data}
       headerActions={headerActions}
@@ -101,7 +106,6 @@ export const EmployeesTable = () => {
       setPageSize={setPageSize}
       cardContainerStyles="!grid-cols-3 gap-8 py-4 pr-8"
       cardStyles="p-4 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-      onClickRow={(item) => router.push(`/employees/${item?.id}?name=${encodeURIComponent(item?.full_name)}`)}
     />
   );
 };

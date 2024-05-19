@@ -1,18 +1,15 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { CourseForm } from "@/components/forms/CourseForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-import { readItem, readItems } from "@directus/sdk";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 
 export default function Page() {
   const fetch = useDirectusFetch();
   const { courseId } = useParams();
-  const { client } = useDirectusContext();
   const pageName = "Materi Pembelajaran";
 
   const [quiz, setQuiz] = useState<any>([]);
@@ -62,12 +59,12 @@ export default function Page() {
 
     async function fetchData() {
       try {
-        const { data: res } = await fetch.get("items/course/"+courseId, {
+        const { data: res } = await fetch.get("items/course/" + courseId, {
           params: {
             fields: ["*"],
           },
         });
-        console.log('\n \x1b[33m ~ res:', res);
+        console.log("\n \x1b[33m ~ res:", res);
 
         setCourse({
           id: res?.data?.id,
@@ -76,9 +73,9 @@ export default function Page() {
           title: res?.data?.title,
           is_open_exam: res?.data?.is_open_exam,
           is_open_task: res?.data?.is_open_task,
-          description: res?.data?.description ?? '',
-          min_score: String(res?.data?.min_score) ?? '',
-          status: res?.data?.status ?? '',
+          description: res?.data?.description ?? "",
+          min_score: String(res?.data?.min_score) ?? "",
+          status: res?.data?.status ?? "",
         });
       } catch (error) {
         // eslint-disable-next-line no-console

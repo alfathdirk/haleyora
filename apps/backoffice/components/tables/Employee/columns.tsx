@@ -65,13 +65,12 @@ export const columns: ColumnDef<Employee>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col">
         <span className="">
-          {/* {row.original?.full_name}  */}
-          Engineer
+          {row.original?.role ?? '-'}
         </span>
-        <span className="font-thin">
-          {/* {row.original?.email} */}
+        {/* <span className="font-thin">
+          {row.original?.email}
           Full time
-        </span>
+        </span> */}
       </div>
     ),
   },
