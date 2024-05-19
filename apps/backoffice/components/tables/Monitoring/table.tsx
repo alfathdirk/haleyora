@@ -42,7 +42,7 @@ export const MonitoringTable = () => {
   async function fetchData() {
     try {
       const filters = searchValue
-        ? { full_name: { _contains: searchValue } }
+        ? { name: { _contains: searchValue } }
         : {};
 
       const { data: res } = await fetch.get("items/category", {
@@ -96,23 +96,21 @@ export const MonitoringTable = () => {
   };
 
   return (
-    <>
-      <DataTable
-        columns={currentLayout === "card" ? cardColumns : columns}
-        layout="card"
-        onLayoutChange={(val: string) => setCurrentLayout(val)}
-        data={data}
-        headerActions={headerActions}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-        setCurrentPage={setCurrentPage}
-        setPageSize={setPageSize}
-        cardContainerStyles="!grid-cols-5"
-        cardStyles="py-3 px-2 rounded-xl shadow-xl shadow-[#F4F4F4] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        onClickRow={(id) => router.push(`/monitoring/sector/${id}`)}
-      />
-    </>
+    <DataTable
+      columns={currentLayout === "card" ? cardColumns : columns}
+      layout="card"
+      onLayoutChange={(val: string) => setCurrentLayout(val)}
+      data={data}
+      headerActions={headerActions}
+      currentPage={currentPage}
+      pageSize={pageSize}
+      totalItems={totalItems}
+      onPageChange={handlePageChange}
+      setCurrentPage={setCurrentPage}
+      setPageSize={setPageSize}
+      cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 xl:!grid-cols-5 gap-8"
+      cardStyles="py-3 px-2 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
+      onClickRow={(item) => router.push(`/monitoring/sector/${item?.id}?title=${encodeURIComponent(item?.name)}`)}
+    />
   );
 };

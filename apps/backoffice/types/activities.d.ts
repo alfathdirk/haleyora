@@ -1,5 +1,5 @@
-export interface SubSectorResponse {
-  data: SubSector[];
+export interface ActivitiesResponse {
+  data: Activities[];
   meta?: Meta;
 }
 
@@ -8,9 +8,10 @@ export interface Meta {
   filter_count: number;
 }
 
-export interface SubSector {
+export interface Activities {
   id: string;
-  sector_id: string;
+  sub_sector: string;
   title: string;
+  status: string;
   name?: string;
 }

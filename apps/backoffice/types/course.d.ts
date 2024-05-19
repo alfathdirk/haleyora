@@ -36,7 +36,3 @@ type Activity = {
   name: string;
   // other activity fields
 };
-
-type EmployeeCourse = {
-  id: number; // or more fields if needed
-};

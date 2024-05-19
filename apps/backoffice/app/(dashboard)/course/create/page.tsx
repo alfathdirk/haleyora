@@ -3,34 +3,51 @@
 import BreadCrumb from "@/components/breadcrumb";
 import { CourseForm } from "@/components/forms/CourseForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
-import { readItems } from "@directus/sdk";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import React, { useEffect, useState } from "react";
 
 export default function Page() {
-  const { client } = useDirectusContext();
+  const fetch = useDirectusFetch();
   const pageName = "Materi Pembelajaran";
 
+  const [quiz, setQuiz] = useState<any>([]);
   const [activities, setActivities] = useState<any>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const filters = {};
+        const { data: res } = await fetch.get("items/activities", {
+          params: {
+            fields: ["id, title"],
+          },
+        });
 
-        const result = await client.request(
-          readItems("activities", {
-            fields: ["*"],
-            filter: filters,
-          }),
-        );
-
-        result.forEach((item) => {
+        res?.data.forEach((item: any) => {
           item._id = item.id;
           item.name = item.title;
         });
 
-        setActivities(result ?? []);
+        setActivities(res?.data ?? []);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching:", error);
+      }
+    }
+
+    async function fetchDataQuiz() {
+      try {
+        const { data: res } = await fetch.get("items/quiz", {
+          params: {
+            fields: ["id, title"],
+          },
+        });
+
+        res?.data.forEach((item: any) => {
+          item._id = item.id;
+          item.name = item.title;
+        });
+
+        setQuiz(res?.data ?? []);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Error fetching:", error);
@@ -38,7 +55,8 @@ export default function Page() {
     }
 
     fetchData();
-  }, [client]);
+    fetchDataQuiz();
+  }, []);
 
   return (
     <ScrollArea className="h-full">
@@ -57,6 +75,7 @@ export default function Page() {
             { _id: "Archived", name: "Archived" },
           ]}
           activities={activities}
+          quiz={quiz}
           initialData={null}
           key={null}
         />

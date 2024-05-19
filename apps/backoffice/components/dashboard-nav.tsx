@@ -28,6 +28,11 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
     <nav className="grid items-start gap-2">
       {items.map((item, index) => {
         const Icon = Icons[item.icon || "arrowRight"];
+        const isActive =
+          item.path === "/"
+            ? path === item.path
+            : path.startsWith(item?.path);
+
         if (item?.groupLabel) {
           return (
             item.path && (
@@ -50,8 +55,10 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
               >
                 <span
                   className={cn(
-                    "group flex items-center rounded-md px-3 py-2 text-[16px] transition-all ease-in duration-50 font-normal hover:bg-accent hover:text-accent-foreground",
-                    path === item.path ? "bg-accent" : "transparent",
+                    "group flex items-center px-6 py-2 text-[16px] transition-all ease-in duration-50 font-normal hover:bg-accent hover:text-accent-foreground",
+                    isActive
+                      ? "bg-accent border-r-4 border-[#00A9E3]"
+                      : "transparent",
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
                 >

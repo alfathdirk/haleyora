@@ -3,83 +3,42 @@
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
-import { columns } from "./columns";
-import { cardColumns } from "./columns-card";
-import { useEffect, useState, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-import { debounce } from "@/lib/utils";
+import { columns } from "./columns/columns";
+import { cardColumns } from "./columns/columns-card";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ColumnDef } from "@tanstack/react-table";
 
-interface SectorTableProps {
-  categoryId: string;
+interface SectorTableProps<TData, TValue> {
   defaultLayout?: string;
+  customColumns?: ColumnDef<TData, TValue>[];
+  data: TData[];
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  tableHeader?: boolean;
+  // methods
+  onClickRow?: (data: TData) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePageChange: (val: number) => void;
+  setCurrentPage: (val: number) => void;
+  setPageSize: (val: number) => void;
 }
 
-export const SectorTable = ({
-  categoryId,
+export const SectorTable = <TData, TValue>({
+  data,
+  currentPage,
+  pageSize,
+  totalItems,
   defaultLayout = "table",
-}: SectorTableProps) => {
-  const fetch = useDirectusFetch();
-  const router = useRouter();
-
+  customColumns,
+  onClickRow,
+  handleInputChange,
+  handlePageChange,
+  setCurrentPage,
+  setPageSize,
+}: SectorTableProps<TData, TValue>) => {
   const [currentLayout, setCurrentLayout] = useState(defaultLayout);
-
-  const [data, setData] = useState<Array<any>>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
-  const [searchValue, setSearchValue] = useState("");
-
-  const onInputChange = useCallback((nextValue: string) => {
-    setSearchValue(nextValue);
-    setCurrentPage(1);
-  }, []);
-
-  const debouncedSearchChange = useMemo(
-    () => debounce(onInputChange, 500),
-    [onInputChange],
-  );
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = event.target.value;
-    debouncedSearchChange(nextValue);
-  };
-
-  useEffect(() => {
-    let filters = searchValue ? { title: { _contains: searchValue } } : {};
-    Object.assign(filters, {
-      category_id: {
-        _eq: categoryId,
-      },
-    });
-
-    async function fetchData() {
-      try {
-        const { data: res } = await fetch.get("items/sector", {
-          params: {
-            fields: ["*"],
-            limit: pageSize,
-            offset: (currentPage - 1) * pageSize,
-            filter: JSON.stringify(filters),
-            meta: "total_count,filter_count",
-          },
-        });
-
-        setTotalItems(res?.meta?.filter_count);
-        setData(res?.data ?? []);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error("Error fetching:", error);
-      }
-    }
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryId, currentPage, pageSize, searchValue]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   const headerActions = () => {
     return (
@@ -99,25 +58,28 @@ export const SectorTable = ({
   };
 
   return (
-    <>
-      <DataTable
-        columns={currentLayout === "card" ? cardColumns : columns}
-        onLayoutChange={(val: string) => setCurrentLayout(val)}
-        tableHeader={false}
-        data={data}
-        headerActions={headerActions}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-        setCurrentPage={setCurrentPage}
-        setPageSize={setPageSize}
-        cardContainerStyles="!grid-cols-5"
-        cardStyles="py-3 px-2 rounded-xl shadow-xl shadow-[#F4F4F4] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        tableRowStyles="!border-0 !mx-8 hover:bg-transparent"
-        tableCellStyles="flex flex-col w-full px-3 py-3 mb-4 shadow-sm rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100 cursor-pointer"
-        onClickRow={(id) => router.push(`/monitoring/subsector/${id}`)}
-      />
-    </>
+    <DataTable
+      columns={
+        currentLayout === "card" ? cardColumns : customColumns ?? columns
+      }
+      onLayoutChange={(val: string) => setCurrentLayout(val)}
+      tableHeader={false}
+      data={data}
+      headerActions={headerActions}
+      currentPage={currentPage}
+      pageSize={pageSize}
+      totalItems={totalItems}
+      onPageChange={handlePageChange}
+      setCurrentPage={setCurrentPage}
+      setPageSize={setPageSize}
+      cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 xl:!grid-cols-5 gap-8"
+      cardStyles="py-3 px-2 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
+      tableRowStyles="!border-0 !mx-8 hover:bg-transparent"
+      tableCellStyles={cn(
+        "flex flex-col w-full px-3 py-3 mb-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100",
+        onClickRow ? "cursor-pointer" : "cursor-default",
+      )}
+      onClickRow={onClickRow}
+    />
   );
 };

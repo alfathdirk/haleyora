@@ -1,24 +1,22 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import BreadCrumb from "@/components/breadcrumb";
 import { Heading } from "@/components/ui/heading";
+import useCategoriesStore from "@/stores/useCategoriesStore";
 import { debounce } from "@/lib/utils";
+import { ColumnDef } from "@tanstack/react-table";
+import { Edit3 } from "lucide-react";
+import { DeleteAction } from "@/components/tables/SubSector/columns/delete-action";
+import { SubSector } from "@/types/subSector";
 import { SubSectorTable } from "@/components/tables/SubSector/table";
+import SubSectorFormDialog from "@/components/forms/SubSectorFormDialog";
 
-export default function SubSectorPage({
-  params,
-}: {
-  params: {
-    id: string;
-  };
-}) {
-  const pageName = "Sub Bidang";
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export default function MasterDataSubSectorPage() {
+  const pageName = "Bidang";
   const fetch = useDirectusFetch();
+  const { setCategories } = useCategoriesStore();
 
   const [data, setData] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,15 +44,7 @@ export default function SubSectorPage({
   };
 
   async function fetchData() {
-    let filters = { sector_id: { _eq: params?.id } };
-
-    if (searchValue) {
-      Object.assign(filters, {
-        title: {
-          _contains: searchValue,
-        },
-      });
-    }
+    let filters = searchValue ? { title: { _contains: searchValue } } : {};
 
     try {
       const { data: res } = await fetch.get("items/sub_sector", {
@@ -80,21 +70,80 @@ export default function SubSectorPage({
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, pageSize, searchValue]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { data: res } = await fetch.get("items/sector", {
+          params: {
+            fields: ["id, title"],
+          },
+        });
+
+        res?.data?.forEach((item: SubSector) => {
+          item.name = item.title;
+        });
+
+        setCategories(res?.data ?? []);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching:", error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
+  const columnsWithAction: ColumnDef<SubSector>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div
+          id={row.original?.id}
+          className="flex items-center justify-between font-semibold"
+        >
+          {row.original?.title}
+          <div>
+            <SubSectorFormDialog
+              initialData={row?.original}
+              triggerTitle={
+                <Edit3 className="w-4 h-auto text-gray-400 group-hover:text-[#00A9E3]" />
+              }
+              dialogTriggerProps={{
+                className: "p-2 h-fit group hover:bg-transparent",
+                variant: "ghost",
+              }}
+              onSubmitCallback={() => fetchData()}
+            />
+            <DeleteAction
+              data={row.original}
+              onConfirmCallback={() => fetchData()}
+            />
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="flex-1">
       <BreadCrumb
         items={[
-          { title: "Monitoring", link: "/monitoring" },
-          { title: pageName, link: "/monitoring/sector" },
+          { title: "Master Data", link: "#" },
+          { title: pageName, link: "/masterdata/sector" },
         ]}
       />
 
       <div className="flex items-start justify-between !mb-10">
-        <Heading title={pageName} description={searchParams.get('title') ?? ''} />
+        <Heading title={pageName} description={`Manajemen ${pageName}`} />
+
+        <SubSectorFormDialog onSubmitCallback={() => fetchData()} />
       </div>
 
       <SubSectorTable
         data={data}
+        customColumns={columnsWithAction}
         currentPage={currentPage}
         pageSize={pageSize}
         totalItems={totalItems}
@@ -102,7 +151,6 @@ export default function SubSectorPage({
         handlePageChange={handlePageChange}
         setCurrentPage={setCurrentPage}
         setPageSize={setPageSize}
-        onClickRow={(item) => router.push(`/monitoring/activities/${item?.id}?title=${encodeURIComponent(item?.title)}`)}
       />
     </div>
   );

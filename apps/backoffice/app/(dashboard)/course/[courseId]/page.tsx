@@ -1,36 +1,56 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { CourseForm } from "@/components/forms/CourseForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
-import { readItem, readItems } from "@directus/sdk";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
 
 export default function Page() {
+  const fetch = useDirectusFetch();
   const { courseId } = useParams();
-  const { client } = useDirectusContext();
   const pageName = "Materi Pembelajaran";
 
+  const [quiz, setQuiz] = useState<any>([]);
   const [activities, setActivities] = useState<any>([]);
   const [course, setCourse] = useState<any>(null);
 
   useEffect(() => {
     async function fetchDataActivities() {
       try {
-        const result = await client.request(
-          readItems("activities", {
-            fields: ["*"],
-          }),
-        );
+        const { data: res } = await fetch.get("items/activities", {
+          params: {
+            fields: ["id, title"],
+          },
+        });
 
-        result.forEach((item) => {
+        res?.data.forEach((item: any) => {
           item._id = item.id;
           item.name = item.title;
         });
 
-        setActivities(result ?? []);
+        setActivities(res?.data ?? []);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching:", error);
+      }
+    }
+
+    async function fetchDataQuiz() {
+      try {
+        const { data: res } = await fetch.get("items/quiz", {
+          params: {
+            fields: ["id, title"],
+          },
+        });
+
+        res?.data.forEach((item: any) => {
+          item._id = item.id;
+          item.name = item.title;
+        });
+
+        setQuiz(res?.data ?? []);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Error fetching:", error);
@@ -39,19 +59,23 @@ export default function Page() {
 
     async function fetchData() {
       try {
-        const result = await client.request(
-          readItem("course", courseId),
-        );
+        const { data: res } = await fetch.get("items/course/" + courseId, {
+          params: {
+            fields: ["*"],
+          },
+        });
+        console.log("\n \x1b[33m ~ res:", res);
 
         setCourse({
-          id: result?.id,
-          activities: result?.activities,
-          title: result?.title,
-          is_open_exam: result?.is_open_exam,
-          is_open_task: result?.is_open_task,
-          description: result?.description ?? '',
-          min_score: result?.min_score ?? '',
-          status: result?.status ?? '',
+          id: res?.data?.id,
+          activities: res?.data?.activities,
+          exam_quiz: res?.data?.exam_quiz,
+          title: res?.data?.title,
+          is_open_exam: res?.data?.is_open_exam,
+          is_open_task: res?.data?.is_open_task,
+          description: res?.data?.description ?? "",
+          min_score: String(res?.data?.min_score) ?? "",
+          status: res?.data?.status ?? "",
         });
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -59,9 +83,10 @@ export default function Page() {
       }
     }
 
-    fetchDataActivities();
     fetchData();
-  }, [client, courseId]);
+    fetchDataQuiz();
+    fetchDataActivities();
+  }, [courseId]);
 
   return (
     <ScrollArea className="h-full">
@@ -80,6 +105,7 @@ export default function Page() {
             { _id: "archived", name: "Archived" },
           ]}
           activities={activities}
+          quiz={quiz}
           initialData={course}
           key={null}
         />

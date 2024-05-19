@@ -33,7 +33,7 @@ interface DataTableProps<TData, TValue> {
   totalItems: number;
   tableHeader?: boolean;
   // methods
-  onClickRow?: (val: string | number) => void;
+  onClickRow?: (data: TData) => void;
   onPageChange: (val: number) => void;
   setCurrentPage: (val: number) => void;
   setPageSize: (val: number) => void;
@@ -164,12 +164,12 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     tabIndex={0}
                     aria-label={`Row ${row.id}`}
-                    className={cn(tableRowStyles)}
-                    onClick={() => onClickRow && onClickRow(row.original?.id)}
+                    className={cn('', tableRowStyles)}
+                    onClick={() => onClickRow && onClickRow(row.original)}
                     onKeyPress={(event) =>
                       event.key === "Enter" &&
                       onClickRow &&
-                      onClickRow(row.original?.id)
+                      onClickRow(row.original)
                     }
                     role="button"
                   >
@@ -214,7 +214,7 @@ export function DataTable<TData, TValue>({
                 )}
                 onClick={() => {
                   if (onClickRow) {
-                    onClickRow(row.original?.id);
+                    onClickRow(row.original);
                   }
                 }}
               >

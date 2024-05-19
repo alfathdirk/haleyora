@@ -32,6 +32,8 @@ import { createItem, deleteItem, updateItem } from "@directus/sdk";
 import { Checkbox } from "../ui/checkbox";
 import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { AlertModal } from "../modal/alert-modal";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
+import FileUpload from "../FileUpload";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -49,20 +51,21 @@ export const IMG_MAX_LIMIT = 3;
 const formSchema = z.object({
   // material_content: "",
   // video_content: "",
-  // exam_quiz: "", foreign
   title: z.string().min(1, { message: "Judul harus di isi." }),
   activities: z.string().min(1, { message: "Pilih satu aktifitas" }),
+  exam_quiz: z.string().min(1, { message: "Pilih satu quiz" }),
   duration: z.string(),
   is_open_exam: z.boolean().optional(),
   is_open_task: z.boolean().optional(),
-  min_score: z.string(),
+  min_score: z.string().max(100, { message: "Maksimum nilai 100." }),
   description: z.string().max(225),
   task_description: z.string().optional(),
   status: z.string().min(1, { message: "Select status" }),
-  imgUrl: z
-    .array(ImgSchema)
-    .max(IMG_MAX_LIMIT, { message: "You can only add up to 3 images" })
-    .optional(),
+  material_content: z.array(z.instanceof(File)).optional(),
+  // imgUrl: z
+  //   .array(ImgSchema)
+  //   .max(IMG_MAX_LIMIT, { message: "You can only add up to 3 images" })
+  //   .optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -71,18 +74,22 @@ interface ProductFormProps {
   initialData: any | null;
   status: any;
   activities: any;
+  quiz: any;
 }
 
 export const CourseForm: React.FC<ProductFormProps> = ({
   initialData,
   status,
   activities,
+  quiz,
 }) => {
-  const { client } = useDirectusContext();
+  const fetch = useDirectusFetch();
   const router = useRouter();
   const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const title = initialData
     ? `Ubah ${initialData?.title ?? ""}`
     : "Buat materi pembelajaran";
@@ -96,15 +103,15 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     : {
         title: "",
         duration: "",
-        // material_content: "",
+        material_content: "",
         // video_content: "",
         is_open_exam: false,
         is_open_task: false,
         min_score: "",
         description: "",
         task_description: "",
-        // exam_quiz: "", foreign
         activities: "",
+        exam_quiz: "",
         status: "Published",
         imgUrl: [],
       };
@@ -122,15 +129,26 @@ export const CourseForm: React.FC<ProductFormProps> = ({
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
+      setLoading(true);
+
       const notify = {
         title: "Sukses!",
         description: `Materi pembelajaran ${data?.title} telah dibuat.`,
       };
-      setLoading(true);
-      if (initialData === null) {
-        await client.request(createItem("course", data));
+
+      if (data.material_content && data.material_content.length > 0) {
+        const resImage = await fetch.upload("files", data.material_content);
+        data.material_content = resImage?.data?.data?.id ?? null;
       } else {
-        await client.request(updateItem("course", initialData?.id, data));
+        delete data.material_content;
+      }
+
+      if (initialData === null) {
+        await fetch.post("items/course/", { body: data });
+      } else {
+        await fetch.patch("items/course/" + initialData?.id, {
+          body: data,
+        });
         notify.description = `Materi pembelajaran ${data?.title} telah diubah.`;
       }
 
@@ -157,7 +175,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     try {
       setLoading(true);
 
-      await client.request(deleteItem("course", initialData?.id));
+      await fetch.delete("items/course/" + initialData?.id);
 
       toast({
         variant: "success",
@@ -221,6 +239,19 @@ export const CourseForm: React.FC<ProductFormProps> = ({
           /> */}
           <div className="gap-8 md:grid md:grid-cols-3">
             <div className="gap-4 md:grid md:col-span-2 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="material_content"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <FileUpload name="material_content" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="title"
@@ -369,6 +400,42 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   </FormItem>
                 )}
               />
+              {form.watch("is_open_exam") && (
+                <FormField
+                  control={form.control}
+                  name="exam_quiz"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kuis</FormLabel>
+                      <Select
+                        disabled={loading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="!text-left">
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={field.value}
+                              placeholder="Pilih salah satu Kuis"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {/* @ts-ignore  */}
+                          {quiz?.map((option) => (
+                            <SelectItem key={option._id} value={option._id}>
+                              {option.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
                 name="is_open_task"

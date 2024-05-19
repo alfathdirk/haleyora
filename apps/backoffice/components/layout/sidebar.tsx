@@ -23,10 +23,8 @@ export default function Sidebar() {
         </Link>
       </div>
       <div className="py-4 space-y-4">
-        <div className="px-3">
-          <div className="h-[60%] space-y-1">
-            <DashboardNav items={navItems} />
-          </div>
+        <div className="h-[60%] space-y-1">
+          <DashboardNav items={navItems} />
         </div>
       </div>
     </nav>

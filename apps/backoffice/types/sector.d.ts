@@ -1,5 +1,11 @@
 export interface SectorResponse {
   data: Sector[];
+  meta?: Meta;
+}
+
+export interface Meta {
+  total_count: number;
+  filter_count: number;
 }
 
 export interface Sector {

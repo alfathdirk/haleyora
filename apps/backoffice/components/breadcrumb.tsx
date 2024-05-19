@@ -30,7 +30,7 @@ export default function BreadCrumb({ items }: BreadCrumbPropsType) {
               "font-medium",
               index === items.length - 1
                 ? "text-foreground pointer-events-none"
-                : "text-muted-foreground",
+                : item?.link !== '#' ? "text-muted-foreground" : "text-muted-foreground pointer-events-none",
             )}
           >
             {item.title}
