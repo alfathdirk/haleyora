@@ -1,11 +1,6 @@
 "use client";
 
-import { Square } from "lucide-react";
 import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
   ResponsiveContainer,
   Legend,
   LineChart,
@@ -20,31 +15,30 @@ export function EmployeeOverview() {
   const data = [
     {
       name: "Jan 2024",
-      selesai: 4000,
-      "sedang berjalan": 2400,
+      selesai: 400,
+      "sedang berjalan": 240,
     },
     {
       name: "Feb 2024",
-      selesai: 3000,
-      "sedang berjalan": 1398,
+      selesai: 300,
+      "sedang berjalan": 139,
     },
     {
       name: "Maret 2024",
-      selesai: 2000,
-      "sedang berjalan": 9800,
+      selesai: 200,
+      "sedang berjalan": 980,
     },
     {
       name: "April 2024",
-      selesai: 2780,
-      "sedang berjalan": 3908,
+      selesai: 278,
+      "sedang berjalan": 390,
     },
     {
       name: "Mei 2024",
-      selesai: 1890,
-      "sedang berjalan": 4800,
+      selesai: 189,
+      "sedang berjalan": 480,
     },
   ];
-
 
   return (
     <ResponsiveContainer width="100%" height="100%" className={"relative"}>
@@ -54,9 +48,7 @@ export function EmployeeOverview() {
         data={data}
         margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
       >
-        <Legend
-          align="right"
-        />
+        <Legend align="right" />
         <CartesianGrid strokeDasharray="1 1" />
         <YAxis stroke="" />
         <XAxis
@@ -66,8 +58,18 @@ export function EmployeeOverview() {
           stroke=""
         />
         <Tooltip cursor={false} />
-        <Line type="monotone" dataKey="selesai" stroke="#FB896B" strokeWidth={2} />
-        <Line type="monotone" dataKey="sedang berjalan" stroke="#6956E5" strokeWidth={2} />
+        <Line
+          type="monotone"
+          dataKey="selesai"
+          stroke="#FB896B"
+          strokeWidth={2}
+        />
+        <Line
+          type="monotone"
+          dataKey="sedang berjalan"
+          stroke="#6956E5"
+          strokeWidth={2}
+        />
       </LineChart>
     </ResponsiveContainer>
   );
