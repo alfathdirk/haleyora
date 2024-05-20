@@ -1,24 +1,90 @@
 "use client";
 
-import { Square } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import {
   PieChart,
   Pie,
-  Sector,
   Cell,
   ResponsiveContainer,
   Legend,
 } from "recharts";
 
 export function CourseOverview() {
-  const data = [
-    { name: "Selesai", value: 400 },
-    { name: "Ujian", value: 300 },
-    { name: "Kuis", value: 300 },
-    { name: "Sedang Berjalan", value: 200 },
-  ];
+  const fetch = useDirectusFetch();
+
+  const [fetching, setFetching] = useState(true);
+  const [summary, setSummary] = useState<Array<object>>([]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+  async function fetchData() {
+    try {
+      const { data: resTotalCompleted } = await fetch.get("items/employee_course", {
+        params: {
+          filter: JSON.stringify({
+            completed: {
+              _eq: 1,
+            },
+          }),
+          aggregate: JSON.stringify({
+            count: "id",
+          }),
+        },
+      });
+
+      const { data: resTotalOngoing } = await fetch.get("items/employee_course", {
+        params: {
+          filter: JSON.stringify({
+            completed: {
+              _eq: 0,
+            },
+            exam_score: {
+              _eq: 0,
+            },
+            exam_attempt: {
+              _lte: 3,
+            },
+          }),
+          aggregate: JSON.stringify({
+            count: "id",
+          }),
+        },
+      });
+
+      const { data: resTotalQuizTaken } = await fetch.get("items/employee_course", {
+        params: {
+          filter: JSON.stringify({
+            completed: {
+              _eq: 1,
+            },
+            exam_score: {
+              _lte: 0,
+            },
+          }),
+          aggregate: JSON.stringify({
+            count: "id",
+          }),
+        },
+      });
+
+      setSummary([
+        { name: "Selesai", value: resTotalCompleted.data[0].count.id },
+        // { name: "Ujian", value: 0 },
+        { name: "Kuis", value: resTotalQuizTaken.data[0].count.id },
+        { name: "Sedang Berjalan", value: resTotalOngoing.data[0].count.id },
+      ]);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error fetching:", error);
+    } finally {
+      setFetching(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -47,12 +113,12 @@ export function CourseOverview() {
     );
   };
 
-  const renderLegend = (props) => {
+  const renderLegend = (props: any) => {
     const { payload } = props;
 
     return (
       <div className="absolute flex flex-col w-1/2 left-[65%] -top-16 gap-y-3">
-        {payload.map((entry, index) => (
+        {payload.map((entry: any, index: number) => (
           <div
             key={`item-${index}`}
             className="inline-flex items-center gap-x-2"
@@ -72,7 +138,7 @@ export function CourseOverview() {
     <ResponsiveContainer width="100%" height="100%" className={"relative"}>
       <PieChart>
         <Pie
-          data={data}
+          data={summary}
           cx="30%"
           cy="50%"
           labelLine={false}
@@ -81,7 +147,7 @@ export function CourseOverview() {
           fill="#8884d8"
           dataKey="value"
         >
-          {data.map((entry, index) => (
+          {summary.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

@@ -19,69 +19,32 @@ import {
 export function EmployeeOverview() {
   const data = [
     {
-      name: "Page A",
-      done: 4000,
-      ongoing: 2400,
-      amt: 2400,
+      name: "Jan 2024",
+      selesai: 4000,
+      "sedang berjalan": 2400,
     },
     {
-      name: "Page B",
-      done: 3000,
-      ongoing: 1398,
-      amt: 2210,
+      name: "Feb 2024",
+      selesai: 3000,
+      "sedang berjalan": 1398,
     },
     {
-      name: "Page C",
-      done: 2000,
-      ongoing: 9800,
-      amt: 2290,
+      name: "Maret 2024",
+      selesai: 2000,
+      "sedang berjalan": 9800,
     },
     {
-      name: "Page D",
-      done: 2780,
-      ongoing: 3908,
-      amt: 2000,
+      name: "April 2024",
+      selesai: 2780,
+      "sedang berjalan": 3908,
     },
     {
-      name: "Page E",
-      done: 1890,
-      ongoing: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      done: 2390,
-      ongoing: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      done: 3490,
-      ongoing: 4300,
-      amt: 2100,
+      name: "Mei 2024",
+      selesai: 1890,
+      "sedang berjalan": 4800,
     },
   ];
 
-  const renderLegend = (props) => {
-    const { payload } = props;
-
-    return (
-      <div className="absolute flex flex-col w-1/2 left-[65%] -top-16 gap-y-3">
-        {payload.map((entry, index) => (
-          <div
-            key={`item-${index}`}
-            className="inline-flex items-center gap-x-2"
-          >
-            <div
-              className={"w-3 h-3"}
-              style={{ background: COLORS[index] }}
-            ></div>
-            {entry.value}
-          </div>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <ResponsiveContainer width="100%" height="100%" className={"relative"}>
@@ -89,15 +52,22 @@ export function EmployeeOverview() {
         width={730}
         height={250}
         data={data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" className="!px-16" padding={{ left: 30, right: 30 }} />
-        <YAxis />
-        <Tooltip />
-        <Legend align="left" verticalAlign="top" style={{  marginBottom: '200px' }} />
-        <Line type="monotone" dataKey="done" stroke="#FB896B" />
-        <Line type="monotone" dataKey="ongoing" stroke="#6956E5" />
+        <Legend
+          align="right"
+        />
+        <CartesianGrid strokeDasharray="1 1" />
+        <YAxis stroke="" />
+        <XAxis
+          dataKey="name"
+          className="!px-16 !text-red-200"
+          padding={{ left: 30, right: 30 }}
+          stroke=""
+        />
+        <Tooltip cursor={false} />
+        <Line type="monotone" dataKey="selesai" stroke="#FB896B" strokeWidth={2} />
+        <Line type="monotone" dataKey="sedang berjalan" stroke="#6956E5" strokeWidth={2} />
       </LineChart>
     </ResponsiveContainer>
   );
