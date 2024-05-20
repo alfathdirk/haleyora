@@ -59,9 +59,9 @@ export default defineEndpoint((router, ctx) => {
           'full_name',
           'email',
           'username',
-          'role',
+          // 'role',
           'image',
-          'status',
+          // 'status',
         ],
       });
 
@@ -113,6 +113,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Ongoing Course
       const employeeOngoingCourseData = await employeeCourseItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -122,19 +123,20 @@ export default defineEndpoint((router, ctx) => {
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
-          'exam_score',
-          'task_score',
-          'last_video_duration',
-          'video_duration',
-          'tasks',
+          // 'exam_score',
+          // 'task_score',
+          // 'last_video_duration',
+          // 'video_duration',
+          // 'tasks',
           'exam_attempt',
         ],
       });
 
       // OK Completed Course
       const employeeCompletedCourseData = await employeeCourseItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -144,25 +146,26 @@ export default defineEndpoint((router, ctx) => {
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
-          'exam_score',
-          'task_score',
-          'last_video_duration',
-          'video_duration',
-          'tasks',
+          // 'exam_score',
+          // 'task_score',
+          // 'last_video_duration',
+          // 'video_duration',
+          // 'tasks',
         ],
       });
 
       // OK Recommended Course
       const employeeRecommendedCourseData = await employeeCourseRecommendationItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
         ],
       });
@@ -214,6 +217,7 @@ export default defineEndpoint((router, ctx) => {
       };
 
       const employeeValidCertificatesData = await employeeCertificateItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -224,18 +228,18 @@ export default defineEndpoint((router, ctx) => {
         },
         fields: [
           'id',
-          'course.id',
-          'course.completed',
+          // 'course.id',
+          // 'course.completed',
           'course.exam_score',
           'course.task_score',
-          'course.tasks',
+          // 'course.tasks',
           'course.course.id',
           'course.course.status',
           'course.course.title',
           'course.course.image',
           'course.course.duration',
           'course.course.activities.*.*.*.*',
-          'expired_days',
+          // 'expired_days',
         ],
       });
 
@@ -246,6 +250,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Unread Notifications
       const employeeUnreadNotificationsData = await employeeNotificationItem.readByQuery({
+        limit: 200,
         filter: {
           employee_id: {
             _eq: String(employeeData.id),
@@ -263,6 +268,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Read Notifications
       const employeeReadNotificationsData = await employeeNotificationItem.readByQuery({
+        limit: 200,
         filter: {
           employee_id: {
             _eq: String(employeeData.id),
@@ -283,6 +289,7 @@ export default defineEndpoint((router, ctx) => {
        */
       const employeeSearch = await useItemService(ctx, 'employee_search');
       const employeeSearchHistoryData = await employeeSearch.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
