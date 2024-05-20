@@ -64,7 +64,6 @@ export default function Page() {
             fields: ["*"],
           },
         });
-        console.log("\n \x1b[33m ~ res:", res);
 
         setCourse({
           id: res?.data?.id,

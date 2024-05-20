@@ -377,7 +377,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   control={form.control}
                   name="exam_quiz"
                   render={({ field }) => (
-                    <FormItem className="col-span-2">
+                    <FormItem className="col-span-2 md:pl-7 md:-mt-6">
                       <FormLabel>Kuis</FormLabel>
                       <Select
                         disabled={loading}
@@ -393,7 +393,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                             />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="max-h-40">
                           {/* @ts-ignore  */}
                           {quiz?.map((option) => (
                             <SelectItem key={option._id} value={option._id}>
@@ -433,7 +433,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   control={form.control}
                   name="task_description"
                   render={({ field }) => (
-                    <FormItem className="col-span-2">
+                    <FormItem className="col-span-2 md:pl-7 md:-mt-6">
                       <FormLabel>Deskripsi Tugas</FormLabel>
                       <FormControl>
                         <Textarea

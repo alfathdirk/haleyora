@@ -84,7 +84,7 @@ export const CourseTable = () => {
     return (
       <div className="flex items-center justify-between w-full">
         <div className="inline-flex gap-x-4">
-          <div className="inline-flex rounded-3xl text-[14px] items-center border-2 border-[#15BE4F] p-2 pr-4 cursor-pointer">
+          {/* <div className="inline-flex rounded-3xl text-[14px] items-center border-2 border-[#15BE4F] p-2 pr-4 cursor-pointer">
             <div className="bg-[#15BE4F] p-2 rounded-full text-white mr-2">
               <Book className="w-4 h-4" />
             </div>
@@ -95,7 +95,7 @@ export const CourseTable = () => {
               <Book className="w-4 h-4" />
             </div>
             Jarang Diminati
-          </div>
+          </div> */}
         </div>
 
         <div className="pr-4 border-r border-[#787486]">

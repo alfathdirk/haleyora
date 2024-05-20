@@ -28,15 +28,15 @@ export default function page() {
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="analytics" disabled>
+            {/* <TabsTrigger value="analytics" disabled>
               Others
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
           <TabsContent value="overview" className="space-y-16">
             <div className="grid grid-cols-1 gap-14 md:grid-cols-2 lg:grid-cols-7 min-h-96">
               <Card className="col-span-3">
                 <CardHeader>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="text-xl font-normal">
                     Persentase Materi Pembelajaran
                   </CardTitle>
                 </CardHeader>
@@ -46,7 +46,7 @@ export default function page() {
               </Card>
               <Card className="col-span-4 md:col-span-4">
                 <CardHeader>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="text-xl font-normal">
                     Jumlah Orang yang Ikut Pembelajaran
                   </CardTitle>
                 </CardHeader>
