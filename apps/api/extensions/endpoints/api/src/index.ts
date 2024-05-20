@@ -2,6 +2,8 @@ import { defineEndpoint } from '@directus/extensions-sdk';
 import axios from 'axios';
 import { useItemService } from './service/ItemService';
 import { useAuthService } from './service/AuthService';
+import fs from 'fs';
+import path from 'path';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -57,9 +59,9 @@ export default defineEndpoint((router, ctx) => {
           'full_name',
           'email',
           'username',
-          'role',
+          // 'role',
           'image',
-          'status',
+          // 'status',
         ],
       });
 
@@ -111,6 +113,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Ongoing Course
       const employeeOngoingCourseData = await employeeCourseItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -120,19 +123,20 @@ export default defineEndpoint((router, ctx) => {
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
-          'exam_score',
-          'task_score',
-          'last_video_duration',
-          'video_duration',
-          'tasks',
+          // 'exam_score',
+          // 'task_score',
+          // 'last_video_duration',
+          // 'video_duration',
+          // 'tasks',
           'exam_attempt',
         ],
       });
 
       // OK Completed Course
       const employeeCompletedCourseData = await employeeCourseItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -142,25 +146,26 @@ export default defineEndpoint((router, ctx) => {
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
-          'exam_score',
-          'task_score',
-          'last_video_duration',
-          'video_duration',
-          'tasks',
+          // 'exam_score',
+          // 'task_score',
+          // 'last_video_duration',
+          // 'video_duration',
+          // 'tasks',
         ],
       });
 
       // OK Recommended Course
       const employeeRecommendedCourseData = await employeeCourseRecommendationItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
           },
         },
         fields: [
-          'id',
+          // 'id',
           ...employeeCourseDataFields,
         ],
       });
@@ -212,6 +217,7 @@ export default defineEndpoint((router, ctx) => {
       };
 
       const employeeValidCertificatesData = await employeeCertificateItem.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -222,18 +228,18 @@ export default defineEndpoint((router, ctx) => {
         },
         fields: [
           'id',
-          'course.id',
-          'course.completed',
+          // 'course.id',
+          // 'course.completed',
           'course.exam_score',
           'course.task_score',
-          'course.tasks',
+          // 'course.tasks',
           'course.course.id',
           'course.course.status',
           'course.course.title',
           'course.course.image',
           'course.course.duration',
           'course.course.activities.*.*.*.*',
-          'expired_days',
+          // 'expired_days',
         ],
       });
 
@@ -244,6 +250,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Unread Notifications
       const employeeUnreadNotificationsData = await employeeNotificationItem.readByQuery({
+        limit: 200,
         filter: {
           employee_id: {
             _eq: String(employeeData.id),
@@ -261,6 +268,7 @@ export default defineEndpoint((router, ctx) => {
 
       // OK Read Notifications
       const employeeReadNotificationsData = await employeeNotificationItem.readByQuery({
+        limit: 200,
         filter: {
           employee_id: {
             _eq: String(employeeData.id),
@@ -281,6 +289,7 @@ export default defineEndpoint((router, ctx) => {
        */
       const employeeSearch = await useItemService(ctx, 'employee_search');
       const employeeSearchHistoryData = await employeeSearch.readByQuery({
+        limit: 200,
         filter: {
           employee: {
             _eq: String(employeeData.id),
@@ -313,6 +322,135 @@ export default defineEndpoint((router, ctx) => {
       });
     } catch (error: unknown) {
       res.send({ message: 'Fetch user detail failed!', error });
+    }
+  });
+
+  router.post('/generate-certificate/:certificate_id', async(req, res) => {
+    try {
+      // OK Decode token
+      const bearerToken = req.headers.authorization;
+      const parseJwt = (token: string | undefined) => {
+        if (token) {
+          return JSON.parse(
+            Buffer.from(String(token.split('.')[1]), 'base64').toString(),
+          );
+        } else {
+          throw new Error('Token not found');
+        }
+      };
+      const payloadToken = parseJwt(bearerToken);
+      if (!payloadToken) {
+        throw new Error('UNAUTHORIZED!');
+      }
+
+      const params = req.params;
+      const certificateId = params.certificate_id;
+      if (!certificateId) {
+        throw new Error('certificate_id is empty!');
+      }
+
+      const employeeCertificateItem = await useItemService(ctx, 'employee_certificate');
+      const [employeeValidCertificateData] = await employeeCertificateItem.readByQuery({
+        filter: {
+          id: {
+            _eq: String(certificateId),
+          },
+        },
+        fields: [
+          'id',
+          'employee.full_name',
+          'user_created',
+          'course.course.title',
+          'expired_days',
+        ],
+      });
+
+      const certificateSettingItem = await useItemService(ctx, 'certificate_setting');
+      const [certificateSettingData] = await certificateSettingItem.readByQuery({
+        fields: [
+          'id',
+          'title',
+          'signature',
+          'pic',
+        ],
+      });
+
+      // Read the contents of the uploads directory
+      const files = fs.readdirSync('uploads');
+
+      // Find the file that starts with "a"
+      const file = files.find(f => f.startsWith(`${certificateSettingData.signature}`));
+
+      // If the file is found, read its contents
+      if (file) {
+        const filePath = path.join('uploads', file);
+        const fileContent = fs.readFileSync(filePath, 'base64');
+
+        const objectData = {
+          employeeName: employeeValidCertificateData.employee.full_name,
+          courseName: employeeValidCertificateData.course.course.title,
+          courseTaken: employeeValidCertificateData.date_created || '01 Maret 2023', // !! DATE_CREATED NOT AUTOMATICALLY FILLED ON CREATED?
+          validUntil: String(employeeValidCertificateData.expired_days), // !! NEED EXPIRED_DAYS IN DATETIME
+          certificateId: String(employeeValidCertificateData.id),
+          picTitle: certificateSettingData.title,
+          picSignatureBase64: fileContent,
+          picName: certificateSettingData.pic,
+        };
+
+        const result = await axios({
+          method: 'post',
+          url: 'http://htmltopdf:3998/generate-certificate',
+          data: objectData,
+        });
+
+        return res.send({
+          message: result.data.message,
+        });
+      } else {
+        throw new Error('Signature file not found!');
+      }
+    }
+    catch (error: unknown) {
+      console.log('🚀 ~ router.post ~ error:', error.message);
+      res.send({ message: 'Generate employee certificate failed!', error: error.message });
+    }
+  });
+
+  router.get('/get-certificate/:certificate_id', async(req, res) => {
+    try {
+      // OK Decode token
+      const bearerToken = req.headers.authorization;
+      const parseJwt = (token: string | undefined) => {
+        if (token) {
+          return JSON.parse(
+            Buffer.from(String(token.split('.')[1]), 'base64').toString(),
+          );
+        } else {
+          throw new Error('Token not found');
+        }
+      };
+      const payloadToken = parseJwt(bearerToken);
+      if (!payloadToken) {
+        throw new Error('UNAUTHORIZED!');
+      }
+
+      const params = req.params;
+      const certificateId = params.certificate_id;
+      if (!certificateId) {
+        throw new Error('certificate_id is empty!');
+      }
+
+      const result = await axios({
+        method: 'get',
+        url: `http://htmltopdf:3998/certificate/${certificateId}`,
+      });
+
+      return res.send({
+        message: result.data.message,
+      });
+    } catch (error: unknown) {
+      console.log('🚀 ~ router.post ~ error:', error.message);
+      res.send({ message: 'Generate employee certificate failed!', error: error.message });
     }
   });
 
