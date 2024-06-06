@@ -42,25 +42,15 @@ export default defineEndpoint((router, ctx) => {
           'email',
         ],
       });
-      const username = userData.email.split('_')[0];
 
       const employeeItem = await useItemService(ctx, 'employee');
       const [employeeData] = await employeeItem.readByQuery({
         filter: {
-          employee_id: {
-            _eq: String(username),
+          email: {
+            _eq: userData.email,
           },
         },
-        fields: [
-          'id',
-          'employee_id',
-          'full_name',
-          'email',
-          'username',
-          'role',
-          'image',
-          'status',
-        ],
+        fields: '*',
       });
 
       /**
@@ -385,8 +375,11 @@ export default defineEndpoint((router, ctx) => {
           unit_pln: result.data.DATA_SPK.UNIT_PLN,
           position: result.data.DATA_SPK.JABATAN,
           unit: result.data.DATA_SPK.DATA_UNIT.NAMA_UNIT,
+          job: result.data.DATA_SPK.ID_KONTRAK.JENIS_PEKERJAAN,
         });
-        await sleep(1000);
+
+        await sleep(800);
+
         directusUsers.updateByQuery({
           filter: {
             email,
