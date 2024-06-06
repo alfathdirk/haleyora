@@ -20,6 +20,26 @@
     "operation": "9157f85a-fbf0-455a-9299-096aca685328"
   },
   {
+    "id": "7cf044d5-4f8c-4285-a66b-dfd34d03f7de",
+    "name": "notification",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "filter",
+      "scope": [
+        "items.create"
+      ],
+      "collections": [
+        "notification"
+      ]
+    },
+    "operation": "bee48511-6565-4bdf-9ec7-40bf45d8614b"
+  },
+  {
     "id": "9e5269d1-8fc3-4c39-8fff-139b6a4ea306",
     "name": "CreateUserOnAdminUserCreated",
     "icon": "bolt",

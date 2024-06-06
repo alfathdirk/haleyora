@@ -319,7 +319,8 @@ export default defineEndpoint((router, ctx) => {
   router.post('/login', async(req, res) => {
     const body = req.body;
     const formData = new FormData();
-    formData.append('iduser', body.username);
+    // formData.append('iduser', body.username);
+    formData.append('username', body.username);
     formData.append('password', body.password);
 
     const login = async(email: string, password: string) => {
@@ -336,29 +337,54 @@ export default defineEndpoint((router, ctx) => {
     };
 
     try {
-      const result = await axios.post(
-        'https://amanda.hpgroup.co.id/index.php?r=api%2Flogin',
+      const loginResult = await axios.post(
+        // 'https://amanda.hpgroup.co.id/index.php?r=api%2Flogin',
+        'http://103.156.15.193:3006/api/auth/login',
         formData,
       );
+
+      // get cookies from response
+      const cookies = loginResult.headers['set-cookie'];
+      const refreshToken = cookies[0].split(';')[0].split('=')[1];
+
+      const result = await axios.get('http://103.156.15.193:3006/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${loginResult.data.accessToken}`,
+          Cookie: `refreshToken=${refreshToken}`,
+        },
+      });
+
       const users = await useItemService(ctx, 'employee');
       const [data] = await users.readByQuery({
         filter: {
           employee_id: {
-            _eq: result.data.userid,
+            _eq: result.data.NO_INDUK,
           },
         },
       });
 
-      const email = `${result.data.userid}_elearning@haleyorapower.co.id`;
+      const email = result.data.EMAIL;
 
       if (!data) {
         const directusUsers = await useItemService(ctx, 'directus_users');
         users.createOne({
-          employee_id: result.data.userid,
-          username: result.data.userid,
-          full_name: result.data.username,
+          employee_id: result.data.NO_INDUK,
+          username: result.data.NO_INDUK,
+          full_name: result.data.NAMA,
           email,
           status: 'active',
+          work_status: result.data.STATUS_KERJA,
+          photo: result.data.FOTO,
+          placement: result.data.PENEMPATAN,
+          gender: result.data.KELAMIN,
+          date_of_birth: result.data.FTGL_LAHIR,
+          place_of_birth: result.data.TP_LAHIR,
+          address: result.data.ALAMAT,
+          phone: result.data.HP,
+          religion: result.data.AGAMA,
+          unit_pln: result.data.DATA_SPK.UNIT_PLN,
+          position: result.data.DATA_SPK.JABATAN,
+          unit: result.data.DATA_SPK.DATA_UNIT.NAMA_UNIT,
         });
         await sleep(1000);
         directusUsers.updateByQuery({

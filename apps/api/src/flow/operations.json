@@ -34,5 +34,31 @@
     "resolve": null,
     "reject": null,
     "flow": "51776e27-4efd-41e2-9edd-6d374a4d3d1d"
+  },
+  {
+    "id": "bee48511-6565-4bdf-9ec7-40bf45d8614b",
+    "name": "Webhook / Request URL",
+    "key": "request_usfud",
+    "type": "request",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "body": "{\n  \"message\": {\n    \"topic\": \"elearningTopic\",\n    \"notification\": {\n      \"title\": \"New courses\",\n      \"body\": \"test new courses\"\n    }\n  }\n}",
+      "headers": [
+        {
+          "header": "Authorization",
+          "value": "Bearer ya29.a0AXooCgs7hnQDeYE8baWqQMjf02dqMrB_O8iks3AjiBvi5QlbnIvvVS1XLvO83TM-WXuxOQ7jMG2rl6zfNzQ-kzhDNl2fyOCsijfNhz45_94gPGEdBM2QFxgId6wFFlXo1qYiVxGdwQ9QDUMnYmlZWYj_m7uJbGYrATCdaCgYKAa8SARESFQHGX2MigqunfYe4i9OqzOLG9s3gsw0171"
+        },
+        {
+          "header": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "method": "POST",
+      "url": "https://fcm.googleapis.com/v1/projects/haleyora-course/messages:send"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "7cf044d5-4f8c-4285-a66b-dfd34d03f7de"
   }
 ]

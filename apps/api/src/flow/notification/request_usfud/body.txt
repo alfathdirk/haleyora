@@ -1,0 +1,9 @@
+{
+  "message": {
+    "topic": "elearningTopic",
+    "notification": {
+      "title": "New courses",
+      "body": "test new courses"
+    }
+  }
+}
