@@ -11,8 +11,9 @@ import { Edit3 } from "lucide-react";
 import { DeleteAction } from "@/components/tables/Activities/columns/delete-action";
 import ActivitiesFormDialog from "@/components/forms/ActivitiesFormDialog";
 import { ActivitiesTable } from "@/components/tables/Activities/table";
-import { Activities } from "@/types/activities";
+import { Activities, Status } from "@/types/activities";
 import { Badge } from "@/components/ui/badge";
+import { VariantComponent } from "@/types/next";
 
 export default function MasterDataActivitiesPage() {
   const pageName = "Aktifitas";
@@ -100,7 +101,7 @@ export default function MasterDataActivitiesPage() {
       accessorKey: "title",
       header: "Title",
       cell: ({ row }) => {
-        const statusColor = {
+        const statusColor: Record<Status, VariantComponent>  = {
           draft: "outline",
           published: "success",
           archived: "outline",
@@ -114,7 +115,7 @@ export default function MasterDataActivitiesPage() {
             <div>
               {row.original?.title}
               <Badge
-                variant={statusColor[row.original.status] ?? "default"}
+                variant={statusColor[row.original?.status ?? 'draft']}
                 className="ml-8 font-semibold uppercase"
               >
                 {row.original?.status}

@@ -3,42 +3,61 @@
 import BreadCrumb from "@/components/breadcrumb";
 import { QuizForm } from "@/components/forms/QuizForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
-import { readItems } from "@directus/sdk";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import React, { useEffect, useState } from "react";
 
 export default function Page() {
-  const { client } = useDirectusContext();
+  const fetch = useDirectusFetch();
   const pageName = "Kuis";
 
   const [activities, setActivities] = useState<any>([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const filters = {};
+  async function fetchDataActivities() {
+    try {
+      const { data: res } = await fetch.get("items/activities", {
+        params: {
+          fields: ["id, title"],
+        },
+      });
 
-        const result = await client.request(
-          readItems("activities", {
-            fields: ["*"],
-            filter: filters,
-          }),
-        );
+      res?.data.forEach((item: any) => {
+        item._id = item.id;
+        item.name = item.title;
+      });
 
-        result.forEach((item) => {
-          item._id = item.id;
-          item.name = item.title;
-        });
-
-        setActivities(result ?? []);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error("Error fetching:", error);
-      }
+      setActivities(res?.data ?? []);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error fetching:", error);
     }
+  }
 
-    fetchData();
-  }, [client]);
+  useEffect(() => {
+    // async function fetchData() {
+    //   try {
+    //     const filters = {};
+
+    //     const result = await client.request(
+    //       readItems("activities", {
+    //         fields: ["*"],
+    //         filter: filters,
+    //       }),
+    //     );
+
+    //     result.forEach((item) => {
+    //       item._id = item.id;
+    //       item.name = item.title;
+    //     });
+
+    //     setActivities(result ?? []);
+    //   } catch (error) {
+    //     // eslint-disable-next-line no-console
+    //     console.error("Error fetching:", error);
+    //   }
+    // }
+
+    fetchDataActivities();
+  }, []);
 
   return (
     <ScrollArea className="h-full">
@@ -51,11 +70,11 @@ export default function Page() {
         />
 
         <QuizForm
-          status={[
-            { _id: "Published", name: "Published" },
-            { _id: "Draft", name: "Draft" },
-            { _id: "Archived", name: "Archived" },
-          ]}
+          // status={[
+          //   { _id: "Published", name: "Published" },
+          //   { _id: "Draft", name: "Draft" },
+          //   { _id: "Archived", name: "Archived" },
+          // ]}
           activities={activities}
           initialData={null}
           key={null}

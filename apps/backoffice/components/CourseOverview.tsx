@@ -87,7 +87,15 @@ export function CourseOverview() {
   }, []);
 
   const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({
+  const renderCustomizedLabel: React.FC<{
+    cx: number;
+    cy: number;
+    midAngle: number;
+    innerRadius: number;
+    outerRadius: number;
+    percent: number;
+    index: number;
+  }> = ({
     cx,
     cy,
     midAngle,

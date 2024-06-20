@@ -8,10 +8,12 @@ export interface Meta {
   filter_count: number;
 }
 
+type Status = 'draft' | 'published' | 'archived';
+
 export interface Activities {
   id: string;
   sub_sector: string;
   title: string;
-  status: string;
+  status: Status;
   name?: string;
 }

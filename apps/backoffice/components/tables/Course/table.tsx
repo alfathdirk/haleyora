@@ -127,7 +127,7 @@ export const CourseTable = () => {
         setPageSize={setPageSize}
         cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 !gap-12 px-2 md:pr-8 pb-8"
         cardStyles="p-0 rounded-3xl shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.18)] border border-[#F1F1F1] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        onClickRow={(id) => router.push(`/course/${id}`)}
+        onClickRow={(item) => router.push(`/course/${item?.id}`)}
         headerActions={headerActions}
       />
     </>

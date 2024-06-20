@@ -22,26 +22,30 @@ import * as z from "zod";
 import { useToast } from "../ui/use-toast";
 import { useEffect, useState } from "react";
 
-import { createItem, createItems, deleteItem, updateItem } from "@directus/sdk";
 import { Checkbox } from "../ui/checkbox";
-import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { AlertModal } from "../modal/alert-modal";
 import QuizFieldArray from "./Quiz/QuizFieldArray";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
+import { cleanedData } from "@/lib/helper";
+
+// Custom validation for file instances
+const fileInstance = z.custom<File>((data) => data instanceof File, {
+  message: "Expected instance of File"
+});
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
   description: z.string().max(225),
-  duration: z.string(),
+  duration: z.number(),
   randomize: z.boolean().optional(),
-  score_per_question: z.string(),
+  score_per_question: z.number(),
   task_description: z.string().optional(),
   quiz_question: z
     .array(
       z.object({
         title: z.string().min(1, "Question title is required."),
-        image: z
-          .array(z.instanceof(File))
-          .optional(),
+        // image: z.array(z.instanceof(File)).optional(),
+        image: z.array(fileInstance).optional(),
         choices: z
           .array(
             z.object({
@@ -64,7 +68,7 @@ interface FormProps {
 }
 
 export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
-  const { client } = useDirectusContext();
+  const fetch = useDirectusFetch();
   const router = useRouter();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -78,9 +82,9 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     : {
         title: "",
         description: "",
-        duration: "",
-        randomize: "",
-        score_per_question: "",
+        duration: 0,
+        randomize: false,
+        score_per_question: 0,
         quiz_question: [
           {
             title: "",
@@ -90,6 +94,22 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
           },
         ],
       };
+
+      // {
+      //   title: "",
+      //   description: "",
+      //   duration: "",
+      //   randomize: "",
+      //   score_per_question: "",
+      //   quiz_question: [
+      //     {
+      //       title: "",
+      //       image: [],
+      //       choices: [{ id: "", label: "" }],
+      //       answer: "",
+      //     },
+      //   ],
+      // };
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -102,7 +122,47 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     }
   }, [initialData, form]);
 
-  const onSubmit = async (data: FormValues) => {
+  const handleQuizCreation = async (data: FormValues, quizQuestions?: any) => {
+    (data as any).quiz_question = undefined;
+    const result: any = await fetch.post("items/quiz/", { body: data });
+
+    if (quizQuestions) {
+      const updatedQuestions = quizQuestions.map((question: any) => cleanedData({
+        ...question,
+        quiz_id: result?.data?.data?.id,
+      }));
+      // await client.request(createItems("quiz_question", updatedQuestions));
+      await fetch.post("items/quiz_question/", { body: updatedQuestions });
+    }
+
+    return result;
+  };
+
+  const handleQuizUpdate = async (id: string, data: any) => {
+    const keys:any = [];
+    const updatedQuestions = data?.quiz_question.map((question: any) => {
+      keys.push(question.id);
+      return cleanedData({
+        ...question,
+        quiz_id: id,
+      });
+    });
+    await fetch.patch("items/quiz_question/", { body: {
+      keys: ["0dedcbe5-ffb2-461a-b266-a0320255f5e0", "eb457868-2613-4ac9-8ab6-b8b167f7c057"],
+      data: {
+        details: {
+          update: updatedQuestions
+        }
+      }
+    } });
+
+    (data as any).quiz_question = undefined;
+    await fetch.patch("items/quiz/" + id, {
+      body: cleanedData(data),
+    });
+  };
+
+  const onSubmit = async (data: any) => {
     try {
       const notify = {
         title: "Sukses!",
@@ -111,22 +171,14 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
       setLoading(true);
 
       if (initialData === null) {
-        const quizQuestions = data.quiz_question;
-        delete data.quiz_question;
-        const result = await client.request(createItem("quiz", data));
-
-        const updatedQuestions = quizQuestions.map((question) => ({
-          ...question,
-          quiz_id: result.id,
-        }));
-        await client.request(createItems("quiz_question", updatedQuestions));
+        await handleQuizCreation(data, data.quiz_question);
       } else {
-        await client.request(updateItem("quiz", initialData?.id, data));
-        notify.description = `Kuis ${data?.title} telah diubah.`;
+        await handleQuizUpdate(initialData.id, data);
+        notify.description = `Kuis ${data.title} telah diubah.`;
       }
 
-      // router.refresh();
-      // router.push(`/quiz`);
+      router.refresh();
+      router.push(`/quiz`);
 
       toast({
         variant: "success",
@@ -148,7 +200,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     try {
       setLoading(true);
 
-      await client.request(deleteItem("quiz", initialData?.id));
+      await fetch.delete("items/quiz/" + initialData?.id);
 
       toast({
         variant: "success",

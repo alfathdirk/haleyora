@@ -9,7 +9,7 @@ export interface Data {
 export interface Quiz {
   id: string;
   user_created: string;
-  date_created: string | Date;
+  date_created: string;
   user_updated: null;
   date_updated: null;
   title: string;

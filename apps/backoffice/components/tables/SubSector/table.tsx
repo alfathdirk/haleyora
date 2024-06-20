@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 interface SectorTableProps<TData, TValue> {
   defaultLayout?: string;
-  customColumns?: ColumnDef<TData, TValue>[];
+  customColumns?: any;
   data: TData[];
   currentPage: number;
   pageSize: number;

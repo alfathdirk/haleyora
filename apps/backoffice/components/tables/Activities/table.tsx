@@ -13,7 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 interface ActivitiesTableProps<TData, TValue> {
   defaultLayout?: string;
   onClickRow?: boolean;
-  customColumns?: ColumnDef<TData, TValue>[];
+  customColumns?: any;
   data: TData[];
   currentPage: number;
   pageSize: number;
@@ -62,7 +62,7 @@ export const ActivitiesTable = <TData, TValue>({
 
   return (
     <DataTable
-      columns={currentLayout === "card" ? cardColumns : (customColumns ?? columns)}
+      columns={currentLayout === "card" ? cardColumns : customColumns || columns}
       onLayoutChange={(val: string) => setCurrentLayout(val)}
       tableHeader={false}
       data={data}
