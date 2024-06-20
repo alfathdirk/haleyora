@@ -67,8 +67,10 @@ export const AuthProvider = ({ children }: Props) => {
         return true;
       }
       setIsAuthenticated(false);
+      router.replace("/login");
       return false;
     } catch (error) {
+      router.replace("/login");
       setIsAuthenticated(false);
     }
   };

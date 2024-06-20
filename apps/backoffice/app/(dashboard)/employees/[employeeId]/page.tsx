@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { capitalizeFirstLetter } from "@/lib/helper";
 
 export default function Page() {
-  const { employeeId } = useParams();
+  const { employeeId } : { employeeId: string } = useParams();
   const searchParams = useSearchParams();
   const fetch = useDirectusFetch();
 

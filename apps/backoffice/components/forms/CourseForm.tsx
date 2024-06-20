@@ -46,7 +46,7 @@ const formSchema = z.object({
   status: z.string().min(1, { message: "Select status" }),
   material_content: z
     .array(z.instanceof(File))
-    .min(1, "Material content is required")
+    // .min(1, "Material content is required")
     .max(1, "Only one file is allowed"),
   video_content: z
     .array(z.instanceof(File))
@@ -131,29 +131,29 @@ export const CourseForm: React.FC<ProductFormProps> = ({
       if (data.image && data.image.length > 0) {
         const resImage = await fetch.upload("files", data.image);
         data.image = resImage?.data?.data?.id ?? null;
-      } else {
-        delete data.image;
       }
 
       if (data.material_content && data.material_content.length > 0) {
         const resImage = await fetch.upload("files", data.material_content);
         data.material_content = resImage?.data?.data?.id ?? null;
-      } else {
-        delete data.material_content;
       }
 
       if (data.video_content && data.video_content.length > 0) {
         const resImage = await fetch.upload("files", data.video_content);
         data.video_content = resImage?.data?.data?.id ?? null;
-      } else {
-        delete data.video_content;
       }
 
+      // Clean data by removing empty arrays and null values
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0))
+      );
+      console.log('\n \x1b[33m ~ cleanedData:', cleanedData);
+
       if (initialData === null) {
-        await fetch.post("items/course/", { body: data });
+        await fetch.post("items/course/", { body: cleanedData });
       } else {
         await fetch.patch("items/course/" + initialData?.id, {
-          body: data,
+          body: cleanedData,
         });
         notify.description = `Materi pembelajaran ${data?.title} telah diubah.`;
       }

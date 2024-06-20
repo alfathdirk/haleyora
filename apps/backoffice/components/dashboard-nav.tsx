@@ -28,10 +28,11 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
     <nav className="grid items-start gap-2">
       {items.map((item, index) => {
         const Icon = Icons[item.icon || "arrowRight"];
-        const isActive =
-          item.path === "/"
+        const isActive = item.path
+          ? item.path === "/"
             ? path === item.path
-            : path.startsWith(item?.path);
+            : path.startsWith(item.path)
+          : false;
 
         if (item?.groupLabel) {
           return (

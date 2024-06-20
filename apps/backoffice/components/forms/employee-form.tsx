@@ -25,7 +25,6 @@ import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import FileUpload from "../file-upload";
 import { useToast } from "../ui/use-toast";
 import { useEffect, useState } from "react";
 
@@ -190,11 +189,7 @@ export const EmployeeForm: React.FC<ProductFormProps> = ({
               <FormItem>
                 <FormLabel>Images</FormLabel>
                 <FormControl>
-                  <FileUpload
-                    onChange={field.onChange}
-                    value={field.value || []}
-                    onRemove={field.onChange}
-                  />
+                  {/* FILEUPLOAD Sections */}
                 </FormControl>
                 <FormMessage />
               </FormItem>
