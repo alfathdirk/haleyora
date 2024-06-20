@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: Props) => {
 
   const checkCurrentUser = async () => {
     try {
-      const result = await client.request(readMe({ fields: ["*.*"] }));
+      const result = await client.request(readMe({ fields: ["title", "avatar", "first_name", "last_name", "role"] }));
       if (result) {
         setCurrentUser(result as unknown as UserData);
         setIsAuthenticated(true);

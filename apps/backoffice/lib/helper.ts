@@ -57,3 +57,10 @@ export function formatDurationFromMinutes(totalMinutes: number) {
 export const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+// Clean data by removing empty arrays and null values
+export const cleanedData = (data: Array<any>) => {
+  return Object.fromEntries(
+    Object.entries(data).filter(([_, value]) => value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0))
+  );
+};

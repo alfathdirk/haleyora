@@ -7,11 +7,10 @@ import { columns } from "./columns/columns";
 import { cardColumns } from "./columns/columns-card";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
 
 interface SectorTableProps<TData, TValue> {
   defaultLayout?: string;
-  customColumns?: ColumnDef<TData, TValue>[];
+  customColumns?: any;
   data: TData[];
   currentPage: number;
   pageSize: number;

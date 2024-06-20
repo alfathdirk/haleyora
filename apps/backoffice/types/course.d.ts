@@ -16,7 +16,7 @@ export interface Course {
   title: string;
   image: null;
   imageUrl?: string;
-  activities: string | Activity;
+  activities: Activity;
   duration: number | null;
   material_content: null;
   video_content: null;
@@ -33,6 +33,6 @@ export interface Course {
 
 type Activity = {
   id: number;
-  name: string;
+  title: string;
   // other activity fields
 };

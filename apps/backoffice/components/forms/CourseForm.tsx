@@ -147,7 +147,6 @@ export const CourseForm: React.FC<ProductFormProps> = ({
       const cleanedData = Object.fromEntries(
         Object.entries(data).filter(([_, value]) => value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0))
       );
-      console.log('\n \x1b[33m ~ cleanedData:', cleanedData);
 
       if (initialData === null) {
         await fetch.post("items/course/", { body: cleanedData });
