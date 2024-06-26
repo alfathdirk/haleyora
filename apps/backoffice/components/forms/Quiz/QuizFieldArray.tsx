@@ -31,7 +31,7 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                   <div className="flex justify-between md:col-span-2">
                     <h1>Pertanyaan No. {index + 1}</h1>
                     {fields?.length > 1 && (
-                      <Button onClick={() => remove(index)} variant={"link"}>
+                      <Button className="text-gray-400" onClick={() => remove(index)} variant={"link"}>
                         Hapus
                       </Button>
                     )}
@@ -117,6 +117,7 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                 className="flex flex-row items-center justify-center gap-4 p-4 border cursor-pointer h-fit rounded-xl bg-gray-50 hover:bg-gray-100"
                 onClick={() =>
                   append({
+                    id: "",
                     title: "",
                     image: "",
                     choices: [{ id: "", label: "" }],

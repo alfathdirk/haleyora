@@ -1,10 +1,9 @@
-// components/ui/FileUpload.tsx
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { DndContext, useDroppable } from "@dnd-kit/core";
-import { ImageIcon, FileIcon, FileTextIcon, Trash } from "lucide-react";
+import { FileIcon, FileTextIcon, Trash } from "lucide-react";
 
 interface FileUploadProps {
   name: string;

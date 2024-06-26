@@ -21,7 +21,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
 import { useEffect, useState } from "react";
-
 import { Checkbox } from "../ui/checkbox";
 import { AlertModal } from "../modal/alert-modal";
 import QuizFieldArray from "./Quiz/QuizFieldArray";
@@ -30,7 +29,7 @@ import { cleanedData } from "@/lib/helper";
 
 // Custom validation for file instances
 const fileInstance = z.custom<File>((data) => data instanceof File, {
-  message: "Expected instance of File"
+  message: "Expected instance of File",
 });
 
 const formSchema = z.object({
@@ -43,8 +42,8 @@ const formSchema = z.object({
   quiz_question: z
     .array(
       z.object({
+        id: z.string().optional(), // Include id field
         title: z.string().min(1, "Question title is required."),
-        // image: z.array(z.instanceof(File)).optional(),
         image: z.array(fileInstance).optional(),
         choices: z
           .array(
@@ -87,6 +86,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
         score_per_question: 0,
         quiz_question: [
           {
+            id: "", // Include id field for default values
             title: "",
             image: [],
             choices: [{ id: "", label: "" }],
@@ -127,11 +127,12 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     const result: any = await fetch.post("items/quiz/", { body: data });
 
     if (quizQuestions) {
-      const updatedQuestions = quizQuestions.map((question: any) => cleanedData({
-        ...question,
-        quiz_id: result?.data?.data?.id,
-      }));
-      // await client.request(createItems("quiz_question", updatedQuestions));
+      const updatedQuestions = quizQuestions.map((question: any) =>
+        cleanedData({
+          ...question,
+          quiz_id: result?.data?.data?.id,
+        }),
+      );
       await fetch.post("items/quiz_question/", { body: updatedQuestions });
     }
 
@@ -139,25 +140,28 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
   };
 
   const handleQuizUpdate = async (id: string, data: any) => {
-    const keys:any = [];
-    const updatedQuestions = data?.quiz_question.map((question: any) => {
-      keys.push(question.id);
-      return cleanedData({
+    const updatedQuestions = data.quiz_question.map((question: any) =>
+      cleanedData({
         ...question,
-        quiz_id: id,
-      });
-    });
-    await fetch.patch("items/quiz_question/", { body: {
-      keys: ["0dedcbe5-ffb2-461a-b266-a0320255f5e0", "eb457868-2613-4ac9-8ab6-b8b167f7c057"],
-      data: {
-        details: {
-          update: updatedQuestions
-        }
-      }
-    } });
+      })
+    );
+
+    const updatePromises = updatedQuestions
+      .filter((question: any) => question.id) // Only update existing questions
+      .map((question: any) =>
+        fetch.patch(`items/quiz_question/${question.id}`, { body: question })
+      );
+
+    const createPromises = updatedQuestions
+      .filter((question: any) => !question.id) // Only create new questions
+      .map((question: any) =>
+        fetch.post("items/quiz_question", { body: { ...question, quiz_id: id } })
+      );
+
+    await Promise.all([...updatePromises, ...createPromises]);
 
     (data as any).quiz_question = undefined;
-    await fetch.patch("items/quiz/" + id, {
+    await fetch.patch(`items/quiz/${id}`, {
       body: cleanedData(data),
     });
   };
@@ -176,7 +180,6 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
         await handleQuizUpdate(initialData.id, data);
         notify.description = `Kuis ${data.title} telah diubah.`;
       }
-
       router.refresh();
       router.push(`/quiz`);
 
@@ -336,7 +339,6 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               errors: form.formState.errors,
             }}
           />
-
           <Button className="ml-auto" type="submit">
             {action}
           </Button>
