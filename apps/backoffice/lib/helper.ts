@@ -64,3 +64,20 @@ export const cleanedData = (data: Array<any>) => {
     Object.entries(data).filter(([_, value]) => value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0))
   );
 };
+
+export const fetchDirectusFile = async (fileId: string) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/files/${fileId}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const fileData = await response.json();
+    return {
+      ...fileData,
+      url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${fileData.filename_disk}`,
+    };
+  } catch (error) {
+    console.error('Error fetching file from Directus:', error);
+    return null;
+  }
+};

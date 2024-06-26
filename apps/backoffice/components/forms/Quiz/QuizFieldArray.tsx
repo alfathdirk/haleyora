@@ -12,7 +12,7 @@ import { Plus } from "lucide-react";
 import ChoicesFieldArray from "./ChoicesFieldArray";
 import FileUpload from "@/components/FileUpload";
 
-const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
+const QuizFieldArray = ({ control, register, errors, getValues, setValue }: any) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "quiz_question",
@@ -22,10 +22,9 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
     <div className="gap-8 mb-8 md:grid md:grid-cols-2">
       {fields.map((item, index) => {
         return (
-          <>
+          <React.Fragment key={item.id || index}>
             <FormField
-              key={item.id}
-              name={""}
+              name={`quiz_question.${index}`}
               render={() => (
                 <div className="flex flex-col gap-4 p-4 border rounded-xl">
                   <div className="flex justify-between md:col-span-2">
@@ -49,7 +48,8 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                     </FormLabel>
                     <FormControl>
                       <FileUpload
-                        {...register(`quiz_question.${index}.image`)}
+                        name={`quiz_question.${index}.image`}
+                        maxFiles={5}
                       />
                     </FormControl>
                     {errors?.quiz_question &&
@@ -129,7 +129,7 @@ const QuizFieldArray = ({ control, register, errors, getValues }: any) => {
                 Tambah Pertanyaan
               </div>
             )}
-          </>
+          </React.Fragment>
         );
       })}
     </div>
