@@ -36,9 +36,9 @@ const fileInstance = z.custom<File>((data) => data instanceof File, {
 const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
   description: z.string().max(225),
-  duration: z.number(),
+  duration: z.string(),
   randomize: z.boolean().optional(),
-  score_per_question: z.number(),
+  score_per_question: z.string(),
   task_description: z.string().optional(),
   quiz_question: z
     .array(
@@ -82,9 +82,9 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     : {
         title: "",
         description: "",
-        duration: 0,
+        duration: '',
         randomize: false,
-        score_per_question: 0,
+        score_per_question: '',
         quiz_question: [
           {
             title: "",
@@ -279,7 +279,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="score_per_question"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Minimum Nilai</FormLabel>
+                  <FormLabel required>Nilai pertanyaan</FormLabel>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
                   </FormControl>
