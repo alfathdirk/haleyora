@@ -253,10 +253,13 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel required>Judul</FormLabel>
+                  <FormDescription className="!mt-0">
+                    Judul kuis
+                  </FormDescription>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Judul pembelajaran"
+                      // placeholder="Judul pembelajaran"
                       {...field}
                     />
                   </FormControl>
@@ -270,6 +273,9 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel required>Durasi</FormLabel>
+                  <FormDescription className="!mt-0">
+                    Estimasi durasi kuis dalam satuan menit
+                  </FormDescription>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
                   </FormControl>
@@ -283,6 +289,9 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel required>Minimum Nilai</FormLabel>
+                  <FormDescription className="!mt-0">
+                    Minimum nilai untuk lulus kuis
+                  </FormDescription>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
                   </FormControl>

@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
-import { useEffect, useState } from "react";
+import { JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { AlertModal } from "../modal/alert-modal";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
@@ -230,7 +230,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 name="title"
                 render={({ field }) => (
                   <FormItem className="col-span-2">
-                    <FormLabel>Judul</FormLabel>
+                    <FormLabel required>Judul</FormLabel>
                     <FormControl>
                       <Input
                         disabled={loading}
@@ -246,8 +246,8 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 control={form.control}
                 name="activities"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Aktifitas</FormLabel>
+                  <FormItem className="col-span-2">
+                    <FormLabel required>Aktifitas</FormLabel>
                     <Select
                       disabled={loading}
                       onValueChange={field.onChange}
@@ -275,7 +275,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="status"
                 render={({ field }) => (
@@ -296,8 +296,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {/* @ts-ignore  */}
-                        {status.map((option) => (
+                        {status.map((option: { _id: string; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | PromiseLikeOfReactNode | null | undefined; }) => (
                           <SelectItem key={option._id} value={option._id}>
                             {option.name}
                           </SelectItem>
@@ -307,13 +306,16 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 control={form.control}
                 name="min_score"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Minimum Nilai</FormLabel>
+                    <FormDescription className="!mt-0">
+                      Minimum nilai untuk lulus pembelajaran
+                    </FormDescription>
                     <FormControl>
                       <Input disabled={loading} type="number" {...field} />
                     </FormControl>
@@ -327,6 +329,9 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Durasi</FormLabel>
+                    <FormDescription className="!mt-0">
+                      Estimasi durasi pembelajaran dalam satuan menit
+                    </FormDescription>
                     <FormControl>
                       <Input disabled={loading} type="number" {...field} />
                     </FormControl>
@@ -455,7 +460,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={() => (
                   <FormItem>
                     <div className="space-y-1 leading-none">
-                      <FormLabel>Gambar</FormLabel>
+                      <FormLabel required>Gambar</FormLabel>
                       <FormDescription>
                         Preview gambar pada baner Pembelajaran
                       </FormDescription>
@@ -473,7 +478,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={() => (
                   <FormItem>
                     <div className="space-y-1 leading-none">
-                      <FormLabel>Konten Tambahan</FormLabel>
+                      <FormLabel required>Konten PDF</FormLabel>
                       <FormDescription>
                         File tambahan untuk pembelajaran
                       </FormDescription>
@@ -491,7 +496,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={() => (
                   <FormItem>
                     <div className="space-y-1 leading-none">
-                      <FormLabel>Konten Video</FormLabel>
+                      <FormLabel required>Konten Video</FormLabel>
                       <FormDescription>Video Pembelajaran</FormDescription>
                     </div>
                     <FormControl>

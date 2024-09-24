@@ -37,7 +37,7 @@ const ChoicesFieldArray = ({ qIndex, control, register, errors }: any) => {
                           : ""
                       }`}
                     >
-                      Id
+                      Pilihan
                     </FormLabel>
                     <FormControl>
                       <Input
