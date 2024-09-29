@@ -43,6 +43,29 @@ export interface DirectusFetchMethods {
   ) => Promise<ApiResponse<T>>;
 }
 
+const serializeParams = (params: any, prefix = ""): URLSearchParams => {
+  const query = new URLSearchParams();
+
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const value = params[key];
+      const fullKey = prefix ? `${prefix}[${key}]` : key;
+
+      if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+        // Recursively serialize nested objects
+        const nestedParams = serializeParams(value, fullKey);
+        nestedParams.forEach((val, nestedKey) => {
+          query.append(nestedKey, val);
+        });
+      } else {
+        query.append(fullKey, value);
+      }
+    }
+  }
+
+  return query;
+};
+
 export const useDirectusFetch = (): DirectusFetchMethods => {
   const { accessToken } = useDirectusContext();
 
@@ -64,9 +87,10 @@ export const useDirectusFetch = (): DirectusFetchMethods => {
   ): Promise<ApiResponse<T>> => {
     const endpoint = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`);
 
-    // Handle params
-    Object.keys(params).forEach((key) => {
-      endpoint.searchParams.append(key, params[key]);
+    // Handle params (now properly serializes nested objects)
+    const serializedParams = serializeParams(params);
+    serializedParams.forEach((value, key) => {
+      endpoint.searchParams.append(key, value);
     });
 
     const defaultHeaders: HeadersInit = {
