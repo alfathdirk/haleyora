@@ -18,6 +18,7 @@ export interface Employee {
   status: string;
   email: string;
   employee_id?: string;
+  employee_course?: EmployeeCourse[]
 }
 
 export interface EmployeeCourse {
