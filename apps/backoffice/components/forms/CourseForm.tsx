@@ -37,25 +37,19 @@ const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
   activities: z.string().min(1, { message: "Pilih satu aktifitas" }),
   exam_quiz: z.string().min(1, { message: "Pilih satu quiz" }),
-  duration: z.string(),
+  duration: z.string().min(0, { message: "Durasi harus di isi." }),
   is_open_exam: z.boolean().optional(),
   is_open_task: z.boolean().optional(),
-  min_score: z.string().max(100, { message: "Maksimum nilai 100." }),
-  description: z.string().max(225),
+  min_score: z.string().min(0).max(100, { message: "Maksimum nilai 100." }),
+  description: z.string().max(500),
   task_description: z.string().optional(),
   status: z.string().min(1, { message: "Select status" }),
   material_content: z
-    .array(z.instanceof(File))
-    // .min(1, "Material content is required")
-    .max(1, "Only one file is allowed"),
+    .array(z.instanceof(File)),
   video_content: z
-    .array(z.instanceof(File))
-    .min(1, "Video content is required")
-    .max(1, "Only one file is allowed"),
+    .array(z.instanceof(File)),
   image: z
-    .array(z.instanceof(File))
-    .min(1, "Image is required")
-    .max(1, "Only one file is allowed"),
+    .array(z.instanceof(File)),
 });
 
 type CourseFormValues = z.infer<typeof formSchema>;
@@ -92,10 +86,10 @@ export const CourseForm: React.FC<ProductFormProps> = ({
     ? initialData
     : {
         title: "",
-        duration: "",
+        duration: 0,
         is_open_exam: false,
         is_open_task: false,
-        min_score: "",
+        min_score: 0,
         description: "",
         task_description: "",
         activities: "",
