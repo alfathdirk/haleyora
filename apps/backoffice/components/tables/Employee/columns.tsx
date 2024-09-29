@@ -54,7 +54,7 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "employee_id",
     header: "Employee ID",
     cell: ({ row }) => (
-      <div className="px-2.5 py-1 bg-gray-200 rounded-full w-fit">
+      <div className="px-2.5 py-1 bg-gray-200 dark:bg-gray-600 rounded-full w-fit">
         #{row?.original?.employee_id}
       </div>
     ),
@@ -137,8 +137,8 @@ export const columns: ColumnDef<Employee>[] = [
   //     <LessonTags tags={["Electrical", "Cable", "Installation"]} />
   //   ),
   // },
-  {
-    id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => <CellAction data={row.original} />,
+  // },
 ];

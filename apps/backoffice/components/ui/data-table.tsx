@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
         {headerActions ? headerActions() : <div></div>}
 
         <div className="flex gap-x-4">
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center ml-4 gap-x-2">
             <div
               className={clsx(
                 "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
@@ -136,11 +136,11 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <ScrollArea className="rounded-md h-[calc(85vh-220px)] pt-4">
+      <ScrollArea className="rounded-md h-[calc(85vh-220px)]">
         {currentLayout === "table" ? (
           <Table className="relative">
             {tableHeader && (
-              <TableHeader className="bg-[#FAFBFB] sticky top-0 left-0 z-30">
+              <TableHeader className="bg-[#FAFBFB] dark:bg-gray-600 sticky top-0 left-0 z-30">
                 {tableInstance.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
@@ -201,7 +201,7 @@ export function DataTable<TData, TValue>({
         ) : tableInstance.getRowModel().rows.length ? (
           <div
             className={cn(
-              "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
+              "grid gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3",
               cardContainerStyles,
             )}
           >
