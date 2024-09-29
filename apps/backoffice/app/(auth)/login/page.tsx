@@ -51,9 +51,8 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F5F5F5]">
-      <div className="hidden w-3/5 lg:block ">
-        {/* Placeholder for image on the left side */}
+    <div className="flex justify-center min-h-screen bg-[#F5F5F5]">
+      {/* <div className="hidden w-3/5 lg:block ">
         <Image
           src="/assets/img/general/login-image.png"
           width={160}
@@ -61,18 +60,20 @@ const LoginPage: React.FC = () => {
           alt="haleyora-logo"
           className="w-full"
         />
-      </div>
+      </div> */}
       <div className="flex items-center justify-center w-full p-8 lg:w-1/2">
-        <div className="w-full max-w-md">
-          <Image
-            src="/assets/img/general/haleyora-logo.png"
-            width={160}
-            height={10}
-            alt="haleyora-logo"
-            className="w-4/6 h-auto mb-6"
-          />
-          <p className="mb-4 text-3xl font-bold">Welcome back</p>
-          <p className="text-[#787486] mb-8">
+        <div className="w-full max-w-md p-8 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] border bg-secondary rounded-xl">
+          <div className="flex justify-center">
+            <Image
+              src="/assets/img/general/haleyora-logo.png"
+              width={160}
+              height={10}
+              alt="haleyora-logo"
+              className="w-4/6 h-auto mb-6"
+            />
+          </div>
+          <p className="mb-2 text-2xl font-bold">Welcome back</p>
+          <p className="text-[#787486] mb-4">
             Please enter your email & password
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -87,7 +88,7 @@ const LoginPage: React.FC = () => {
                 id="email"
                 type="email"
                 {...register("email")}
-                className="block w-full px-0 py-2 mt-1 bg-transparent border-b placeholder:text-black border-[#A69999] focus-visible:!ring-0 focus-visible:!border-none"
+                className="block w-full px-4 py-2 mt-1 bg-transparent border border-primary rounded-xl placeholder:text-black focus-visible:!ring-0 focus-visible:!border-none"
                 placeholder="Email"
               />
               <p className="mt-2 text-sm text-red-600">
@@ -106,7 +107,7 @@ const LoginPage: React.FC = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className="block w-full px-0 py-2 mt-1 bg-transparent border-b placeholder:text-black border-[#A69999] focus-visible:!ring-0 focus-visible:!border-none"
+                  className="block w-full px-4 py-2 mt-1 bg-transparent border border-primary rounded-xl placeholder:text-black focus-visible:!ring-0 focus-visible:!border-none"
                   placeholder="Password"
                 />
                 <button

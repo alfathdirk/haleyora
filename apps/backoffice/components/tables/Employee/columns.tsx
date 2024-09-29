@@ -54,23 +54,8 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "employee_id",
     header: "Employee ID",
     cell: ({ row }) => (
-      <div className="px-2.5 py-1 bg-gray-200 rounded-full w-fit">
+      <div className="px-2.5 py-1 bg-gray-200 dark:bg-gray-600 rounded-full w-fit">
         #{row?.original?.employee_id}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-    cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="">
-          {row.original?.role ?? '-'}
-        </span>
-        {/* <span className="font-thin">
-          {row.original?.email}
-          Full time
-        </span> */}
       </div>
     ),
   },
@@ -93,14 +78,67 @@ export const columns: ColumnDef<Employee>[] = [
     },
   },
   {
-    accessorKey: "lesson",
-    header: "Lesson",
+    accessorKey: "employee_course",
+    header: "Pembelajaran",
     cell: ({ row }) => (
-      <LessonTags tags={["Electrical", "Cable", "Installation"]} />
+      <div className="flex flex-col">
+        <span className="">
+          {row.original?.employee_course?.length}
+        </span>
+      </div>
     ),
   },
   {
-    id: "actions",
-    cell: ({ row }) => <CellAction data={row.original} />,
+    accessorKey: "employee_course.exam_score",
+    header: "Rata - rata Kuis",
+    cell: ({ row }) => {
+      let totalQuiz = 0;
+      let totalExamScore = 0;
+
+      row.original?.employee_course?.map((course) => {
+        totalQuiz += 1;
+        totalExamScore += Number(course?.exam_score ?? 0);
+      })
+
+      return (
+        <div className="flex flex-col">
+          <span className="">
+            {(totalExamScore !== 0 &&  totalQuiz !== 0) ? totalExamScore / totalQuiz : 0}
+          </span>
+        </div>
+      );
+    },
   },
+  {
+    accessorKey: "employee_course.tasks_score",
+    header: "Rata - rata Tugas",
+    cell: ({ row }) => {
+      let totalQuiz = 0;
+      let totalExamScore = 0;
+
+      row.original?.employee_course?.map((course) => {
+        totalQuiz += 1;
+        totalExamScore += Number(course?.tasks_score ?? 0);
+      })
+
+      return (
+        <div className="flex flex-col">
+          <span className="">
+            {(totalExamScore !== 0 &&  totalQuiz !== 0) ? totalExamScore / totalQuiz : 0}
+          </span>
+        </div>
+      );
+    },
+  },
+  // {
+  //   accessorKey: "lesson",
+  //   header: "Lesson",
+  //   cell: ({ row }) => (
+  //     <LessonTags tags={["Electrical", "Cable", "Installation"]} />
+  //   ),
+  // },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => <CellAction data={row.original} />,
+  // },
 ];

@@ -44,10 +44,10 @@ export const EmployeesTable = () => {
 
       const { data: res } = await fetch.get("items/employee", {
         params: {
-          fields: ["*", "employee_course.id"],
+          fields: ["id", "employee_id", "email", "full_name", "status", "employee_course.id", "employee_course.completed", "employee_course.exam_score", "employee_course.tasks_score"],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
-          filter: JSON.stringify(filters),
+          filter: filters,
           meta: "total_count,filter_count",
         },
       });

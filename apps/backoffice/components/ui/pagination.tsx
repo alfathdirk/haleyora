@@ -23,7 +23,7 @@ const Pagination = ({
   <nav
     role="navigation"
     aria-label="pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
+    className={cn("mx-auto flex w-full justify-center mt-2", className)}
     {...props}
   >
     <PaginationContent>
@@ -63,7 +63,7 @@ const Pagination = ({
             <PaginationLink
               isActive={currentPage === page}
               onClick={() => onPageChange(page)}
-              className={clsx('hover:bg-[#F9FAFC] hover:border hover:border-[#E4E4E4]', currentPage === page && 'bg-[#F9FAFC] border border-[#E4E4E4]')}
+              className={clsx('hover:bg-[#F9FAFC] hover:border hover:border-[#E4E4E4]', currentPage === page && 'bg-[#F9FAFC] dark:bg-gray-600 border border-[#E4E4E4]')}
             >
               {String(page).padStart(2, "0")}
             </PaginationLink>
