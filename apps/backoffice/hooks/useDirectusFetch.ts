@@ -70,9 +70,9 @@ export const useDirectusFetch = (): DirectusFetchMethods => {
   const { accessToken } = useDirectusContext();
 
   if (!accessToken) {
-    throw new Error(
-      "Token is not available. Make sure you are within a DirectusProvider.",
-    );
+    // throw new Error(
+    //   "Token is not available. Make sure you are within a DirectusProvider.",
+    // );
   }
 
   const baseFetch = async <T>(
