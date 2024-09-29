@@ -478,9 +478,9 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={() => (
                   <FormItem>
                     <div className="space-y-1 leading-none">
-                      <FormLabel required>Konten PDF</FormLabel>
+                      <FormLabel required>File PDF</FormLabel>
                       <FormDescription>
-                        File tambahan untuk pembelajaran
+                        Konten pembelajaran dalam bentuk PDF
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -496,8 +496,10 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                 render={() => (
                   <FormItem>
                     <div className="space-y-1 leading-none">
-                      <FormLabel required>Konten Video</FormLabel>
-                      <FormDescription>Video Pembelajaran</FormDescription>
+                      <FormLabel required>File Video</FormLabel>
+                      <FormDescription>
+                        Konten pembelajaran dalam bentuk Video
+                      </FormDescription>
                     </div>
                     <FormControl>
                       <FileUpload name="video_content" />
