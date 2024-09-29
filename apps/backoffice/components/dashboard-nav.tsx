@@ -56,9 +56,9 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
               >
                 <span
                   className={cn(
-                    "group flex items-center px-6 py-2 text-[16px] transition-all ease-in duration-50 font-normal hover:bg-accent hover:text-accent-foreground",
+                    "group flex items-center px-6 py-2 text-[16px] transition-all ease-in duration-50 font-normal hover:bg-accent hover:text-accent-foreground hover:border-r-4 hover:border-[#00A9E3]",
                     isActive
-                      ? "bg-accent border-r-4 border-[#00A9E3]"
+                      ? "bg-accent border-r-4 text-accent-foreground border-[#00A9E3]"
                       : "transparent",
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
