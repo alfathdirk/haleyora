@@ -13,7 +13,6 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
-  const [currentLayout, setCurrentLayout] = useState<"card" | "table">("table");
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -93,9 +92,8 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
 
   return (
     <DataTable
-      layout={currentLayout}
-      columns={currentLayout === "card" ? columns : columns}
-      onLayoutChange={(val: any) => setCurrentLayout(val)}
+      columns={columns}
+      canChangeLayout={false}
       data={data}
       headerActions={headerActions}
       currentPage={currentPage}
