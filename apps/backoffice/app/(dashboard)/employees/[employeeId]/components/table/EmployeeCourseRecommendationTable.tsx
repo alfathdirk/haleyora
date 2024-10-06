@@ -6,19 +6,15 @@ import { LucideSearch } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { EmployeeCourse } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
-import clsx from "clsx";
-import { format } from "date-fns";
-import id from "date-fns/locale/id";
+import EmpCourseRecFormDialog from "../dialog/EmpCourseRecFormDialog";
+import { Button } from "@/components/ui/button";
 
 export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
-  const router = useRouter();
 
-  const [currentLayout, setCurrentLayout] = useState<"card" | "table">("table");
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -45,14 +41,14 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
       accessorKey: "course.title",
       header: "Materi",
       cell: ({ row }) => {
-        return <div>{row?.original.course.title}</div>;
+        return <div>{row?.original?.course?.title ?? ''}</div>;
       },
     },
     {
       accessorKey: "course.is_open_exam",
       header: "Kuis",
       cell: ({ row }) => {
-        const hasQuiz = row?.original?.course.is_open_exam;
+        const hasQuiz = row?.original?.course?.is_open_exam;
         return (
           <Badge
             className="!font-semibold"
@@ -67,7 +63,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
       accessorKey: "course.is_open_task",
       header: "Tugas",
       cell: ({ row }) => {
-        const hasTask = row?.original?.course.is_open_task;
+        const hasTask = row?.original?.course?.is_open_task;
         return (
           <Badge
             className="!font-semibold"
@@ -109,16 +105,6 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
         },
       });
 
-      // const { data: res } = await fetch.get("items/employee_course", {
-      //   params: {
-      //     fields: ["*", "course.id", "course.title", "course.min_score"],
-      //     limit: pageSize,
-      //     offset: (currentPage - 1) * pageSize,
-      //     filter: JSON.stringify(filters),
-      //     meta: "total_count,filter_count",
-      //   },
-      // });
-
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
     } catch (error) {
@@ -149,6 +135,22 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
             />
           </div>
         </div>
+        <EmpCourseRecFormDialog
+          employeeId={employeeId}
+          triggerTitle={(
+            <Button
+                className=""
+                variant={"secondary"}
+              >
+                Tambah Rekomendasi
+            </Button>
+          )}
+          dialogTriggerProps={{
+            className: "p-2 h-fit group hover:bg-transparent",
+            variant: "ghost",
+          }}
+          onSubmitCallback={() => fetchData()}
+        />
       </div>
     );
   };

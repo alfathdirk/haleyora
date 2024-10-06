@@ -6,17 +6,15 @@ import BreadCrumb from "@/components/breadcrumb";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useParams, useSearchParams } from "next/navigation";
 import { Heading } from "@/components/ui/heading";
-import { EmployeeCourseTable } from "./components/table/EmployeeCourseTable";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Employee } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
 import { capitalizeFirstLetter } from "@/lib/helper";
-import { EmployeeCourseRecommendationTable } from "./components/table/EmployeeCourseRecommendationTable";
 
 export default function Page() {
-  const { employeeId }: { employeeId: string } = useParams();
+  const { employeeId } : { employeeId: string } = useParams();
   const searchParams = useSearchParams();
   const fetch = useDirectusFetch();
 
@@ -187,10 +185,7 @@ export default function Page() {
         </div>
         <h1 className="text-2xl font-normal">Riwayat Pembelajaran</h1>
         <Separator className="my-8" />
-        <EmployeeCourseTable employeeId={employeeId} />
-        <h1 className="!mt-16 text-2xl font-normal">Rekomendasi Pembelajaran</h1>
-        <Separator className="my-8" />
-        <EmployeeCourseRecommendationTable employeeId={employeeId} />
+        {/* <EmployeeCourseTable employeeId={employeeId} /> */}
       </div>
     </ScrollArea>
   );
