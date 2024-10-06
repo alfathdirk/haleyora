@@ -2,15 +2,22 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
-import { Book, LucideSearch } from "lucide-react";
+import { Book, Edit2Icon, EditIcon, LucideSearch, ThumbsUpIcon } from "lucide-react";
 import { columns } from "./columns";
-import { cardColumns } from "./columns-card";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Course } from "@/types/course";
 import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Clock, Clock5, Users2Icon } from "lucide-react";
+import { formatDurationFromMinutes } from "@/lib/helper";
+import { ColumnDef } from "@tanstack/react-table";
+import CourseRecommendationFormDialog from "@/components/forms/CourseRecommendationFormDialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 export const CourseTable = () => {
   const fetch = useDirectusFetch();
@@ -49,7 +56,7 @@ export const CourseTable = () => {
 
         const { data: res } = await fetch.get("items/course", {
           params: {
-            fields: ["*", "activities.*", "employee_course.id"],
+            fields: ["*", "employee_course_files", "activities.*", "employee_course.id"],
             limit: pageSize,
             offset: (currentPage - 1) * pageSize,
             filter: JSON.stringify(filters),
@@ -112,24 +119,104 @@ export const CourseTable = () => {
     );
   }
 
+
+  const cardColumns: ColumnDef<Course>[] = [
+    {
+      accessorKey: "imageUrl",
+      header: "Image",
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-end justify-center rounded-t-[20px]">
+            <Avatar className="w-full h-48 rounded-none rounded-t-[20px]">
+              <AvatarImage src={row.original?.imageUrl ?? ""} alt="@shadcn" />
+              <AvatarFallback className="rounded-none">IMG</AvatarFallback>
+            </Avatar>
+          </div>
+        );
+      },
+      enableSorting: true,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "totalEmployeeCourse",
+      cell: ({ row }) => (
+        <div className="flex justify-between px-3 py-2 mb-2 text-xs text-[#878787] font-normal">
+          <div className="flex items-center mr-1">
+            <Users2Icon className="w-[14px] h-[14px] mr-1" />
+            {row.original?.totalEmployeeCourse} Peminat
+          </div>
+          <div className="flex items-center">
+            <Clock5 className="w-3 h-3 mr-1" />
+            {row?.original?.duration ? formatDurationFromMinutes(row?.original?.duration) : "-"}
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "activities.title",
+      header: "Kategori",
+      cell: ({ row }) => (
+        <div className="px-3 text-[10px] font-medium uppercase text-[#8E8D8D]">
+          {row?.original?.activities?.title}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div className="px-3 pb-2 text-lg min-h-20 font-semibold leading-tight text-[#515151]">
+          {row?.original?.title ?? "-"}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "action",
+      header: "",
+      cell: ({ row }) => (
+        <div
+          id={row.original?.id}
+          className="z-50 flex items-start px-3 mt-2 mb-4 gap-x-2"
+        >
+          <Button className="font-semibold" size={"sm"} variant="default" onClick={() => router.push(`/course/${row.original?.id}`)}>
+            <EditIcon className="w-4 h-4 mr-2" />
+            Edit
+          </Button>
+          <CourseRecommendationFormDialog
+              initialData={row?.original}
+              triggerTitle={(
+                <Button className="font-semibold" size={"sm"} variant="default">
+                  <ThumbsUpIcon className="w-4 h-4 mr-2" />
+                  Rekomendasi
+                </Button>
+              )}
+              dialogTriggerProps={{
+                className: "p-0 h-fit group hover:bg-transparent",
+                variant: "ghost",
+              }}
+              // onSubmitCallback={() => fetchData()}
+            />
+        </div>
+      ),
+    }
+  ];
+
   return (
-    <>
-      <DataTable
-        columns={currentLayout === "card" ? cardColumns : columns}
-        layout="card"
-        onLayoutChange={(val: string) => setCurrentLayout(val)}
-        data={data}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={handlePageChange}
-        setCurrentPage={setCurrentPage}
-        setPageSize={setPageSize}
-        cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 !gap-12 px-2 md:pr-8 pb-8"
-        cardStyles="p-0 rounded-3xl shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.18)] border border-[#F1F1F1] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-        onClickRow={(item) => router.push(`/course/${item?.id}`)}
-        headerActions={headerActions}
-      />
-    </>
+    <DataTable
+      columns={currentLayout === "card" ? cardColumns : columns}
+      layout="card"
+      onLayoutChange={(val: string) => setCurrentLayout(val)}
+      data={data}
+      currentPage={currentPage}
+      pageSize={pageSize}
+      totalItems={totalItems}
+      onPageChange={handlePageChange}
+      setCurrentPage={setCurrentPage}
+      setPageSize={setPageSize}
+      cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 !gap-12 px-2 md:pr-8 pb-8"
+      cardStyles="p-0 rounded-3xl shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.18)] border border-[#F1F1F1] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500"
+      onClickRow={() => {}}
+      headerActions={headerActions}
+    />
   );
 };

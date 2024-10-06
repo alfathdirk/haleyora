@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   pageSize: number;
   totalItems: number;
   tableHeader?: boolean;
+  canChangeLayout?: boolean;
   // methods
   onClickRow?: (data: TData) => void;
   onPageChange: (val: number) => void;
@@ -55,6 +56,7 @@ export function DataTable<TData, TValue>({
   totalItems,
   layout = "table",
   tableHeader = true,
+  canChangeLayout = true,
   onClickRow,
   onPageChange,
   setCurrentPage,
@@ -98,42 +100,46 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between">
         {headerActions ? headerActions() : <div></div>}
 
-        <div className="flex gap-x-4">
-          <div className="flex items-center ml-4 gap-x-2">
-            <div
-              className={clsx(
-                "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
-                {
-                  "bg-[#00A9E3] !text-white": currentLayout === "table",
-                },
-              )}
-              onClick={() => {
-                if (onLayoutChange) {
-                  onLayoutChange("table");
-                }
-                setLayout("table");
-              }}
-            >
-              <PauseHorizontalIcon className="w-full h-5 cursor-pointer" />
+        {canChangeLayout ? (
+            <div className="flex gap-x-4">
+              <div className="flex items-center ml-4 gap-x-2">
+                <div
+                  className={clsx(
+                    "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
+                    {
+                      "bg-[#00A9E3] !text-white": currentLayout === "table",
+                    },
+                  )}
+                  onClick={() => {
+                    if (onLayoutChange) {
+                      onLayoutChange("table");
+                    }
+                    setLayout("table");
+                  }}
+                >
+                  <PauseHorizontalIcon className="w-full h-5 cursor-pointer" />
+                </div>
+                <div
+                  className={clsx(
+                    "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
+                    {
+                      "bg-[#00A9E3] !text-white": currentLayout === "card",
+                    },
+                  )}
+                  onClick={() => {
+                    if (onLayoutChange) {
+                      onLayoutChange("card");
+                    }
+                    setLayout("card");
+                  }}
+                >
+                  <DotsIcon className="w-full h-5 cursor-pointer" />
+                </div>
+              </div>
             </div>
-            <div
-              className={clsx(
-                "h-fit p-2 text-[#787486] rounded-sm cursor-pointer flex items-center",
-                {
-                  "bg-[#00A9E3] !text-white": currentLayout === "card",
-                },
-              )}
-              onClick={() => {
-                if (onLayoutChange) {
-                  onLayoutChange("card");
-                }
-                setLayout("card");
-              }}
-            >
-              <DotsIcon className="w-full h-5 cursor-pointer" />
-            </div>
-          </div>
-        </div>
+          ) : <div></div>
+        }
+
       </div>
 
       <ScrollArea className="rounded-md h-[calc(85vh-220px)]">

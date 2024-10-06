@@ -6,12 +6,14 @@ import { LucideSearch } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { columns } from "./columns";
+import { ColumnDef } from "@tanstack/react-table";
+import { EmployeeCourse } from "@/types/employee";
+import { Badge } from "@/components/ui/badge";
+import EmpCourseRecFormDialog from "../dialog/EmpCourseRecFormDialog";
+import { Button } from "@/components/ui/button";
 
-export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
+export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
-  const router = useRouter();
 
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +36,50 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
     debouncedSearchChange(nextValue);
   };
 
+  const columns: ColumnDef<EmployeeCourse>[] = [
+    {
+      accessorKey: "course.title",
+      header: "Materi",
+      cell: ({ row }) => {
+        return <div>{row?.original?.course?.title ?? ''}</div>;
+      },
+    },
+    {
+      accessorKey: "course.is_open_exam",
+      header: "Kuis",
+      cell: ({ row }) => {
+        const hasQuiz = row?.original?.course?.is_open_exam;
+        return (
+          <Badge
+            className="!font-semibold"
+            variant={hasQuiz ? "success" : "secondary"}
+          >
+            {hasQuiz ? "Ya" : "Tidak"}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "course.is_open_task",
+      header: "Tugas",
+      cell: ({ row }) => {
+        const hasTask = row?.original?.course?.is_open_task;
+        return (
+          <Badge
+            className="!font-semibold"
+            variant={hasTask ? "success" : "secondary"}
+          >
+            {hasTask ? "Ya" : "Tidak"}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "course.min_score",
+      header: "Min. Nilai",
+    },
+  ];
+
   async function fetchData() {
     try {
       let filters = { employee: { _eq: employeeId } };
@@ -46,12 +92,15 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
         });
       }
 
-      const { data: res } = await fetch.get("items/employee_course", {
+      const { data: res } = await fetch.get("items/employee_course_recommendation", {
         params: {
-          fields: ["*", "course.id", "course.title", "course.min_score"],
+          fields: [
+            "id",
+            "course.id", "course.title", "course.min_score", "course.is_open_exam", "course.is_open_task"
+          ],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
-          filter: JSON.stringify(filters),
+          filter: filters,
           meta: "total_count,filter_count",
         },
       });
@@ -86,6 +135,22 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
             />
           </div>
         </div>
+        <EmpCourseRecFormDialog
+          employeeId={employeeId}
+          triggerTitle={(
+            <Button
+                className=""
+                variant={"secondary"}
+              >
+                Tambah Rekomendasi
+            </Button>
+          )}
+          dialogTriggerProps={{
+            className: "p-2 h-fit group hover:bg-transparent",
+            variant: "ghost",
+          }}
+          onSubmitCallback={() => fetchData()}
+        />
       </div>
     );
   };
@@ -93,8 +158,8 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
   return (
     <DataTable
       columns={columns}
-      canChangeLayout={false}
       data={data}
+      canChangeLayout={false}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

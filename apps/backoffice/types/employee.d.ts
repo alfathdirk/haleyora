@@ -11,7 +11,7 @@ export interface Meta {
 }
 
 export interface Employee {
-  id: number;
+  id: string;
   full_name: string;
   role: string;
   verified: boolean;
