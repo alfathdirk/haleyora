@@ -49,7 +49,7 @@ export const CourseTable = () => {
 
         const { data: res } = await fetch.get("items/course", {
           params: {
-            fields: ["*", "activities.*", "employee_course.id"],
+            fields: ["*", "employee_course_files", "activities.*", "employee_course.id"],
             limit: pageSize,
             offset: (currentPage - 1) * pageSize,
             filter: JSON.stringify(filters),
