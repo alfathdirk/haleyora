@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,7 +23,6 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const LoginPage: React.FC = () => {
-  const router = useRouter();
   const { login } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
