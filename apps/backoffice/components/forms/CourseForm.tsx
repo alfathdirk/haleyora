@@ -376,7 +376,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   name="exam_quiz"
                   render={({ field }) => (
                     <FormItem className="col-span-2 md:pl-7 md:-mt-6">
-                      <FormLabel>Kuis</FormLabel>
+                      <FormLabel>Ujian</FormLabel>
                       <Select
                         disabled={loading}
                         onValueChange={field.onChange}
@@ -387,7 +387,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                           <SelectTrigger>
                             <SelectValue
                               defaultValue={field.value}
-                              placeholder="Pilih salah satu Kuis"
+                              placeholder="Pilih salah satu Ujian"
                             />
                           </SelectTrigger>
                         </FormControl>

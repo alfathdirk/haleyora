@@ -9,7 +9,7 @@ import { QuizTable } from "@/components/tables/Quiz/table";
 
 export default function Page() {
   const router = useRouter();
-  const pageName = "Kuis";
+  const pageName = "Ujian";
 
   return (
     <>

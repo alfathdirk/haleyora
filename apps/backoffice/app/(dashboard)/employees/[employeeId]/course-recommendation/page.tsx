@@ -165,7 +165,7 @@ export default function Page() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
-                Nilai Rata - rata Kuis
+                Nilai Rata - rata Ujian
               </CardTitle>
             </CardHeader>
             <CardContent>

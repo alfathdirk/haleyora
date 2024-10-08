@@ -61,18 +61,18 @@ export const columns: ColumnDef<Employee>[] = [
   },
   {
     accessorKey: "employee_course",
-    header: "Pembelajaran",
+    header: "Total Pembelajaran",
     cell: ({ row }) => (
       <div className="flex flex-col">
         <span className="">
-          {row.original?.employee_course?.length}
+          {row.original?.employee_course?.length ?? 0}
         </span>
       </div>
     ),
   },
   {
     accessorKey: "employee_course.exam_score",
-    header: "Rata - rata Kuis",
+    header: "Rata - rata Ujian",
     cell: ({ row }) => {
       let totalQuiz = 0;
       let totalExamScore = 0;

@@ -45,7 +45,7 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
   },
   {
     accessorKey: "exam_score",
-    header: "Nilai Kuis",
+    header: "Nilai Ujian",
     cell: ({ row }) => {
       return <div>{row?.original.exam_score ?? '-'}</div>;
     },
