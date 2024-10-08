@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,6 +24,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const LoginPage: React.FC = () => {
+  const router = useRouter();
   const { login } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -39,7 +41,6 @@ const LoginPage: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setSubmitting(true);
     try {
-      // Assuming the login function accepts an object with email and password
       await login(data.email, data.password);
     } catch (err) {
       if (err instanceof Error) {
@@ -62,7 +63,7 @@ const LoginPage: React.FC = () => {
         />
       </div> */}
       <div className="flex items-center justify-center w-full p-8 lg:w-1/2">
-        <div className="w-full max-w-md p-8 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] border bg-secondary rounded-xl">
+        <div className="w-full max-w-md p-8 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] border bg-primary-foreground rounded-xl">
           <div className="flex justify-center">
             <Image
               src="/assets/img/general/haleyora-logo.png"

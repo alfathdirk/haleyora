@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
-import { JSXElementConstructor, Key, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { AlertModal } from "../modal/alert-modal";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
@@ -37,7 +37,7 @@ const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
   activities: z.string().min(1, { message: "Pilih satu aktifitas" }),
   exam_quiz: z.string().min(1, { message: "Pilih satu quiz" }),
-  duration: z.string().min(0, { message: "Durasi harus di isi." }),
+  duration: z.number().min(0, { message: "Durasi harus di isi." }),
   is_open_exam: z.boolean().optional(),
   is_open_task: z.boolean().optional(),
   min_score: z.string().min(0).max(100, { message: "Maksimum nilai 100." }),
@@ -327,7 +327,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                       Estimasi durasi pembelajaran dalam satuan menit
                     </FormDescription>
                     <FormControl>
-                      <Input disabled={loading} type="number" {...field} />
+                      <Input disabled={loading} type="number" {...field}  onChange={(e) => field.onChange(Number(e.target.value))} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

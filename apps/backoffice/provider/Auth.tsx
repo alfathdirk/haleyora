@@ -3,7 +3,7 @@
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { DirectusUser, readMe } from "@directus/sdk";
+import { readMe } from "@directus/sdk";
 import { useDirectusContext } from "@/hooks/useDirectusContext";
 
 interface AuthContextProps {
@@ -11,6 +11,7 @@ interface AuthContextProps {
   login: (username: string, password: string) => void;
   logout: () => void;
   currentUser: UserData | null;
+  members: any[] | null; // Store fetched API data here
 }
 
 interface Props {
@@ -18,31 +19,16 @@ interface Props {
 }
 
 export interface UserData {
+  tags: string[];
   id: string;
   first_name: string | null;
   last_name: string | null;
   email: string | null;
-  password: string | null;
-  location: string | null;
-  title: string | null;
-  description: string | null;
-  tags: string[] | null;
-  avatar: string | null;
-  language: string | null;
-  theme: string | null;
-  tfa_secret: string | null;
-  status: string;
   role: {
     id: string;
     name: string;
   } | null;
   token: string | null;
-  last_access: "datetime" | null;
-  last_page: string | null;
-  provider: string;
-  external_identifier: string | null;
-  auth_data: Record<string, any> | null;
-  email_notifications: boolean | null;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -50,62 +36,111 @@ export const AuthContext = createContext<AuthContextProps>({
   login: (username: string, password: string) => {},
   logout: () => {},
   currentUser: null,
+  members: null,
 });
 
 export const AuthProvider = ({ children }: Props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+  const [members, setMembers] = useState<any[] | null>(null); // State to store fetched API data
   const { client } = useDirectusContext();
   const router = useRouter();
 
+  // Function to check the current user and their role
   const checkCurrentUser = async () => {
     try {
-      const result = await client.request(readMe({ fields: ["title", "avatar", "first_name", "last_name", "role"] }));
+      const result = await client.request(
+        readMe({
+          fields: ["first_name", "last_name", "email", "role.name", "tags"], // Fetch role.name for role check
+        }),
+      );
+
       if (result) {
-        setCurrentUser(result as unknown as UserData);
+        let NIKs = [];
+        const user = result as unknown as UserData;
+        const nikTag = user?.tags.find((tag: string) => tag.startsWith("NIK:"));
+
+        if (user && nikTag) {
+          NIKs = await fetchMembers(nikTag.split(":")[1]);
+          NIKs = NIKs.data.map((item: { NO_INDUK: string }) => item.NO_INDUK);
+        }
+
+        setMembers(NIKs);
+        setCurrentUser(user);
         setIsAuthenticated(true);
+
         return true;
+      } else {
+        setIsAuthenticated(false);
+        router.replace("/login");
+        return false;
       }
-      setIsAuthenticated(false);
-      router.replace("/login");
-      return false;
     } catch (error) {
-      router.replace("/login");
+      console.error("Error checking current user:", error);
       setIsAuthenticated(false);
+      router.replace("/login");
     }
   };
 
+  // Function to login the user
   const login = async (username: string, password: string) => {
-    let result = await client.login(username, password);
-    if (result) {
-      setCookie("auth", JSON.stringify({ accessToken: result.access_token }), {
-        path: "/",
-      });
-      checkCurrentUser();
-      router.replace("/");
+    try {
+      const result = await client.login(username, password);
+      if (result) {
+        await checkCurrentUser();
+        setCookie(
+          "auth",
+          JSON.stringify({ accessToken: result.access_token }),
+          {
+            path: "/",
+          },
+        );
+        router.replace('/');
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await client.logout();
     deleteCookie("auth");
-    client.logout();
     setIsAuthenticated(false);
+    setMembers(null); // Clear API data on logout
     router.replace("/login");
   };
 
+  const fetchMembers = async (nik: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_HL_URL}/api/tad/list-bawahan/${nik}?limit=1000`,
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching API data:", error);
+    }
+  };
+
+  // Run check on component mount
   useEffect(() => {
-    let cookie = getCookie("auth");
+    const cookie = getCookie("auth");
     if (!cookie) {
       router.replace("/login");
       return;
     }
     checkCurrentUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, currentUser }}
+      value={{
+        isAuthenticated,
+        login,
+        logout,
+        currentUser,
+        members,
+      }}
     >
       {children}
     </AuthContext.Provider>

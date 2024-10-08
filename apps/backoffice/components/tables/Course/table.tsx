@@ -14,10 +14,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Clock, Clock5, Users2Icon } from "lucide-react";
 import { formatDurationFromMinutes } from "@/lib/helper";
 import { ColumnDef } from "@tanstack/react-table";
-import CourseRecommendationFormDialog from "@/components/forms/CourseRecommendationFormDialog";
+// import CourseRecommendationFormDialog from "@/components/forms/CourseRecommendationFormDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 export const CourseTable = () => {
   const fetch = useDirectusFetch();
@@ -182,7 +181,7 @@ export const CourseTable = () => {
             <EditIcon className="w-4 h-4 mr-2" />
             Edit
           </Button>
-          <CourseRecommendationFormDialog
+          {/* <CourseRecommendationFormDialog
               initialData={row?.original}
               triggerTitle={(
                 <Button className="font-semibold" size={"sm"} variant="default">
@@ -195,7 +194,7 @@ export const CourseTable = () => {
                 variant: "ghost",
               }}
               // onSubmitCallback={() => fetchData()}
-            />
+            /> */}
         </div>
       ),
     }
