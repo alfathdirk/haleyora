@@ -9,7 +9,6 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import { cardColumns } from "./columns-card";
 import { useRouter } from "next/navigation";
-import { AuthContext } from "@/provider/Auth";
 
 export const EmployeesTable = ({ members, currentUser }: any) => {
   const fetch = useDirectusFetch();

@@ -60,24 +60,6 @@ export const columns: ColumnDef<Employee>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const isActive = row?.original?.status === "active";
-      return (
-        <Badge variant={isActive ? "success" : "danger"}>
-          <span
-            className={clsx(
-              "rounded-full w-2 h-2 bg-[#12B76A] mr-2",
-              isActive ? "bg-[#12B76A]" : "bg-[#F15046]"
-            )}
-          />
-          {capitalizeFirstLetter(row?.original?.status ?? "")}
-        </Badge>
-      );
-    },
-  },
-  {
     accessorKey: "employee_course",
     header: "Pembelajaran",
     cell: ({ row }) => (
