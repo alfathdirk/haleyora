@@ -121,11 +121,6 @@ const LoginPage: React.FC = () => {
                 {errors.password?.message}
               </p>
             </div>
-            <div className="flex items-center justify-end">
-              <a href="#" className="text-sm ">
-                Forgot your password?
-              </a>
-            </div>
             <div>
               <button
                 type="submit"
