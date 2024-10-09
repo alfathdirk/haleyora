@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: Props) => {
       if (result) {
         let NIKs = [];
         const user = result as unknown as UserData;
-        const nikTag = user?.tags.find((tag: string) => tag.startsWith("NIK:"));
+        const nikTag = user?.tags?.find((tag: string) => tag.startsWith("NIK:"));
 
         if (user && nikTag) {
           NIKs = await fetchMembers(nikTag.split(":")[1]);
