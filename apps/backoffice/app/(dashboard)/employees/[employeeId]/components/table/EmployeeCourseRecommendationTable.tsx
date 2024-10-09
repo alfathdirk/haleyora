@@ -46,7 +46,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
     },
     {
       accessorKey: "course.is_open_exam",
-      header: "Kuis",
+      header: "Ujian",
       cell: ({ row }) => {
         const hasQuiz = row?.original?.course?.is_open_exam;
         return (

@@ -71,7 +71,7 @@ export function CourseOverview() {
       setSummary([
         { name: "Selesai", value: resTotalCompleted.data[0].count.id },
         // { name: "Ujian", value: 0 },
-        { name: "Kuis", value: resTotalQuizTaken.data[0].count.id },
+        { name: "Ujian", value: resTotalQuizTaken.data[0].count.id },
         { name: "Sedang Berjalan", value: resTotalOngoing.data[0].count.id },
       ]);
     } catch (error) {

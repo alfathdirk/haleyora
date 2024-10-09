@@ -21,7 +21,7 @@ export default function page() {
             Hi, {currentUser?.first_name} {currentUser?.last_name} 👋
           </h2>
           <div className="items-center hidden space-x-2 md:flex">
-            <CalendarDateRangePicker />
+            {/* <CalendarDateRangePicker /> */}
             {/* <Button>Download</Button> */}
           </div>
         </div>

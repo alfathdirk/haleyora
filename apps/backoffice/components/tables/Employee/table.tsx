@@ -4,13 +4,13 @@ import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
 import { columns } from "./columns";
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import { cardColumns } from "./columns-card";
 import { useRouter } from "next/navigation";
 
-export const EmployeesTable = () => {
+export const EmployeesTable = ({ members, currentUser }: any) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
@@ -42,6 +42,14 @@ export const EmployeesTable = () => {
         ? { full_name: { _contains: searchValue } }
         : {};
 
+      if (currentUser?.role?.name != "Administrators") {
+        Object.assign(filters, {
+          employee_id: {
+            _in: members,
+          },
+        });
+      }
+
       const { data: res } = await fetch.get("items/employee", {
         params: {
           fields: ["id", "employee_id", "email", "full_name", "status", "employee_course.id", "employee_course.completed", "employee_course.exam_score", "employee_course.tasks_score"],
@@ -63,7 +71,7 @@ export const EmployeesTable = () => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, searchValue]);
+  }, [currentPage, pageSize, searchValue, members]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

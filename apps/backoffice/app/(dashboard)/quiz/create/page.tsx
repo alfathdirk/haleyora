@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 
 export default function Page() {
   const fetch = useDirectusFetch();
-  const pageName = "Kuis";
+  const pageName = "Ujian";
 
   const [activities, setActivities] = useState<any>([]);
 

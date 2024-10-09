@@ -88,7 +88,7 @@ const LatestCompletedQuiz = () => {
             <Button
               size={"sm"}
               variant={"secondary"}
-              className="bg-[#4BA6651C] text-sm lg:text-lg font-normal text-[#4BA665] w-56 rounded-3xl !py-5"
+              className="bg-[#4BA6651C] text-sm font-normal text-[#4BA665] w-56 rounded-3xl !py-5"
               onClick={() => router.push(`/employees/${item?.employee?.id}?name=${encodeURIComponent(item?.employee?.full_name)}`)}
             >
               Lihat Hasil Belajar

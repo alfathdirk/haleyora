@@ -39,7 +39,6 @@ const LoginPage: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setSubmitting(true);
     try {
-      // Assuming the login function accepts an object with email and password
       await login(data.email, data.password);
     } catch (err) {
       if (err instanceof Error) {
@@ -62,7 +61,7 @@ const LoginPage: React.FC = () => {
         />
       </div> */}
       <div className="flex items-center justify-center w-full p-8 lg:w-1/2">
-        <div className="w-full max-w-md p-8 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] border bg-secondary rounded-xl">
+        <div className="w-full max-w-md p-8 shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] border bg-primary-foreground rounded-xl">
           <div className="flex justify-center">
             <Image
               src="/assets/img/general/haleyora-logo.png"
@@ -121,11 +120,6 @@ const LoginPage: React.FC = () => {
               <p className="mt-2 text-sm text-red-600">
                 {errors.password?.message}
               </p>
-            </div>
-            <div className="flex items-center justify-end">
-              <a href="#" className="text-sm ">
-                Forgot your password?
-              </a>
             </div>
             <div>
               <button

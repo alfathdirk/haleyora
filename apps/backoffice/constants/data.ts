@@ -38,9 +38,9 @@ export const navItems: NavItem[] = [
     label: "Dashboard",
   },
   {
-    title: "Karyawan",
+    title: "Monitoring",
     path: "/employees",
-    label: "Karyawan",
+    label: "Monitoring",
     icon: "employee",
   },
   {
@@ -51,8 +51,8 @@ export const navItems: NavItem[] = [
   },
   {
     path: "/quiz",
-    title: "Kuis",
-    label: "Kuis",
+    title: "Ujian",
+    label: "Ujian",
     icon: "quiz",
   },
   {
@@ -61,12 +61,12 @@ export const navItems: NavItem[] = [
     label: "Tugas",
     icon: "parameter",
   },
-  {
-    path: "/monitoring",
-    title: "Monitoring",
-    label: "Monitoring",
-    icon: "dashboard",
-  },
+  // {
+  //   path: "/monitoring",
+  //   title: "Monitoring",
+  //   label: "Monitoring",
+  //   icon: "dashboard",
+  // },
   {
     path: "#",
     groupLabel: "Master Data",

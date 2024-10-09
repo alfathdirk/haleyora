@@ -60,37 +60,19 @@ export const columns: ColumnDef<Employee>[] = [
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const isActive = row?.original?.status === "active";
-      return (
-        <Badge variant={isActive ? "success" : "danger"}>
-          <span
-            className={clsx(
-              "rounded-full w-2 h-2 bg-[#12B76A] mr-2",
-              isActive ? "bg-[#12B76A]" : "bg-[#F15046]"
-            )}
-          />
-          {capitalizeFirstLetter(row?.original?.status ?? "")}
-        </Badge>
-      );
-    },
-  },
-  {
     accessorKey: "employee_course",
-    header: "Pembelajaran",
+    header: "Total Pembelajaran",
     cell: ({ row }) => (
       <div className="flex flex-col">
         <span className="">
-          {row.original?.employee_course?.length}
+          {row.original?.employee_course?.length ?? 0}
         </span>
       </div>
     ),
   },
   {
     accessorKey: "employee_course.exam_score",
-    header: "Rata - rata Kuis",
+    header: "Rata - rata Ujian",
     cell: ({ row }) => {
       let totalQuiz = 0;
       let totalExamScore = 0;

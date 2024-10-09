@@ -72,8 +72,8 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = initialData ? `Ubah ${initialData?.title ?? ""}` : "Buat Kuis";
-  const description = initialData ? "Ubah data Kuis." : "Buat Kuis baru.";
+  const title = initialData ? `Ubah ${initialData?.title ?? ""}` : "Buat Ujian";
+  const description = initialData ? "Ubah data Ujian." : "Buat Ujian baru.";
   const action = initialData ? "Simpan Perubahan" : "Buat";
 
   const defaultValues = initialData
@@ -170,7 +170,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
     try {
       const notify = {
         title: "Sukses!",
-        description: `Kuis ${data?.title} telah dibuat.`,
+        description: `Ujian ${data?.title} telah dibuat.`,
       };
       setLoading(true);
 
@@ -178,7 +178,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
         await handleQuizCreation(data, data.quiz_question);
       } else {
         await handleQuizUpdate(initialData.id, data);
-        notify.description = `Kuis ${data.title} telah diubah.`;
+        notify.description = `Ujian ${data.title} telah diubah.`;
       }
       router.refresh();
       router.push(`/quiz`);
@@ -254,7 +254,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
                 <FormItem>
                   <FormLabel required>Judul</FormLabel>
                   <FormDescription className="!mt-0">
-                    Judul kuis
+                    Judul Ujian
                   </FormDescription>
                   <FormControl>
                     <Input
@@ -274,7 +274,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
                 <FormItem>
                   <FormLabel required>Durasi</FormLabel>
                   <FormDescription className="!mt-0">
-                    Estimasi durasi kuis dalam satuan menit
+                    Estimasi durasi Ujian dalam satuan menit
                   </FormDescription>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
@@ -290,7 +290,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
                 <FormItem>
                   <FormLabel required>Minimum Nilai</FormLabel>
                   <FormDescription className="!mt-0">
-                    Minimum nilai untuk lulus kuis
+                    Minimum nilai untuk lulus Ujian
                   </FormDescription>
                   <FormControl>
                     <Input disabled={loading} type="number" {...field} />
