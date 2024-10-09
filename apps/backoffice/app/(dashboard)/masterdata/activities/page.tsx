@@ -114,12 +114,6 @@ export default function MasterDataActivitiesPage() {
           >
             <div>
               {row.original?.title}
-              <Badge
-                variant={statusColor[row.original?.status ?? 'draft']}
-                className="ml-8 font-semibold uppercase"
-              >
-                {row.original?.status}
-              </Badge>
             </div>
             <div>
               <ActivitiesFormDialog
