@@ -137,6 +137,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
         </div>
         <EmpCourseRecFormDialog
           employeeId={employeeId}
+          employeeRecommendations={data}
           triggerTitle={(
             <Button
                 className=""
