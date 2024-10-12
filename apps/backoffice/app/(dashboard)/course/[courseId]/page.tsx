@@ -69,6 +69,7 @@ export default function Page() {
           id: res?.data?.id,
           activities: res?.data?.activities,
           exam_quiz: res?.data?.exam_quiz,
+          duration: res?.data?.duration,
           title: res?.data?.title,
           is_open_exam: res?.data?.is_open_exam,
           is_open_task: res?.data?.is_open_task,
