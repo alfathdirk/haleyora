@@ -21,13 +21,13 @@ export default function Page() {
       try {
         const { data: res } = await fetch.get("items/activities", {
           params: {
-            fields: ["id, title"],
+            fields: ["id", "title", "sub_sector.title"],
           },
         });
 
         res?.data.forEach((item: any) => {
           item._id = item.id;
-          item.name = item.title;
+          item.name = `${item?.sub_sector?.title ?? '-'} | ${item.title}`;
         });
 
         setActivities(res?.data ?? []);
@@ -69,6 +69,7 @@ export default function Page() {
           id: res?.data?.id,
           activities: res?.data?.activities,
           exam_quiz: res?.data?.exam_quiz,
+          duration: res?.data?.duration,
           title: res?.data?.title,
           is_open_exam: res?.data?.is_open_exam,
           is_open_task: res?.data?.is_open_task,

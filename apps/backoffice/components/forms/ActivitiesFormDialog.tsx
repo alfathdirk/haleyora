@@ -71,7 +71,7 @@ export default function ActivitiesFormDialog({
       ? initialData
       : {
           sub_sector: "",
-          status: "draft",
+          status: "published",
           title: "",
         },
   });
@@ -82,10 +82,10 @@ export default function ActivitiesFormDialog({
     try {
       if (initialData) {
         await fetch.patch("items/activities/" + initialData?.id, {
-          body: data,
+          body: {...data, status: 'published'},
         });
       } else {
-        await fetch.post("items/activities", { body: data });
+        await fetch.post("items/activities", { body: {...data, status: 'published'} });
       }
 
       if (onSubmitCallback) {
@@ -173,7 +173,7 @@ export default function ActivitiesFormDialog({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -204,7 +204,7 @@ export default function ActivitiesFormDialog({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="title"

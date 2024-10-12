@@ -11,6 +11,7 @@ import { EmployeeCourse } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
 import EmpCourseRecFormDialog from "../dialog/EmpCourseRecFormDialog";
 import { Button } from "@/components/ui/button";
+import { DeleteAction } from "../delete-action";
 
 export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
@@ -78,6 +79,18 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
       accessorKey: "course.min_score",
       header: "Min. Nilai",
     },
+    {
+      accessorKey: "id",
+      header: "",
+      cell: ({ row }) => {
+        return (
+          <DeleteAction
+            data={row.original}
+            onConfirmCallback={() => fetchData()}
+          />
+        );
+      },
+    }
   ];
 
   async function fetchData() {
@@ -137,6 +150,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
         </div>
         <EmpCourseRecFormDialog
           employeeId={employeeId}
+          employeeRecommendations={data}
           triggerTitle={(
             <Button
                 className=""

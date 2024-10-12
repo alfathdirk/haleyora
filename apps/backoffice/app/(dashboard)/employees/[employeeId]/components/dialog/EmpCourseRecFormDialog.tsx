@@ -41,10 +41,12 @@ type FormValues = z.infer<typeof formSchema>;
 export default function EmpCourseRecFormDialog({
   employeeId,
   triggerTitle,
+  employeeRecommendations,
   dialogTriggerProps,
   onSubmitCallback,
 }: {
   employeeId: string;
+  employeeRecommendations: any[];
   triggerTitle?: React.ReactNode | string;
   dialogTriggerProps?: ButtonProps;
   onSubmitCallback?: () => void;
@@ -63,8 +65,10 @@ export default function EmpCourseRecFormDialog({
   });
 
   // Fetch task details including files
-  const fetchCourses = async () => {
+  const fetchCourses = async (data: any) => {
     try {
+      const ids = data.map((i: any) => i?.course?.id);
+
       const { data: res } = await fetch.get("items/course", {
         params: {
           fields: ["id", "title"],
@@ -72,6 +76,9 @@ export default function EmpCourseRecFormDialog({
             status: {
               _eq: "published",
             },
+            id: {
+              _nin: ids,
+            }
           },
         },
       });
@@ -88,12 +95,12 @@ export default function EmpCourseRecFormDialog({
   };
 
   useEffect(() => {
-    if (showFormModal) {
-      fetchCourses(); // Fetch task details when modal is opened
+    if (showFormModal && employeeRecommendations) {
+      fetchCourses(employeeRecommendations); // Fetch task details when modal is opened
     } else {
       form.reset(); // Ensure form is reset when modal is closed
     }
-  }, [showFormModal, form]);
+  }, [showFormModal, form, employeeRecommendations]);
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);

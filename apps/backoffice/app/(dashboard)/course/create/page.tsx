@@ -18,13 +18,13 @@ export default function Page() {
       try {
         const { data: res } = await fetch.get("items/activities", {
           params: {
-            fields: ["id, title"],
+            fields: ["id", "title", "sub_sector.title"],
           },
         });
 
         res?.data.forEach((item: any) => {
           item._id = item.id;
-          item.name = item.title;
+          item.name = `${item?.sub_sector?.title ?? '-'} | ${item.title}`;
         });
 
         setActivities(res?.data ?? []);

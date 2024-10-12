@@ -62,6 +62,7 @@ export const SectorTable = <TData, TValue>({
         currentLayout === "card" ? cardColumns : customColumns ?? columns
       }
       onLayoutChange={(val: string) => setCurrentLayout(val)}
+      canChangeLayout={false}
       tableHeader={false}
       data={data}
       headerActions={headerActions}
@@ -71,11 +72,11 @@ export const SectorTable = <TData, TValue>({
       onPageChange={handlePageChange}
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
-      cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 xl:!grid-cols-5 gap-8"
-      cardStyles="py-3 px-2 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
+      // cardContainerStyles="!grid-cols-1 md:!grid-cols-3 lg:!grid-cols-4 xl:!grid-cols-5 gap-8"
+      // cardStyles="py-3 px-2 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
       tableRowStyles="!border-0 !mx-8 hover:bg-transparent"
       tableCellStyles={cn(
-        "flex flex-col w-full px-3 py-3 my-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100",
+        "flex flex-col w-full px-3 py-3 mt-4 mb-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-2xl !border hover:bg-gray-50 transition-all ease-in duration-100",
         onClickRow ? "cursor-pointer" : "cursor-default",
       )}
       onClickRow={onClickRow}
