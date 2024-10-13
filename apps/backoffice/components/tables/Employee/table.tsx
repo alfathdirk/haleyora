@@ -99,6 +99,7 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
       layout={currentLayout}
       columns={currentLayout === "card" ? cardColumns : columns}
       onLayoutChange={(val: any) => setCurrentLayout(val)}
+      canChangeLayout={false}
       data={data}
       headerActions={headerActions}
       currentPage={currentPage}

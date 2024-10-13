@@ -93,7 +93,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
     }
   ];
 
-  async function fetchData() {
+  const fetchData = async function () {
     try {
       let filters = { employee: { _eq: employeeId } };
 
