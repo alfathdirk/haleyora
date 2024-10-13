@@ -1,3 +1,8 @@
+"use client";
+
+import { useContext, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { AuthContext } from "@/provider/Auth"; // Assuming AuthContext is in /provider/Auth
 import { MobileSidebar } from "@/components/layout/mobile-sidebar";
 import Sidebar from "@/components/layout/sidebar";
 import ThemeToggle from "@/components/layout/ThemeToggle/theme-toggle";
@@ -5,17 +10,40 @@ import { UserNav } from "@/components/layout/user-nav";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { canAccessPath } from "@/constants/data";
 
-export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || "Haleyora",
-  description: "Elearning Haleyora Power",
-};
+// export const metadata: Metadata = {
+//   title: process.env.NEXT_PUBLIC_APP_NAME || "Haleyora",
+//   description: "Elearning Haleyora Power",
+// };
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { currentUser, isAuthenticated } = useContext(AuthContext); // Access current user and authentication status
+  const router = useRouter();
+  const pathname = usePathname(); // Get current route path
+
+
+  useEffect(() => {
+     // If not authenticated, redirect to login
+     if (!isAuthenticated) {
+      router.replace("/login");
+    }
+
+    if (currentUser && !canAccessPath(currentUser.role?.name, pathname)) {
+      router.replace("/not-authorized");
+    }
+  }, [isAuthenticated, currentUser, router]);
+
+  // While checking the user's role and path, don't render anything
+  if (!isAuthenticated || !currentUser || !canAccessPath(currentUser.role?.name, pathname)) {
+    return null;
+  }
+
+  // If the user is authenticated and has the required role, render the layout
   return (
     <>
       <div className="flex h-screen overflow-hidden">
@@ -25,7 +53,6 @@ export default function DashboardLayout({
           {/* Header */}
           <div className="absolute top-0 left-0 right-0 z-20 px-4 py-4 border-b md:py-[30px] md:px-6 supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur">
             <nav className="flex items-center justify-between px-0 md:px-4">
-
               <div className="flex text-lg font-semibold lg:flex-row lg:text-3xl">
                 <p className="text-[#C2BB34] mr-2">E-LEARNING</p>
                 <p className="text-[#05A5DE]"> HALEYORA POWER</p>
@@ -42,9 +69,7 @@ export default function DashboardLayout({
           </div>
 
           <ScrollArea className="h-full">
-            <div className="p-4 md:p-10">
-              {children}
-            </div>
+            <div className="p-4 md:p-10">{children}</div>
           </ScrollArea>
         </main>
       </div>

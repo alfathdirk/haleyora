@@ -1,10 +1,16 @@
+"use client"
+
 import { DashboardNav } from "@/components/dashboard-nav";
-import { navItems } from "@/constants/data";
+import { getAccessibleNavItems, navItems } from "@/constants/data";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { AuthContext } from "@/provider/Auth";
+import { useContext } from "react";
 
 export default function Sidebar() {
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <nav
       className={cn(
@@ -24,7 +30,7 @@ export default function Sidebar() {
       </div>
       <div className="py-4 space-y-4">
         <div className="h-[60%] space-y-1">
-          <DashboardNav items={navItems} />
+          <DashboardNav items={getAccessibleNavItems(currentUser?.role?.name)} />
         </div>
       </div>
     </nav>

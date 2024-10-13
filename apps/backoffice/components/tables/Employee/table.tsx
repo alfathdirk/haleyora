@@ -42,7 +42,7 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
         ? { full_name: { _contains: searchValue } }
         : {};
 
-      if (currentUser?.role?.name != "Administrators") {
+      if (currentUser?.role?.name != "Administrator") {
         Object.assign(filters, {
           employee_id: {
             _in: members,

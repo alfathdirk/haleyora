@@ -5,6 +5,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { readMe } from "@directus/sdk";
 import { useDirectusContext } from "@/hooks/useDirectusContext";
+import { Role } from "@/types";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -26,7 +27,7 @@ export interface UserData {
   email: string | null;
   role: {
     id: string;
-    name: string;
+    name: Role;
   } | null;
   token: string | null;
 }

@@ -117,7 +117,6 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
   };
 
   const processForm: SubmitHandler<ProfileFormValues> = (data) => {
-    console.log("data ==>", data);
     setData(data);
     // api call and reset
     // form.reset();
@@ -196,7 +195,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
             size="sm"
             onClick={() => setOpen(true)}
           >
-            <Trash className="h-4 w-4" />
+            <Trash className="w-4 h-4" />
           </Button>
         )}
       </div>
@@ -206,15 +205,15 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
           {steps.map((step, index) => (
             <li key={step.name} className="md:flex-1">
               {currentStep > index ? (
-                <div className="group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-sky-600 transition-colors ">
+                <div className="flex flex-col w-full py-2 pl-4 transition-colors border-l-4 group border-sky-600 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                  <span className="text-sm font-medium transition-colors text-sky-600 ">
                     {step.id}
                   </span>
                   <span className="text-sm font-medium">{step.name}</span>
                 </div>
               ) : currentStep === index ? (
                 <div
-                  className="flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
+                  className="flex flex-col w-full py-2 pl-4 border-l-4 border-sky-600 md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4"
                   aria-current="step"
                 >
                   <span className="text-sm font-medium text-sky-600">
@@ -223,7 +222,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
                   <span className="text-sm font-medium">{step.name}</span>
                 </div>
               ) : (
-                <div className="group flex h-full w-full flex-col border-l-4 border-gray-200 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
+                <div className="flex flex-col w-full h-full py-2 pl-4 transition-colors border-l-4 border-gray-200 group md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
                   <span className="text-sm font-medium text-gray-500 transition-colors">
                     {step.id}
                   </span>
@@ -238,7 +237,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(processForm)}
-          className="space-y-8 w-full"
+          className="w-full space-y-8"
         >
           <div
             className={cn(
@@ -410,11 +409,11 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
                           className="absolute right-8"
                           onClick={() => remove(index)}
                         >
-                          <Trash2Icon className="h-4 w-4 " />
+                          <Trash2Icon className="w-4 h-4 " />
                         </Button>
                         {errors?.jobs?.[index] && (
                           <span className="absolute alert right-8">
-                            <AlertTriangleIcon className="h-4 w-4   text-red-700" />
+                            <AlertTriangleIcon className="w-4 h-4 text-red-700" />
                           </span>
                         )}
                       </AccordionTrigger>
@@ -602,13 +601,13 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
         </form>
       </Form>
       {/* Navigation */}
-      <div className="mt-8 pt-5">
+      <div className="pt-5 mt-8">
         <div className="flex justify-between">
           <button
             type="button"
             onClick={prev}
             disabled={currentStep === 0}
-            className="rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="px-2 py-1 text-sm font-semibold bg-white rounded shadow-sm text-sky-900 ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -616,7 +615,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="w-6 h-6"
             >
               <path
                 strokeLinecap="round"
@@ -629,7 +628,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
             type="button"
             onClick={next}
             disabled={currentStep === steps.length - 1}
-            className="rounded bg-white px-2 py-1 text-sm font-semibold text-sky-900 shadow-sm ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="px-2 py-1 text-sm font-semibold bg-white rounded shadow-sm text-sky-900 ring-1 ring-inset ring-sky-300 hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -637,7 +636,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
               viewBox="0 0 24 24"
               strokeWidth="1.5"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="w-6 h-6"
             >
               <path
                 strokeLinecap="round"
