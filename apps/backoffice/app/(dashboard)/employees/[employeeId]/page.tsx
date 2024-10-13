@@ -79,7 +79,7 @@ export default function Page() {
       });
 
       const averageExamScore = res?.data?.[0]?.avg?.exam_score;
-      const averageTaskScore = res?.data?.[0]?.avg?.task_score;
+      const averageTaskScore = res?.data?.[0]?.avg?.tasks_score;
       setTotalAvgQuizScore(averageExamScore ?? 0);
       setTotalAvgTaskScore(averageTaskScore ?? 0);
     } catch (error) {
