@@ -17,6 +17,7 @@ import { ColumnDef } from "@tanstack/react-table";
 // import CourseRecommendationFormDialog from "@/components/forms/CourseRecommendationFormDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DeleteAction } from "@/app/(dashboard)/course/components/delete-action";
 
 export const CourseTable = () => {
   const fetch = useDirectusFetch();
@@ -46,37 +47,39 @@ export const CourseTable = () => {
     debouncedSearchChange(nextValue);
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const filters = searchValue
-          ? { title: { _contains: searchValue } }
-          : {};
 
-        const { data: res } = await fetch.get("items/course", {
-          params: {
-            fields: ["*", "employee_course_files", "activities.*", "employee_course.id"],
-            limit: pageSize,
-            offset: (currentPage - 1) * pageSize,
-            filter: JSON.stringify(filters),
-            meta: "total_count,filter_count",
-          },
-        });
+  const fetchData = async function () {
+    try {
+      const filters = searchValue
+        ? { title: { _contains: searchValue } }
+        : {};
 
-        res?.data?.forEach((item: Course) => {
-          item.totalEmployeeCourse = item.employee_course?.length;
-          if (item.image) {
-            item.imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${item.image}?access_token=${accessToken}`;
-          }
-        });
+      const { data: res } = await fetch.get("items/course", {
+        params: {
+          fields: ["*", "employee_course_files", "activities.*", "employee_course.id"],
+          limit: pageSize,
+          offset: (currentPage - 1) * pageSize,
+          filter: JSON.stringify(filters),
+          meta: "total_count,filter_count",
+        },
+      });
 
-        setTotalItems(res?.meta?.filter_count);
-        setData(res?.data ?? []);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error("Error fetching:", error);
-      }
+      res?.data?.forEach((item: Course) => {
+        item.totalEmployeeCourse = item.employee_course?.length;
+        if (item.image) {
+          item.imageUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${item.image}?access_token=${accessToken}`;
+        }
+      });
+
+      setTotalItems(res?.meta?.filter_count);
+      setData(res?.data ?? []);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error fetching:", error);
     }
+  }
+
+  useEffect(() => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,7 +167,7 @@ export const CourseTable = () => {
       accessorKey: "title",
       header: "Title",
       cell: ({ row }) => (
-        <div className="px-3 pb-2 text-lg min-h-20 font-semibold leading-tight text-[#515151]">
+        <div className="px-3 pb-2 text-lg min-h-[5rem] font-semibold leading-tight text-[#515151]">
           {row?.original?.title ?? "-"}
         </div>
       ),
@@ -177,10 +180,15 @@ export const CourseTable = () => {
           id={row.original?.id}
           className="z-50 flex items-start px-3 mt-2 mb-4 gap-x-2"
         >
-          <Button className="font-semibold" size={"sm"} variant="default" onClick={() => router.push(`/course/${row.original?.id}`)}>
+          <Button className="items-center font-semibold rounded-xl" size={"sm"} variant="default" onClick={() => router.push(`/course/${row.original?.id}`)}>
             <EditIcon className="w-4 h-4 mr-2" />
             Edit
           </Button>
+
+          <DeleteAction
+            data={row.original}
+            onConfirmCallback={() => fetchData()}
+          />
           {/* <CourseRecommendationFormDialog
               initialData={row?.original}
               triggerTitle={(
@@ -205,6 +213,7 @@ export const CourseTable = () => {
       columns={currentLayout === "card" ? cardColumns : columns}
       layout="card"
       onLayoutChange={(val: string) => setCurrentLayout(val)}
+      canChangeLayout={false}
       data={data}
       currentPage={currentPage}
       pageSize={pageSize}
