@@ -12,7 +12,7 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
     accessorKey: "course.title",
     header: "Materi",
     cell: ({ row }) => {
-      return <div>{row?.original.course.title}</div>;
+      return <div>{row?.original?.course?.title}</div>;
     },
   },
   {
