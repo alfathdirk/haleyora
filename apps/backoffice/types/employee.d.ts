@@ -17,7 +17,19 @@ export interface Employee {
   verified: boolean;
   status: string;
   email: string;
+  phone?: string;
   employee_id?: string;
+  place_of_birth?: string;
+  date_of_birth?: string;
+  work_status?: string;
+  gender?: string;
+  religion?: string;
+  address?: string;
+  unit_pln?: string;
+  unit?: string;
+  placement?: string;
+  position?: string;
+  job?: string;
   employee_course?: EmployeeCourse[]
 }
 

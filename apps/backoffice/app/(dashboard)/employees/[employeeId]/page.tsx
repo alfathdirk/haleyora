@@ -14,6 +14,8 @@ import { Employee } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
 import { capitalizeFirstLetter } from "@/lib/helper";
 import { EmployeeCourseRecommendationTable } from "./components/table/EmployeeCourseRecommendationTable";
+import EmpDetailDialog from "./components/dialog/EmpDetailDialog";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const { employeeId }: { employeeId: string } = useParams();
@@ -134,6 +136,21 @@ export default function Page() {
             />
             {capitalizeFirstLetter(detail?.status ?? "")}
           </Badge>
+          <EmpDetailDialog
+            employee={detail}
+            triggerTitle={(
+              <Button
+                  className=""
+                  variant={"secondary"}
+                >
+                  Detail Karyawan
+              </Button>
+            )}
+            dialogTriggerProps={{
+              className: "p-2 h-fit group hover:bg-transparent",
+              variant: "ghost",
+            }}
+          />
         </div>
 
         <div className="flex items-start gap-x-4 !mb-10">
