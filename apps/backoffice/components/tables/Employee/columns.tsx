@@ -95,18 +95,18 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "employee_course.tasks_score",
     header: "Rata - rata Tugas",
     cell: ({ row }) => {
-      let totalQuiz = 0;
-      let totalExamScore = 0;
+      let totalTasks = 0;
+      let totalTasksScore = 0;
 
       row.original?.employee_course?.map((course) => {
-        totalQuiz += 1;
-        totalExamScore += Number(course?.tasks_score ?? 0);
+        totalTasks += 1;
+        totalTasksScore += Number(course?.tasks_score ?? 0);
       })
 
       return (
         <div className="flex flex-col">
           <span className="">
-            {(totalExamScore !== 0 &&  totalQuiz !== 0) ? totalExamScore / totalQuiz : 0}
+            {(totalTasksScore !== 0 &&  totalTasks !== 0) ? totalTasksScore / totalTasks : 0}
           </span>
         </div>
       );
