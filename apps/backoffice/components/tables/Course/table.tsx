@@ -50,16 +50,22 @@ export const CourseTable = () => {
 
   const fetchData = async function () {
     try {
-      const filters = searchValue
-        ? { title: { _contains: searchValue } }
-        : {};
+      let filters = { };
+
+      if (searchValue) {
+        Object.assign(filters, {
+          title: {
+            _contains: searchValue,
+          },
+        });
+      }
 
       const { data: res } = await fetch.get("items/course", {
         params: {
           fields: ["*", "employee_course_files", "activities.*", "employee_course.id"],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
-          filter: JSON.stringify(filters),
+          filter: filters,
           meta: "total_count,filter_count",
         },
       });
