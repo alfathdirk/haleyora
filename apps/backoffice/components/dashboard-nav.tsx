@@ -75,7 +75,7 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
         );
       })}
       {/* Logout */}
-      <a
+      <div
         key={"logout-sidebar"}
         onClick={() => logout()}
         className="absolute bottom-0 w-full pl-9 right-3"
@@ -90,7 +90,7 @@ export function DashboardNav({ items, setOpen }: DashboardNavProps) {
           <LogoutIcon className="w-4 h-4 mr-2" />
           <span>Logout</span>
         </span>
-      </a>
+      </div>
     </nav>
   );
 }
