@@ -26,12 +26,11 @@ export default function DashboardLayout({
   const router = useRouter();
   const pathname = usePathname(); // Get current route path
 
-
   useEffect(() => {
-     // If not authenticated, redirect to login
-     if (!isAuthenticated) {
-      router.replace("/login");
-    }
+    // If not authenticated, redirect to login
+    // if (!isAuthenticated) {
+    //   router.replace("/login");
+    // }
 
     if (currentUser && !canAccessPath(currentUser.role?.name, pathname)) {
       router.replace("/not-authorized");
@@ -39,7 +38,11 @@ export default function DashboardLayout({
   }, [isAuthenticated, currentUser, router]);
 
   // While checking the user's role and path, don't render anything
-  if (!isAuthenticated || !currentUser || !canAccessPath(currentUser.role?.name, pathname)) {
+  if (
+    !isAuthenticated ||
+    !currentUser ||
+    !canAccessPath(currentUser.role?.name, pathname)
+  ) {
     return null;
   }
 
