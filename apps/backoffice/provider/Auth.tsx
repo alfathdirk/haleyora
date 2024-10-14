@@ -104,11 +104,11 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   const logout = async () => {
-    await client.logout();
     deleteCookie("auth");
     setIsAuthenticated(false);
     setMembers(null); // Clear API data on logout
     router.replace("/login");
+    await client.logout();
   };
 
   const fetchMembers = async (nik: string) => {
