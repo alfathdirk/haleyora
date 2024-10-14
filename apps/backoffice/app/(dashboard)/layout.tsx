@@ -9,7 +9,7 @@ import ThemeToggle from "@/components/layout/ThemeToggle/theme-toggle";
 import { UserNav } from "@/components/layout/user-nav";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { canAccessPath } from "@/constants/data";
 
 // export const metadata: Metadata = {
@@ -35,16 +35,7 @@ export default function DashboardLayout({
     if (currentUser && !canAccessPath(currentUser.role?.name, pathname)) {
       router.replace("/not-authorized");
     }
-  }, [isAuthenticated, currentUser, router]);
-
-  // While checking the user's role and path, don't render anything
-  if (
-    !isAuthenticated ||
-    !currentUser ||
-    !canAccessPath(currentUser.role?.name, pathname)
-  ) {
-    return null;
-  }
+  }, [currentUser]);
 
   // If the user is authenticated and has the required role, render the layout
   return (
