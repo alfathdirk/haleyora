@@ -22,9 +22,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { currentUser, isAuthenticated } = useContext(AuthContext); // Access current user and authentication status
+  const { currentUser, isAuthenticated } = useContext(AuthContext);
   const router = useRouter();
-  const pathname = usePathname(); // Get current route path
+  const pathname = usePathname();
 
   useEffect(() => {
     // If not authenticated, redirect to login
@@ -37,7 +37,6 @@ export default function DashboardLayout({
     }
   }, [currentUser]);
 
-  // If the user is authenticated and has the required role, render the layout
   return (
     <>
       <div className="flex h-screen overflow-hidden">
