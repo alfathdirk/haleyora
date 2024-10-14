@@ -69,17 +69,40 @@ export default function Page() {
     try {
       const { data: res } = await fetch.get("items/employee_course", {
         params: {
+          fields: ["exam_score", "tasks_score", "course.is_open_task", "course.is_open_exam"],
           filter: JSON.stringify({
             employee: { _eq: employeeId },
           }),
-          aggregate: JSON.stringify({
-            avg: ["exam_score", "tasks_score"],
-          }),
+          // aggregate: JSON.stringify({
+          //   avg: ["exam_score", "tasks_score"],
+          // }),
         },
       });
 
-      const averageExamScore = res?.data?.[0]?.avg?.exam_score;
-      const averageTaskScore = res?.data?.[0]?.avg?.tasks_score;
+      let totalQuiz = 0;
+      let totalExamScore = 0;
+      let totalTasks = 0;
+      let totalTasksScore = 0;
+      console.log('\n \x1b[33m ~ res:', res?.data);
+
+      res?.data?.map((item: any) => {
+        // if (item?.is_open_exam) {
+        //   totalQuiz += 1;
+        //   totalExamScore += Number(item?.tasks_score ?? 0);
+        // }
+        totalQuiz += 1;
+        totalExamScore += Number(item?.exam_score ?? 0);
+
+        // if (item?.is_open_task) {
+        //   totalTasks += 1;
+        //   totalTasksScore += Number(item?.tasks_score ?? 0);
+        // }
+        totalTasks += 1;
+        totalTasksScore += Number(item?.tasks_score ?? 0);
+      })
+
+      const averageExamScore = totalExamScore / totalQuiz;
+      const averageTaskScore = totalTasksScore / totalTasks;
       setTotalAvgQuizScore(averageExamScore ?? 0);
       setTotalAvgTaskScore(averageTaskScore ?? 0);
     } catch (error) {
