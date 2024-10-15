@@ -33,9 +33,9 @@ export default function Page() {
       // Fetch total employee courses
       const { data: totalRes } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
+          filter: {
             employee: { _eq: employeeId },
-          }),
+          },
           aggregate: JSON.stringify({
             count: "*",
           }),
@@ -45,10 +45,10 @@ export default function Page() {
       // Fetch completed employee courses
       const { data: completedRes } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
+          filter: {
             employee: { _eq: employeeId },
             completed: { _eq: true },
-          }),
+          },
           aggregate: JSON.stringify({
             count: "*",
           }),
@@ -83,7 +83,6 @@ export default function Page() {
       let totalExamScore = 0;
       let totalTasks = 0;
       let totalTasksScore = 0;
-      console.log('\n \x1b[33m ~ res:', res?.data);
 
       res?.data?.map((item: any) => {
         // if (item?.is_open_exam) {
@@ -101,10 +100,11 @@ export default function Page() {
         totalTasksScore += Number(item?.tasks_score ?? 0);
       })
 
-      const averageExamScore = totalExamScore / totalQuiz;
-      const averageTaskScore = totalTasksScore / totalTasks;
-      setTotalAvgQuizScore(averageExamScore ?? 0);
-      setTotalAvgTaskScore(averageTaskScore ?? 0);
+      const averageExamScore = totalQuiz > 0 ? totalExamScore / totalQuiz : 0;
+      const averageTaskScore = totalTasks > 0 ? totalTasksScore / totalTasks : 0;
+
+      setTotalAvgQuizScore(Number(averageExamScore.toFixed(1)) || 0);
+      setTotalAvgTaskScore(Number(averageTaskScore.toFixed(1)) || 0);
     } catch (error) {
       console.error("Error fetching average scores:", error);
     }
