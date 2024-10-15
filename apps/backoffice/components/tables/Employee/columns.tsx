@@ -1,14 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CellAction } from "./cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Employee } from "@/types/employee";
-import { Badge } from "@/components/ui/badge";
-import { capitalizeFirstLetter } from "@/lib/helper";
-import { LessonTags } from "@/components/ui/lesson-tags";
-import clsx from "clsx";
 
 export const columns: ColumnDef<Employee>[] = [
   {
@@ -82,10 +77,12 @@ export const columns: ColumnDef<Employee>[] = [
         totalExamScore += Number(course?.exam_score ?? 0);
       })
 
+      const averageExamScore = totalQuiz > 0 ? totalExamScore / totalQuiz : 0;
+
       return (
         <div className="flex flex-col">
           <span className="">
-            {(totalExamScore !== 0 &&  totalQuiz !== 0) ? totalExamScore / totalQuiz : 0}
+            {Number(averageExamScore.toFixed(1)) || 0}
           </span>
         </div>
       );
@@ -103,24 +100,15 @@ export const columns: ColumnDef<Employee>[] = [
         totalTasksScore += Number(course?.tasks_score ?? 0);
       })
 
+      const averageTaskScore = totalTasks > 0 ? totalTasksScore / totalTasks : 0;
+
       return (
         <div className="flex flex-col">
           <span className="">
-            {(totalTasksScore !== 0 &&  totalTasks !== 0) ? totalTasksScore / totalTasks : 0}
+            {Number(averageTaskScore.toFixed(1)) || 0}
           </span>
         </div>
       );
     },
   },
-  // {
-  //   accessorKey: "lesson",
-  //   header: "Lesson",
-  //   cell: ({ row }) => (
-  //     <LessonTags tags={["Electrical", "Cable", "Installation"]} />
-  //   ),
-  // },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => <CellAction data={row.original} />,
-  // },
 ];
