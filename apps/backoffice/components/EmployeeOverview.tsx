@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   Legend,
@@ -10,35 +11,122 @@ import {
   Tooltip,
   Line,
 } from "recharts";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
+import { EmployeeCourse } from "@/types/quiz";
+
+// Helper function to format the month name
+const formatMonth = (month: any, year: any) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Maret",
+    "April",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agu",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
+  ];
+  return `${months[month - 1]} ${year}`;
+};
+
+// Function to get the last 12 months from the current date
+const getLastTwelveMonths = () => {
+  const today = new Date();
+  const months = [];
+
+  for (let i = 0; i < 12; i++) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Month in 'MM' format
+    const year = date.getFullYear().toString();
+    months.push({ month, year });
+  }
+
+  return months.reverse(); // Reverse to start from the oldest month
+};
 
 export function EmployeeOverview() {
-  const data = [
-    {
-      name: "Jan 2024",
-      selesai: 400,
-      "sedang berjalan": 240,
-    },
-    {
-      name: "Feb 2024",
-      selesai: 300,
-      "sedang berjalan": 139,
-    },
-    {
-      name: "Maret 2024",
-      selesai: 200,
-      "sedang berjalan": 980,
-    },
-    {
-      name: "April 2024",
-      selesai: 278,
-      "sedang berjalan": 390,
-    },
-    {
-      name: "Mei 2024",
-      selesai: 189,
-      "sedang berjalan": 480,
-    },
-  ];
+  const fetch = useDirectusFetch();
+  const [data, setData] = useState(
+    Array<{
+      name: string;
+      Lulus: number;
+      "Tidak Lulus": number;
+    }>,
+  );
+
+  // Function to group data by month and category
+  const groupDataByMonth = (allCourses: EmployeeCourse[]) => {
+    const months = getLastTwelveMonths(); // Get last 12 months dynamically
+    const groupedData = months.map(({ month, year }) => {
+      // Filter courses by the current month
+      const coursesInMonth = allCourses.filter((course) => {
+        const courseDate = new Date(course.date_created);
+        return (
+          courseDate.getFullYear() === parseInt(year, 10) &&
+          courseDate.getMonth() + 1 === parseInt(month, 10)
+        );
+      });
+
+      // Calculate the number of completed, running, and failed courses
+      const completed = coursesInMonth.filter(
+        (course) =>
+          course.completed && course.exam_score >= course.course.min_score,
+      ).length;
+      const failed = coursesInMonth.filter(
+        (course) =>
+          course.completed && course.exam_score < course.course.min_score,
+      ).length;
+
+      return {
+        name: formatMonth(parseInt(month, 10), year),
+        Lulus: completed,
+        "Tidak Lulus": failed,
+      };
+    });
+
+    return groupedData;
+  };
+
+  // Function to fetch all courses for the last 12 months
+  async function fetchAllCourses() {
+    const months = getLastTwelveMonths();
+    const startDate = `${months[0].year}-${months[0].month}-01`; // Oldest month start date
+    const endDate = `${months[11].year}-${months[11].month}-31`; // Most recent month end date
+
+    try {
+      // Fetch all employee courses with related course information
+      const { data: allCourses } = await fetch.get("items/employee_course", {
+        params: {
+          filter: JSON.stringify({
+            date_created: { _gte: startDate, _lte: endDate }, // Courses created in the last 12 months
+          }),
+          fields: [
+            "id",
+            "completed",
+            "exam_attempt",
+            "exam_score",
+            "date_created",
+            "course.min_score",
+          ], // Fetch related course.min_score
+        },
+      });
+
+      // Group the data by month and calculate the needed categories
+      const groupedData = groupDataByMonth(allCourses?.data);
+
+      setData(groupedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllCourses();
+  }, []);
 
   return (
     <ResponsiveContainer width="100%" height="100%" className={"relative"}>
@@ -60,14 +148,14 @@ export function EmployeeOverview() {
         <Tooltip cursor={false} />
         <Line
           type="monotone"
-          dataKey="selesai"
-          stroke="#FB896B"
+          dataKey="Lulus"
+          stroke="#6956E5"
           strokeWidth={2}
         />
         <Line
           type="monotone"
-          dataKey="sedang berjalan"
-          stroke="#6956E5"
+          dataKey="Tidak Lulus"
+          stroke="#FF0000"
           strokeWidth={2}
         />
       </LineChart>

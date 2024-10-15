@@ -33,9 +33,9 @@ export default function Page() {
       // Fetch total employee courses
       const { data: totalRes } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
+          filter: {
             employee: { _eq: employeeId },
-          }),
+          },
           aggregate: JSON.stringify({
             count: "*",
           }),
@@ -45,10 +45,10 @@ export default function Page() {
       // Fetch completed employee courses
       const { data: completedRes } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
+          filter: {
             employee: { _eq: employeeId },
             completed: { _eq: true },
-          }),
+          },
           aggregate: JSON.stringify({
             count: "*",
           }),
