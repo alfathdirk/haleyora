@@ -35,9 +35,10 @@ const fileInstance = z.custom<File>((data) => data instanceof File, {
 const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
   description: z.string().max(225),
-  duration: z.string(),
+  duration: z.number().min(0, { message: "Durasi harus di isi." }),
   randomize: z.boolean().optional(),
-  score_per_question: z.string(),
+  // score_per_question: z.string(),
+  score_per_question: z.number().min(0, { message: "Durasi harus di isi." }),
   task_description: z.string().optional(),
   quiz_question: z
     .array(
@@ -70,8 +71,12 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
   const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deletedQuestions, setDeletedQuestions] = useState<string[]>([]);
+  console.log('\n \x1b[33m ~ deletedQuestions:', deletedQuestions);
+
   const title = initialData ? `Ubah ${initialData?.title ?? ""}` : "Buat Ujian";
   const description = initialData ? "Ubah data Ujian." : "Buat Ujian baru.";
   const action = initialData ? "Simpan Perubahan" : "Buat";
@@ -180,6 +185,14 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
         await handleQuizUpdate(initialData.id, data);
         notify.description = `Ujian ${data.title} telah diubah.`;
       }
+
+      if (deletedQuestions.length > 0) {
+        const deletePromises = deletedQuestions.map(async(id) =>
+          fetch.delete(`items/quiz_question/${id}`)
+        );
+        await Promise.all(deletePromises);
+      }
+
       router.refresh();
       router.push(`/quiz`);
 
@@ -277,7 +290,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
                     Estimasi durasi Ujian dalam satuan menit
                   </FormDescription>
                   <FormControl>
-                    <Input disabled={loading} type="number" {...field} />
+                    <Input disabled={loading} type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -288,12 +301,12 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               name="score_per_question"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel required>Minimum Nilai</FormLabel>
+                  <FormLabel required>Nilai Pertanyaan</FormLabel>
                   <FormDescription className="!mt-0">
-                    Minimum nilai untuk lulus Ujian
+                    Nilai/Bobot per Pertanyaan
                   </FormDescription>
                   <FormControl>
-                    <Input disabled={loading} type="number" {...field} />
+                    <Input disabled={loading} type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -346,6 +359,7 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
               getValues: form.getValues,
               setValue: form.setValue,
               errors: form.formState.errors,
+              setDeletedQuestions
             }}
           />
           <Button className="ml-auto" type="submit">

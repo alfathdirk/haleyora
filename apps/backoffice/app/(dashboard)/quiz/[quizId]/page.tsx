@@ -28,7 +28,13 @@ export default function Page() {
         },
       });
 
-      setDetail(res?.data[0] ?? []);
+      let newData = res?.data[0];
+      newData.quiz_question = newData?.quiz_question?.map((item: any) => {
+        item.quiz_question_id = item?.id;
+        return item;
+      })
+
+      setDetail(newData ?? []);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
@@ -56,41 +62,6 @@ export default function Page() {
   }
 
   useEffect(() => {
-    // async function fetchDataActivities() {
-    //   try {
-    //     const result = await client.request(
-    //       readItems("activities", {
-    //         fields: ["*"],
-    //       }),
-    //     );
-
-    //     result.forEach((item) => {
-    //       item._id = item.id;
-    //       item.name = item.title;
-    //     });
-
-    //     setActivities(result ?? []);
-    //   } catch (error) {
-    //     // eslint-disable-next-line no-console
-    //     console.error("Error fetching:", error);
-    //   }
-    // }
-
-    // async function fetchData() {
-    //   try {
-    //     const result = await client.request(
-    //       readItem("quiz", quizId, {
-    //         fields: ["*", "quiz_question.*"],
-    //       }),
-    //     );
-
-    //     setDetail(result);
-    //   } catch (error) {
-    //     // eslint-disable-next-line no-console
-    //     console.error("Error fetching:", error);
-    //   }
-    // }
-
     fetchDataActivities();
     fetchDetailData(quizId);
   }, [quizId]);

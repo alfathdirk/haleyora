@@ -12,11 +12,18 @@ import { Plus } from "lucide-react";
 import ChoicesFieldArray from "./ChoicesFieldArray";
 import FileUpload from "@/components/FileUpload";
 
-const QuizFieldArray = ({ control, register, errors, getValues, setValue }: any) => {
+const QuizFieldArray = ({ control, register, errors, getValues, setValue, setDeletedQuestions }: any) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "quiz_question",
   });
+
+  const handleRemoveQuestion = (id: string | undefined, index: number) => {
+    if (id) {
+      setDeletedQuestions((prev: string[]) => [...prev, id]);
+    }
+    remove(index); // Remove from the form UI
+  };
 
   return (
     <div className="gap-8 mb-8 md:grid md:grid-cols-2">
@@ -29,8 +36,12 @@ const QuizFieldArray = ({ control, register, errors, getValues, setValue }: any)
                 <div className="flex flex-col gap-4 p-4 border rounded-xl">
                   <div className="flex justify-between md:col-span-2">
                     <h1>Pertanyaan No. {index + 1}</h1>
-                    {fields?.length > 1 && (
-                      <Button className="text-gray-400" onClick={() => remove(index)} variant={"link"}>
+                    {fields.length > 1 && (
+                      <Button
+                        className="text-gray-400"
+                        onClick={() => handleRemoveQuestion(item?.quiz_question_id, index)} // Mark for deletion
+                        variant={"link"}
+                      >
                         Hapus
                       </Button>
                     )}
