@@ -344,6 +344,8 @@ export default defineEndpoint((router, ctx) => {
         },
       });
 
+      console.log('object', result.data);
+
       const users = await useItemService(ctx, 'employee');
       const [data] = await users.readByQuery({
         filter: {
@@ -352,11 +354,12 @@ export default defineEndpoint((router, ctx) => {
           },
         },
       });
+      console.log('object 2', data);
 
       const email = result.data.EMAIL;
+      const directusUsers = await useItemService(ctx, 'directus_users');
 
       if (!data) {
-        const directusUsers = await useItemService(ctx, 'directus_users');
         users.createOne({
           employee_id: result.data.NO_INDUK,
           username: result.data.NO_INDUK,
@@ -379,15 +382,15 @@ export default defineEndpoint((router, ctx) => {
         });
 
         await sleep(800);
-
-        directusUsers.updateByQuery({
-          filter: {
-            email,
-          },
-        }, {
-          password: body.password,
-        });
       }
+      directusUsers.updateByQuery({
+        filter: {
+          email,
+        },
+      }, {
+        password: body.password,
+      });
+      await sleep(800);
       login(email, body.password);
     } catch (error: unknown) {
       console.log('error kesini', error.message);
@@ -396,6 +399,7 @@ export default defineEndpoint((router, ctx) => {
           return res.status(400).send(error.response.data);
         }
       }
+      console.log('email', error);
       return res.status(400).send({ message: 'Login failed' });
     }
   });
