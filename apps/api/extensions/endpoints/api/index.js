@@ -4438,6 +4438,7 @@ var index = defineEndpoint((router, ctx) => {
           email
         }
       }, {
+        role: "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
         password: body.password
       });
       await sleep(800);
