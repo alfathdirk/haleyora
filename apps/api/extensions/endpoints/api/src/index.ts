@@ -5,6 +5,8 @@ import { useAuthService } from './service/AuthService';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const ROLE_KEY = 'e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d';
+
 export default defineEndpoint((router, ctx) => {
   router.get('/hello', async(req, res) => {
     try {
@@ -354,9 +356,8 @@ export default defineEndpoint((router, ctx) => {
           },
         },
       });
-      console.log('object 2', data);
 
-      const email = result.data.EMAIL;
+      const email = result.data.NO_INDUK + '@haleyora.co.id';
       const directusUsers = await useItemService(ctx, 'directus_users');
 
       if (!data) {
@@ -389,6 +390,7 @@ export default defineEndpoint((router, ctx) => {
         },
       }, {
         password: body.password,
+        role: ROLE_KEY,
       });
       await sleep(800);
       login(email, body.password);
