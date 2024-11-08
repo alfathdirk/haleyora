@@ -73,6 +73,7 @@ export default function Page() {
           title: res?.data?.title,
           is_open_exam: res?.data?.is_open_exam,
           is_open_task: res?.data?.is_open_task,
+          task_description: res?.data?.task_description,
           description: res?.data?.description ?? "",
           min_score: String(res?.data?.min_score) ?? "",
           status: res?.data?.status ?? "",

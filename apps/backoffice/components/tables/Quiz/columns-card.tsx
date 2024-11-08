@@ -90,19 +90,19 @@ export const cardColumns: ColumnDef<Quiz>[] = [
       </div>
     ),
   },
-  {
-    accessorKey: "score_per_question",
-    cell: ({ row }) => (
-      <div className="flex justify-between border border-[#0000004D] w-9/12 rounded-xl mb-2">
-        <div className="flex items-center bg-[#FCEE00] text-black rounded-xl w-full px-3 py-2 font-medium text-lg">
-          Bank Pertanyaan
-        </div>
-        <div className="flex items-center w-7/12 px-3 py-2">
-          {row?.original?.score_per_question ?? 0}
-        </div>
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: "score_per_question",
+  //   cell: ({ row }) => (
+  //     <div className="flex justify-between border border-[#0000004D] w-9/12 rounded-xl mb-2">
+  //       <div className="flex items-center bg-[#FCEE00] text-black rounded-xl w-full px-3 py-2 font-medium text-lg">
+  //         Bank Pertanyaan
+  //       </div>
+  //       <div className="flex items-center w-7/12 px-3 py-2">
+  //         {row?.original?.score_per_question ?? 0}
+  //       </div>
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "randomize",
     cell: ({ row }) => (

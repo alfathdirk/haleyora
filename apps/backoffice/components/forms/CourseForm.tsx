@@ -122,6 +122,11 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         description: `Materi pembelajaran ${data?.title} telah dibuat.`,
       };
 
+
+      if (!data?.is_open_task) {
+        data.task_description = ''
+      }
+
       if (data.image && data.image.length > 0) {
         const resImage = await fetch.upload("files", data.image);
         data.image = resImage?.data?.data?.id ?? null;
@@ -151,14 +156,16 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         notify.description = `Materi pembelajaran ${data?.title} telah diubah.`;
       }
 
-      // router.refresh();
-      // router.push(`/course`);
-
       toast({
         variant: "success",
         title: notify.title,
         description: notify.description,
       });
+
+      setTimeout(() => {
+        router.push(`/course`);
+      }, 300);
+
     } catch (error: any) {
       toast({
         variant: "destructive",
