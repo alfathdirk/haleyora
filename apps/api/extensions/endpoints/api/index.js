@@ -4140,7 +4140,6 @@ const useAuthService = async (ctx) => {
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const ROLE_KEY = "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d";
 var index = defineEndpoint((router, ctx) => {
   router.get("/hello", async (req, res) => {
     try {
@@ -4401,7 +4400,6 @@ var index = defineEndpoint((router, ctx) => {
           Cookie: `refreshToken=${refreshToken}`
         }
       });
-      console.log("object", result.data);
       const users = await useItemService(ctx, "employee");
       const [data] = await users.readByQuery({
         filter: {
@@ -4440,19 +4438,16 @@ var index = defineEndpoint((router, ctx) => {
           email
         }
       }, {
-        password: body.password,
-        role: ROLE_KEY
+        password: body.password
       });
       await sleep(800);
       login(email, body.password);
     } catch (error) {
-      console.log("error kesini", error.message);
       if (axios.isAxiosError(error)) {
         if (error.response) {
           return res.status(400).send(error.response.data);
         }
       }
-      console.log("email", error);
       return res.status(400).send({ message: "Login failed" });
     }
   });
