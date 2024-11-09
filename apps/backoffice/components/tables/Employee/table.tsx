@@ -1,16 +1,22 @@
 "use client";
 
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectItem,
+  SelectContent,
+} from "@/components/ui/select";
 import { columns } from "./columns";
-import { useEffect, useState, useMemo, useCallback, useContext } from "react";
+import { cardColumns } from "./columns-card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
-import { cardColumns } from "./columns-card";
 import { useRouter } from "next/navigation";
 
-export const EmployeesTable = ({ members, currentUser }: any) => {
+export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
@@ -20,11 +26,13 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [searchValue, setSearchValue] = useState("");
+  const [unitFilter, setUnitFilter] = useState<string | null>(null);
+  const [units, setUnits] = useState<string[]>([]);
 
   const onInputChange = useCallback((nextValue: string) => {
     setSearchValue(nextValue);
-    setCurrentPage(1);
-  }, []);
+    onFilterChange({ unit: unitFilter, search: nextValue });
+  }, [unitFilter]);
 
   const debouncedSearchChange = useMemo(
     () => debounce(onInputChange, 500),
@@ -36,23 +44,53 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
     debouncedSearchChange(nextValue);
   };
 
+  const handleUnitChange = (unit: string | null) => {
+    setUnitFilter(unit);
+    setCurrentPage(1); // Reset to first page on unit change
+    onFilterChange({ unit_pln: unit, search: searchValue });
+  };
+
+  async function fetchUnits() {
+    try {
+      const { data: res } = await fetch.get("items/employee", {
+        params: {
+          fields: ["unit_pln"],
+          groupBy: "unit_pln",
+        },
+      });
+      const uniqueUnits = res?.data
+        .map((item: any) => item.unit_pln)
+        .filter(Boolean);
+      setUnits(uniqueUnits ?? []);
+    } catch (error) {
+      console.error("Error fetching units:", error);
+    }
+  }
+
   async function fetchData() {
     try {
-      const filters = searchValue
-        ? { full_name: { _contains: searchValue } }
-        : {};
+      const filters: any = {
+        ...(searchValue && { full_name: { _contains: searchValue } }),
+        ...(unitFilter && { unit_pln: { _eq: unitFilter } }),
+      };
 
       if (!["Administrator", "Admin Pusat"].includes(currentUser?.role?.name)) {
-        Object.assign(filters, {
-          employee_id: {
-            _in: members,
-          },
-        });
+        filters.employee_id = { _in: members };
       }
 
       const { data: res } = await fetch.get("items/employee", {
         params: {
-          fields: ["id", "employee_id", "email", "full_name", "status", "employee_course.id", "employee_course.completed", "employee_course.exam_score", "employee_course.tasks_score"],
+          fields: [
+            "id",
+            "employee_id",
+            "email",
+            "full_name",
+            "status",
+            "employee_course.id",
+            "employee_course.completed",
+            "employee_course.exam_score",
+            "employee_course.tasks_score",
+          ],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: filters,
@@ -69,9 +107,13 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
   }
 
   useEffect(() => {
+    fetchUnits();
+  }, []);
+
+  useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, searchValue, members]);
+  }, [currentPage, pageSize, searchValue, members, unitFilter]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -80,6 +122,23 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
   const headerActions = () => {
     return (
       <div className="flex items-center justify-between w-full">
+        {/* Unit Filter Dropdown */}
+        <Select
+          value={unitFilter ?? ""}
+          onValueChange={(value) => handleUnitChange(value || null)}
+        >
+          <SelectTrigger className="w-48 border-2 border-[#787486] rounded-xl">
+            <span>{unitFilter ? unitFilter : "Filter by Unit PLN"}</span>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Units</SelectItem>
+            {units.map((unit) => (
+              <SelectItem key={unit} value={unit}>
+                {unit}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <div className="pr-4">
           <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
             <LucideSearch className="w-6 h-6 text-[#959595]" />
@@ -110,7 +169,11 @@ export const EmployeesTable = ({ members, currentUser }: any) => {
       setPageSize={setPageSize}
       cardContainerStyles="!grid-cols-3 gap-8 py-4 pr-8"
       cardStyles="p-4 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
-      onClickRow={(item) => router.push(`/employees/${item?.id}?name=${encodeURIComponent(item?.full_name)}`)}
+      onClickRow={(item) =>
+        router.push(
+          `/employees/${item?.id}?name=${encodeURIComponent(item?.full_name)}`,
+        )
+      }
     />
   );
 };

@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,8 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Employee } from "@/types/employee";
-import { Badge } from "@/components/ui/badge";
-import { capitalizeFirstLetter } from "@/lib/helper";
 import { EmployeeCourseRecommendationTable } from "./components/table/EmployeeCourseRecommendationTable";
 import EmpDetailDialog from "./components/dialog/EmpDetailDialog";
 import { Button } from "@/components/ui/button";
