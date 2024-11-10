@@ -10,39 +10,60 @@ import {
   Tooltip,
   Bar,
 } from "recharts";
+import { DateRange } from "react-day-picker";
 
-export function UnitOverview() {
+interface Props {
+  selectedUnit: string | null;
+  selectedCourse: string | null;
+  dateRange: DateRange | undefined;
+}
+
+export function UnitOverview({ selectedUnit, selectedCourse, dateRange }: Props) {
   const fetch = useDirectusFetch();
-
   const [fetching, setFetching] = useState(true);
   const [dataBarchart, setDataBarchart] = useState<
     Array<{ name: string; examAverage: number; tasksAverage: number }>
   >([]);
 
   async function fetchData() {
+    setFetching(true);
     try {
-      const { data: employeeCourses } = await fetch.get(
-        "items/employee_course",
-        {
-          params: {
-            fields: [
-              "id",
-              "exam_score",
-              "tasks_score",
-              "course.is_open_exam",
-              "course.is_open_task",
-              "employee.employee_id",
-              "employee.unit",
-            ],
-            filter: {
-              completed: true,
-            },
-          },
+      // Define filters based on selectedUnit, selectedCourse, and dateRange
+      const filters: any = {
+        completed: true,
+      };
+
+      if (dateRange?.from && dateRange?.to) {
+        filters.date_created = {
+          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+        };
+      }
+
+      const { data: employeeCourses } = await fetch.get("items/employee_course", {
+        params: {
+          fields: [
+            "id",
+            "exam_score",
+            "tasks_score",
+            "course.is_open_exam",
+            "course.is_open_task",
+            "course.id",
+            "employee.employee_id",
+            "employee.unit",
+          ],
+          filter: filters,
         },
-      );
+      });
+
+      // Filter data based on selectedUnit and selectedCourse before grouping
+      const filteredCourses = employeeCourses?.data?.filter((course: any) => {
+        const matchesUnit = selectedUnit ? course.employee.unit === selectedUnit : true;
+        const matchesCourse = selectedCourse ? course.course.id === selectedCourse : true;
+        return matchesUnit && matchesCourse;
+      });
 
       // Group data by unit, only including scores if the respective `is_open` flags are true
-      const unitScores = employeeCourses?.data?.reduce(
+      const unitScores = filteredCourses.reduce(
         (
           acc: Record<
             string,
@@ -53,7 +74,7 @@ export function UnitOverview() {
               taskCount: number;
             }
           >,
-          ec: any, // Employee Courses
+          ec: any, // Employee Course
         ) => {
           const unit = ec.employee.unit;
           const examScore = ec.exam_score || 0;
@@ -106,9 +127,14 @@ export function UnitOverview() {
     }
   }
 
+  // Debounce fetchData when filters change
   useEffect(() => {
-    fetchData();
-  }, []);
+    const debounceFetch = setTimeout(() => {
+      fetchData();
+    }, 500); // 500ms debounce delay
+
+    return () => clearTimeout(debounceFetch);
+  }, [selectedUnit, selectedCourse, dateRange]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -140,11 +166,7 @@ export function UnitOverview() {
             <XAxis dataKey="name" />
             <Tooltip />
             <Bar dataKey="examAverage" fill="#8884d8" name="Rata - rata Kuis" />
-            <Bar
-              dataKey="tasksAverage"
-              fill="#82ca9d"
-              name="Rata - rata Tugas"
-            />
+            <Bar dataKey="tasksAverage" fill="#82ca9d" name="Rata - rata Tugas" />
           </BarChart>
         </ResponsiveContainer>
       )}

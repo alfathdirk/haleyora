@@ -63,7 +63,7 @@ export default function SelectFilterCourse({
       <SelectContent>
         <SelectItem value="">Semua</SelectItem>
         {data.map((item) => (
-          <SelectItem key={item?.id} value={item?.title}>
+          <SelectItem key={item?.id} value={item?.id}>
             {item?.title}
           </SelectItem>
         ))}

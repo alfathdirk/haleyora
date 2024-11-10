@@ -5,6 +5,13 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./ui/data-table";
 import { EmployeeCourse } from "@/types/quiz";
+import { DateRange } from "react-day-picker";
+
+interface Props {
+  selectedUnit: string | null;
+  selectedCourse: string | null;
+  dateRange: DateRange | undefined;
+}
 
 const columns: ColumnDef<EmployeeCourse>[] = [
   {
@@ -18,7 +25,6 @@ const columns: ColumnDef<EmployeeCourse>[] = [
         {row.original?.title ?? "-"}
       </div>
     ),
-    // enableSorting: true,
   },
   {
     accessorKey: "average_score",
@@ -28,15 +34,14 @@ const columns: ColumnDef<EmployeeCourse>[] = [
         {row.original?.average_score ?? "-"}
       </div>
     ),
-    // enableSorting: true,
   },
 ];
 
-export function CoursesSummary() {
+export function CoursesSummary({ selectedUnit, selectedCourse, dateRange }: Props) {
   const fetch = useDirectusFetch();
 
-  const [allData, setAllData] = useState<any[]>([]); // Store all data
-  const [data, setData] = useState<any[]>([]); // Store paginated data
+  const [allData, setAllData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -46,27 +51,41 @@ export function CoursesSummary() {
   const [fetching, setFetching] = useState(true);
 
   async function fetchData() {
+    setFetching(true);
+
+    // Build filters based on selectedUnit, selectedCourse, and dateRange
+    const filters: any = {
+      completed: true,
+    };
+    if (selectedUnit) {
+      // filters["employee.unit"] = { _eq: selectedUnit };
+    }
+    if (selectedCourse) {
+      filters["course.id"] = { _eq: selectedCourse };
+    }
+    if (dateRange?.from && dateRange?.to) {
+      filters.date_created = {
+        _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+      };
+    }
+
     try {
-      const { data: employeeCourses } = await fetch.get(
-        "items/employee_course",
-        {
-          params: {
-            fields: [
-              "id",
-              "exam_score",
-              "tasks_score",
-              "course.id",
-              "course.title",
-              "course.is_open_exam",
-              "course.is_open_task",
-              "employee.employee_id",
-            ],
-            filter: {
-              completed: true,
-            },
-          },
+      const { data: employeeCourses } = await fetch.get("items/employee_course", {
+        params: {
+          fields: [
+            "id",
+            "exam_score",
+            "tasks_score",
+            "course.id",
+            "course.title",
+            "course.is_open_exam",
+            "course.is_open_task",
+            "employee.employee_id",
+            "employee.unit",
+          ],
+          filter: filters,
         },
-      );
+      });
 
       // Group data by course.id, calculate averages
       const courseScores = employeeCourses?.data?.reduce(
@@ -120,7 +139,7 @@ export function CoursesSummary() {
           courseScores[courseId];
         const averageExam = examCount > 0 ? examTotal / examCount : 0;
         const averageTask = taskCount > 0 ? taskTotal / taskCount : 0;
-        const averageScore = (averageExam + averageTask) / 2; // Overall average
+        const averageScore = (averageExam + averageTask) / 2;
 
         return {
           id: courseId,
@@ -129,10 +148,10 @@ export function CoursesSummary() {
         };
       });
 
-      setAllData(formattedData); // Store all data
+      setAllData(formattedData);
       setTotalItems(formattedData.length);
       setFetching(false);
-      updatePaginatedData(formattedData, currentPage, pageSize); // Update paginated data for initial render
+      updatePaginatedData(formattedData, currentPage, pageSize);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -149,10 +168,10 @@ export function CoursesSummary() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedUnit, selectedCourse, dateRange]);
 
   useEffect(() => {
-    updatePaginatedData(allData, currentPage, pageSize); // Update data when page or page size changes
+    updatePaginatedData(allData, currentPage, pageSize);
   }, [currentPage, pageSize, allData]);
 
   const handlePageChange = (page: number) => {
