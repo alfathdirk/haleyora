@@ -13,6 +13,13 @@ import {
 } from "recharts";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { EmployeeCourse } from "@/types/quiz";
+import { DateRange } from "react-day-picker";
+
+interface Props {
+  selectedUnit: string | null;
+  selectedCourse: string | null;
+  dateRange: DateRange | undefined;
+}
 
 // Helper function to format the month name
 const formatMonth = (month: any, year: any) => {
@@ -48,7 +55,11 @@ const getLastTwelveMonths = () => {
   return months.reverse(); // Reverse to start from the oldest month
 };
 
-export function EmployeeOverview() {
+export function EmployeeOverview({
+  selectedUnit,
+  selectedCourse,
+  dateRange,
+}: Props) {
   const fetch = useDirectusFetch();
   const [data, setData] = useState(
     Array<{
@@ -91,19 +102,34 @@ export function EmployeeOverview() {
     return groupedData;
   };
 
-  // Function to fetch all courses for the last 12 months
+  // Function to fetch all courses for the last 12 months, including filters
   async function fetchAllCourses() {
     const months = getLastTwelveMonths();
-    const startDate = `${months[0].year}-${months[0].month}-01`; // Oldest month start date
-    const endDate = `${months[11].year}-${months[11].month}-31`; // Most recent month end date
+    const startDate =
+      dateRange?.from?.toISOString() ||
+      `${months[0].year}-${months[0].month}-01`;
+    const endDate =
+      dateRange?.to?.toISOString() ||
+      `${months[11].year}-${months[11].month}-31`;
 
     try {
+      // Set up filters based on selectedUnit, selectedCourse, and dateRange
+      const filters: any = {
+        date_created: { _gte: startDate, _lte: endDate }, // Courses created in the specified range or last 12 months
+      };
+
+      if (selectedUnit) {
+        // filters.unit_id = { _eq: selectedUnit };
+      }
+
+      if (selectedCourse) {
+        filters.course_id = { _eq: selectedCourse };
+      }
+
       // Fetch all employee courses with related course information
       const { data: allCourses } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
-            date_created: { _gte: startDate, _lte: endDate }, // Courses created in the last 12 months
-          }),
+          filter: JSON.stringify(filters),
           fields: [
             "id",
             "completed",
@@ -124,9 +150,14 @@ export function EmployeeOverview() {
     }
   }
 
+  // Debounce fetchAllCourses to avoid multiple calls on rapid state changes
   useEffect(() => {
-    fetchAllCourses();
-  }, []);
+    const debounceFetch = setTimeout(() => {
+      fetchAllCourses();
+    }, 500);
+
+    return () => clearTimeout(debounceFetch);
+  }, [selectedUnit, selectedCourse, dateRange]);
 
   return (
     <ResponsiveContainer width="100%" height="100%" className={"relative"}>

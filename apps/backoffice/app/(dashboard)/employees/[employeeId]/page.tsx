@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,8 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Employee } from "@/types/employee";
-import { Badge } from "@/components/ui/badge";
-import { capitalizeFirstLetter } from "@/lib/helper";
 import { EmployeeCourseRecommendationTable } from "./components/table/EmployeeCourseRecommendationTable";
 import EmpDetailDialog from "./components/dialog/EmpDetailDialog";
 import { Button } from "@/components/ui/button";
@@ -69,7 +66,7 @@ export default function Page() {
     try {
       const { data: res } = await fetch.get("items/employee_course", {
         params: {
-          fields: ["exam_score", "tasks_score", "course.is_open_task", "course.is_open_exam"],
+          fields: ["exam_score", "tasks_score", "completed", "course.is_open_task", "course.is_open_exam"],
           filter: JSON.stringify({
             employee: { _eq: employeeId },
           }),
@@ -85,19 +82,17 @@ export default function Page() {
       let totalTasksScore = 0;
 
       res?.data?.map((item: any) => {
-        // if (item?.is_open_exam) {
-        //   totalQuiz += 1;
-        //   totalExamScore += Number(item?.tasks_score ?? 0);
-        // }
-        totalQuiz += 1;
-        totalExamScore += Number(item?.exam_score ?? 0);
+        if (item?.completed) {
+          if (item?.course?.is_open_exam) {
+            totalQuiz += 1;
+            totalExamScore += Number(item?.exam_score ?? 0);
+          }
 
-        // if (item?.is_open_task) {
-        //   totalTasks += 1;
-        //   totalTasksScore += Number(item?.tasks_score ?? 0);
-        // }
-        totalTasks += 1;
-        totalTasksScore += Number(item?.tasks_score ?? 0);
+          if (item?.course?.is_open_task) {
+            totalTasks += 1;
+            totalTasksScore += Number(item?.tasks_score ?? 0);
+          }
+        }
       })
 
       const averageExamScore = totalQuiz > 0 ? totalExamScore / totalQuiz : 0;
@@ -150,7 +145,7 @@ export default function Page() {
             title={searchParams.get("name") ?? ""}
             description={searchParams.get("title") ?? ""}
           />
-          <Badge variant={detail?.status === "active" ? "success" : "danger"}>
+          {/* <Badge variant={detail?.status === "active" ? "success" : "danger"}>
             <span
               className={clsx(
                 "rounded-full w-2 h-2 bg-[#12B76A] mr-2",
@@ -158,7 +153,7 @@ export default function Page() {
               )}
             />
             {capitalizeFirstLetter(detail?.status ?? "")}
-          </Badge>
+          </Badge> */}
           <EmpDetailDialog
             employee={detail}
             triggerTitle={(

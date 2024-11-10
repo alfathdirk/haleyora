@@ -1,53 +1,36 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Employee } from "@/types/employee";
+import { getInitials } from "@/lib/helper";
 
 export const columns: ColumnDef<Employee>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="border border-[#D0D5DD] shadow-none"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="border border-[#D0D5DD] shadow-none"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "full_name",
     header: "Name",
     cell: ({ row }) => {
+      const fullName = row.original?.full_name || "";
+      const initials = getInitials(fullName); // Get initials from full name
+
       return (
         <div className="flex">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>HL</AvatarFallback>
+            {/* <AvatarImage src="https://github.com/shadcn.png" alt={fullName} /> */}
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col ml-4">
-            <span className="font-bold">{row.original?.full_name}</span>
+            <span className="font-bold">{fullName}</span>
             <span>{row.original?.email}</span>
           </div>
         </div>
       );
     },
+    enableSorting: true,
   },
   {
     accessorKey: "employee_id",
-    header: "Employee ID",
+    header: "NIK",
     cell: ({ row }) => (
       <div className="px-2.5 py-1 bg-gray-200 dark:bg-gray-600 rounded-full w-fit">
         #{row?.original?.employee_id}
