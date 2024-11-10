@@ -79,7 +79,6 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
         filters.employee_id = { _in: members };
       }
 
-      console.log('\n \x1b[33m ~ sortingFields:', sortingFields);
       const sortParams = sortingFields.map(
         (field) => `${field.desc ? "-" : ""}${field.id}`
       );
@@ -140,7 +139,7 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
           onValueChange={(value) => handleUnitChange(value || null)}
         >
           <SelectTrigger className="w-48 border-2 border-[#787486] rounded-xl">
-            <span>{unitFilter ? unitFilter : "Filter by Unit PLN"}</span>
+            <span>{unitFilter ? unitFilter : "Pilih Unit PLN"}</span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All Units</SelectItem>
