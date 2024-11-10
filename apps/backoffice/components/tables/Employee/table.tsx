@@ -28,6 +28,7 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
   const [searchValue, setSearchValue] = useState("");
   const [unitFilter, setUnitFilter] = useState<string | null>(null);
   const [units, setUnits] = useState<string[]>([]);
+  const [sortingFields, setSortingFields] = useState<{ id: string; desc: boolean }[]>([]);
 
   const onInputChange = useCallback((nextValue: string) => {
     setSearchValue(nextValue);
@@ -78,6 +79,11 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
         filters.employee_id = { _in: members };
       }
 
+      console.log('\n \x1b[33m ~ sortingFields:', sortingFields);
+      const sortParams = sortingFields.map(
+        (field) => `${field.desc ? "-" : ""}${field.id}`
+      );
+
       const { data: res } = await fetch.get("items/employee", {
         params: {
           fields: [
@@ -94,6 +100,7 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: filters,
+          sort: sortParams,
           meta: "total_count,filter_count",
         },
       });
@@ -113,10 +120,15 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, searchValue, members, unitFilter]);
+  }, [currentPage, pageSize, searchValue, members, unitFilter, sortingFields])
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleSortChange = (sortingState: any) => {
+    setSortingFields(sortingState);
+    setCurrentPage(1);
   };
 
   const headerActions = () => {
@@ -174,6 +186,7 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
           `/employees/${item?.id}?name=${encodeURIComponent(item?.full_name)}`,
         )
       }
+      onSortChange={handleSortChange}
     />
   );
 };
