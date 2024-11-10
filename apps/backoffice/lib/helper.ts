@@ -81,3 +81,9 @@ export const fetchDirectusFile = async (fileId: string) => {
     return null;
   }
 };
+
+export const getInitials = (str: string) => {
+  const names = str.split(" ");
+  const initials = names.map((name) => name.charAt(0)).slice(0, 2);
+  return initials.join("").toUpperCase();
+};

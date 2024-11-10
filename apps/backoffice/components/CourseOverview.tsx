@@ -2,80 +2,84 @@
 
 import { useEffect, useState } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import { DateRange } from "react-day-picker";
 
-export function CourseOverview() {
+interface Props {
+  selectedUnit: string | null;
+  selectedCourse: string | null;
+  dateRange: DateRange | undefined;
+}
+
+export function CourseOverview({
+  selectedUnit,
+  selectedCourse,
+  dateRange,
+}: Props) {
   const fetch = useDirectusFetch();
-
   const [fetching, setFetching] = useState(true);
-  const [summary, setSummary] = useState<Array<object>>([]);
+  const [summary, setSummary] = useState<Array<{ name: string; value: number }>>([]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   async function fetchData() {
+    setFetching(true);
     try {
+      const filters: any = {
+        completed: { _eq: 1 },
+      };
+
+      if (selectedUnit) {
+        // filters.unit_id = { _eq: selectedUnit };
+      }
+      if (selectedCourse) {
+        filters.course = { _eq: selectedCourse };
+      }
+      if (dateRange?.from && dateRange?.to) {
+        filters.date_created = {
+          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+        };
+      }
+
       const { data: resTotalCompleted } = await fetch.get("items/employee_course", {
         params: {
-          filter: JSON.stringify({
-            completed: {
-              _eq: 1,
-            },
-          }),
-          aggregate: JSON.stringify({
-            count: "id",
-          }),
+          filter: JSON.stringify(filters),
+          aggregate: JSON.stringify({ count: "id" }),
         },
       });
 
       const { data: resTotalOngoing } = await fetch.get("items/employee_course", {
         params: {
           filter: JSON.stringify({
-            completed: {
-              _eq: 0,
-            },
-            exam_score: {
-              _eq: 0,
-            },
-            exam_attempt: {
-              _lte: 3,
-            },
+            ...filters,
+            completed: { _eq: 0 },
+            exam_score: { _eq: 0 },
+            exam_attempt: { _lte: 3 },
           }),
-          aggregate: JSON.stringify({
-            count: "id",
-          }),
+          aggregate: JSON.stringify({ count: "id" }),
         },
       });
 
       const { data: resTotalQuizTaken } = await fetch.get("items/employee_course", {
         params: {
           filter: JSON.stringify({
-            completed: {
-              _eq: 1,
-            },
-            exam_score: {
-              _lte: 0,
-            },
+            ...filters,
+            completed: { _eq: 1 },
+            exam_score: { _lte: 0 },
           }),
-          aggregate: JSON.stringify({
-            count: "id",
-          }),
+          aggregate: JSON.stringify({ count: "id" }),
         },
       });
 
       setSummary([
-        { name: "Selesai", value: resTotalCompleted.data[0].count.id },
-        // { name: "Ujian", value: 0 },
-        { name: "Ujian", value: resTotalQuizTaken.data[0].count.id },
-        { name: "Sedang Berjalan", value: resTotalOngoing.data[0].count.id },
+        { name: "Selesai", value: resTotalCompleted.data[0].count.id || 0 },
+        { name: "Ujian", value: resTotalQuizTaken.data[0].count.id || 0 },
+        {
+          name: "Sedang Berjalan",
+          value: resTotalOngoing.data[0].count.id || 0,
+        },
       ]);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
     } finally {
       setFetching(false);
@@ -83,27 +87,26 @@ export function CourseOverview() {
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    // Debounce effect for fetchData
+    const delayDebounceFn = setTimeout(() => {
+      // Validate if date range is fully provided before fetching
+      if (!dateRange || (dateRange.from && dateRange.to)) {
+        fetchData();
+      }
+    }, 500); // 500ms delay
 
-  const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel: React.FC<{
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-    index: number;
-  }> = ({
+    return () => clearTimeout(delayDebounceFn);
+  }, [selectedUnit, selectedCourse, dateRange]);
+
+  const renderCustomizedLabel = ({
     cx,
     cy,
     midAngle,
     innerRadius,
     outerRadius,
     percent,
-    index,
-  }) => {
+  }: any) => {
+    const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -123,7 +126,6 @@ export function CourseOverview() {
 
   const renderLegend = (props: any) => {
     const { payload } = props;
-
     return (
       <div className="absolute flex flex-col w-1/2 left-[65%] -top-16 gap-y-3">
         {payload.map((entry: any, index: number) => (
