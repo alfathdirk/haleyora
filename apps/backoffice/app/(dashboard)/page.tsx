@@ -13,6 +13,7 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import SelectFilterUnit from "@/components/SelectFilterUnit";
 import SelectFilterCourse from "@/components/SelectFilterCourse";
 import { UnitOverview } from "@/components/UnitOverview";
+import { CoursesSummary } from "@/components/CoursesSummary";
 
 export default function page() {
   const { currentUser } = useContext(AuthContext);
@@ -40,9 +41,6 @@ export default function page() {
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            {/* <TabsTrigger value="analytics" disabled>
-              Others
-            </TabsTrigger> */}
           </TabsList>
           <TabsContent value="overview" className="space-y-16">
 
@@ -93,16 +91,16 @@ export default function page() {
                   <UnitOverview />
                 </CardContent>
               </Card>
-              {/* <Card className="col-span-4 md:col-span-4">
+              <Card className="col-span-4 md:col-span-4">
                 <CardHeader>
                   <CardTitle className="text-lg font-normal">
-                    Bagan Nilai Unit
+                    Nilai Rata - rata per Materi Pembelajaran
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="relative pl-2 h-3/4">
-                  <UnitOverview />
+                  <CoursesSummary />
                 </CardContent>
-              </Card> */}
+              </Card>
             </div>
 
             <div>

@@ -47,6 +47,7 @@ interface DataTableProps<TData, TValue> {
   tableCellStyles?: ClassValue;
   cardContainerStyles?: ClassValue;
   cardStyles?: ClassValue;
+  scrollAreaStyles?: ClassValue;
 }
 
 export function DataTable<TData, TValue>({
@@ -70,6 +71,7 @@ export function DataTable<TData, TValue>({
   tableCellStyles,
   cardContainerStyles,
   cardStyles,
+  scrollAreaStyles,
 }: DataTableProps<TData, TValue>) {
   const [currentLayout, setLayout] = useState(layout);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -180,7 +182,7 @@ export function DataTable<TData, TValue>({
         )}
       </div>
 
-      <ScrollArea className="rounded-md h-[calc(85vh-220px)]">
+      <ScrollArea className={clsx('rounded-md h-[calc(85vh-220px)]', scrollAreaStyles ?? '')}>
         {currentLayout === "table" ? (
           <Table className="relative">
             {tableHeader && (
