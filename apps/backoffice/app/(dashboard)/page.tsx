@@ -12,6 +12,7 @@ import LatestCompletedQuiz from "@/components/LatestCompletedQuiz";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import SelectFilterUnit from "@/components/SelectFilterUnit";
 import SelectFilterCourse from "@/components/SelectFilterCourse";
+import { UnitOverview } from "@/components/UnitOverview";
 
 export default function page() {
   const { currentUser } = useContext(AuthContext);
@@ -61,7 +62,7 @@ export default function page() {
             <div className="grid grid-cols-1 gap-14 md:grid-cols-2 lg:grid-cols-7 min-h-96">
               <Card className="col-span-3">
                 <CardHeader>
-                  <CardTitle className="text-xl font-normal">
+                  <CardTitle className="text-lg font-normal">
                     Persentase Materi Pembelajaran
                   </CardTitle>
                 </CardHeader>
@@ -71,7 +72,7 @@ export default function page() {
               </Card>
               <Card className="col-span-4 md:col-span-4">
                 <CardHeader>
-                  <CardTitle className="text-xl font-normal">
+                  <CardTitle className="text-lg font-normal">
                     Grafik Kelulusan Karyawan
                   </CardTitle>
                 </CardHeader>
@@ -79,6 +80,29 @@ export default function page() {
                   <EmployeeOverview />
                 </CardContent>
               </Card>
+            </div>
+
+            <div className="grid grid-cols-1 gap-14 md:grid-cols-2 lg:grid-cols-7 min-h-96">
+              <Card className="col-span-3">
+                <CardHeader>
+                  <CardTitle className="text-lg font-normal">
+                    Bagan Nilai Rata - rata per Unit
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative pl-2 h-3/4">
+                  <UnitOverview />
+                </CardContent>
+              </Card>
+              {/* <Card className="col-span-4 md:col-span-4">
+                <CardHeader>
+                  <CardTitle className="text-lg font-normal">
+                    Bagan Nilai Unit
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative pl-2 h-3/4">
+                  <UnitOverview />
+                </CardContent>
+              </Card> */}
             </div>
 
             <div>
