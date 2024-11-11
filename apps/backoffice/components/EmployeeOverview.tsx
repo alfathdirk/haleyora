@@ -119,11 +119,10 @@ export function EmployeeOverview({
       };
 
       if (selectedUnit) {
-        // filters.unit_id = { _eq: selectedUnit };
+        filters.employee = { unit_pln: { _eq: selectedUnit } };
       }
-
       if (selectedCourse) {
-        filters.course_id = { _eq: selectedCourse };
+        filters.course = { _eq: selectedCourse };
       }
 
       // Fetch all employee courses with related course information

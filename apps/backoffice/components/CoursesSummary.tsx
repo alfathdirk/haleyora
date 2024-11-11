@@ -58,10 +58,10 @@ export function CoursesSummary({ selectedUnit, selectedCourse, dateRange }: Prop
       completed: true,
     };
     if (selectedUnit) {
-      // filters["employee.unit"] = { _eq: selectedUnit };
+      filters.employee = { unit_pln: { _eq: selectedUnit } };
     }
     if (selectedCourse) {
-      filters["course.id"] = { _eq: selectedCourse };
+      filters.course = { _eq: selectedCourse };
     }
     if (dateRange?.from && dateRange?.to) {
       filters.date_created = {

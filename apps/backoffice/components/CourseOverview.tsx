@@ -30,7 +30,7 @@ export function CourseOverview({
       };
 
       if (selectedUnit) {
-        // filters.unit_id = { _eq: selectedUnit };
+        filters.employee = { unit_pln: { _eq: selectedUnit } };
       }
       if (selectedCourse) {
         filters.course = { _eq: selectedCourse };
