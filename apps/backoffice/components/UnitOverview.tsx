@@ -111,11 +111,11 @@ export function UnitOverview({ selectedUnit, selectedCourse, dateRange }: Props)
         name: unit,
         examAverage:
           unitScores[unit].examCount > 0
-            ? unitScores[unit].examTotal / unitScores[unit].examCount
+            ? (unitScores[unit].examTotal / unitScores[unit].examCount).toFixed(2)
             : 0,
         tasksAverage:
           unitScores[unit].taskCount > 0
-            ? unitScores[unit].tasksTotal / unitScores[unit].taskCount
+            ? (unitScores[unit].tasksTotal / unitScores[unit].taskCount).toFixed(2)
             : 0,
       }));
 
