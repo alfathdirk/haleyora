@@ -46,6 +46,13 @@ export const navItems: NavItem[] = [
     roles: ["Administrator", "Admin Pusat", "⁠Admin Unit", "Leader"],
   },
   {
+    path: "/evaluation",
+    title: "Evaluasi",
+    label: "Evaluasi",
+    icon: "parameter",
+    roles: ["Administrator", "Admin Pusat", "⁠Admin Unit", "Leader"],
+  },
+  {
     path: "/course",
     title: "Pembelajaran",
     label: "Pembelajaran",
