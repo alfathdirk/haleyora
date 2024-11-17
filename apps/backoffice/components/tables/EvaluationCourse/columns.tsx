@@ -15,6 +15,7 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
         {row.original?.name ?? "-"}
       </div>
     ),
+    enableSorting: true,
   },
   {
     accessorKey: "unit",
@@ -36,6 +37,7 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
         {row.original?.totalEvaluation ?? ""}
       </div>
     ),
+    enableSorting: true,
   },
   {
     accessorKey: "passed",
@@ -43,5 +45,6 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
     cell: ({ row }) => (
       <div className="px-2.5 py-1 w-fit">{row.original?.passed ?? ""}</div>
     ),
+    enableSorting: true,
   },
 ];

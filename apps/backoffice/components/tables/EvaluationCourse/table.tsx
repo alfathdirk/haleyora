@@ -17,9 +17,10 @@ export const EvaluationCourseTable = ({
   const fetch = useDirectusFetch();
 
   const [fetching, setFetching] = useState(true);
-  const [data, setData] = useState<any>([]);
+  const [allData, setAllData] = useState<any[]>([]); // Complete dataset
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [data, setData] = useState<any[]>([]); // Paginated and sorted data
   const [totalItems, setTotalItems] = useState(0);
 
   const [searchValue, setSearchValue] = useState("");
@@ -114,7 +115,7 @@ export const EvaluationCourseTable = ({
                 passed: string;
                 examEvaluation: string;
                 taskEvaluation: string;
-                totalEvaluation: string;
+                totalEvaluation: number;
               }
             >,
             record: any,
@@ -123,13 +124,11 @@ export const EvaluationCourseTable = ({
             const fullName = record.employee.full_name;
             const unit = record.employee.unit_pln;
 
-            // Extract course evaluation details
             const examScore = record.exam_score || 0;
             const tasksScore = record.tasks_score || 0;
             const isOpenExam = record.course.is_open_exam;
             const isOpenTask = record.course.is_open_task;
 
-            // Initialize employee data if not already present
             if (!acc[employeeId]) {
               acc[employeeId] = {
                 name: fullName,
@@ -137,18 +136,19 @@ export const EvaluationCourseTable = ({
                 passed: "Tidak",
                 examEvaluation: "0",
                 taskEvaluation: "0",
-                totalEvaluation: "0",
+                totalEvaluation: 0,
               };
             }
 
-            // Apply the pass/fail evaluation formula
             const examEvaluation = isOpenExam ? (examScore / 100) * 70 : 0;
             const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
             const totalEvaluation = examEvaluation + taskEvaluation;
 
             acc[employeeId].examEvaluation = examEvaluation.toFixed(2);
             acc[employeeId].taskEvaluation = taskEvaluation.toFixed(2);
-            acc[employeeId].totalEvaluation = totalEvaluation.toFixed(2);
+            acc[employeeId].totalEvaluation = Number(
+              totalEvaluation.toFixed(2),
+            );
 
             if (totalEvaluation >= 80) {
               acc[employeeId].passed = "Ya";
@@ -159,14 +159,12 @@ export const EvaluationCourseTable = ({
           {},
         );
 
-        // Format data to include pass percentage
         const formattedData = Object.keys(employeeScores).map((employeeId) => {
           return { ...employeeScores[employeeId] };
         });
 
-        setData(formattedData);
+        setAllData(formattedData);
         setTotalItems(formattedData.length);
-        setFetching(false);
         updatePaginatedData(formattedData, currentPage, pageSize);
       } catch (error) {
         console.error("Error fetching:", error);
@@ -176,25 +174,50 @@ export const EvaluationCourseTable = ({
     }
   }
 
-  // Updates paginated data based on current page and page size
-  const updatePaginatedData = (allData: any[], page: number, size: number) => {
+  const updatePaginatedData = (
+    allData: any[],
+    page: number,
+    size: number,
+    sortingFields: { id: string; desc: boolean }[] = [],
+  ) => {
+    let sortedData = [...allData];
+
+    // Apply sorting
+    sortingFields.forEach(({ id, desc }) => {
+      sortedData.sort((a, b) => {
+        const aValue = a[id] ?? "";
+        const bValue = b[id] ?? "";
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          // Case-insensitive sorting for strings
+          return desc
+            ? bValue.localeCompare(aValue)
+            : aValue.localeCompare(bValue);
+        }
+
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          // Numeric sorting
+          return desc ? bValue - aValue : aValue - bValue;
+        }
+
+        return 0; // No sorting for other data types
+      });
+    });
+
+    // Apply pagination
     const startIndex = (page - 1) * size;
-    const paginatedData = allData.slice(startIndex, startIndex + size);
+    const paginatedData = sortedData.slice(startIndex, startIndex + size);
     setData(paginatedData);
   };
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    currentPage,
-    pageSize,
-    searchValue,
-    members,
-    selectedUnit,
-    sortingFields,
-    courseId,
-  ]);
+  }, [members, courseId]);
+
+  useEffect(() => {
+    updatePaginatedData(allData, currentPage, pageSize, sortingFields);
+  }, [allData, currentPage, pageSize, sortingFields]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

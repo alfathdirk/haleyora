@@ -150,7 +150,7 @@ export default function Page() {
         <EvaluationCourseTable
           members={members}
           currentUser={currentUser}
-          onFilterChange={handleFilterChange}
+          // onFilterChange={handleFilterChange}
           courseId={courseId}
         />
       </div>
