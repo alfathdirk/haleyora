@@ -101,7 +101,7 @@ export default function SelectFilterCourse({
               {loading && <Loader />}
             </div>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="overflow-y-auto max-h-40">
             <SelectItem value="">Semua</SelectItem>
             {memoizedCourses.length > 0 ? (
               memoizedCourses
