@@ -1,78 +1,118 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef, useMemo } from "react";
 import {
   Select,
   SelectTrigger,
   SelectItem,
   SelectContent,
 } from "@/components/ui/select";
-import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Loader } from "./ui/loader";
+import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 
-interface SelectFilterCourseProps {
-  selectedCourse: { id: string; title: string } | null;
-  onCourseChange: (unit: { id: string; title: string } | null) => void;
-}
+type Course = { id: string; title: string };
+
+type SelectFilterCourseProps = {
+  selectedCourse: Course | null;
+  onCourseChange?: (course: Course | null) => void;
+  defaultValue?: string;
+};
 
 export default function SelectFilterCourse({
   selectedCourse,
-  onCourseChange,
+  onCourseChange = () => {},
+  defaultValue = "",
 }: SelectFilterCourseProps) {
   const fetch = useDirectusFetch();
-  const [data, setData] = useState<Array<{ id: string; title: string }>>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const hasFetched = useRef(false);
+
+  const fetchCourses = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data: res } = await fetch.get("items/course", {
+        params: { fields: ["id", "title"] },
+      });
+      setCourses(res?.data ?? []);
+    } catch {
+      setError("Failed to fetch courses.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function fetchUnits() {
-      setLoading(true);
-      try {
-        const { data: res } = await fetch.get("items/course", {
-          params: {
-            fields: ["id", "title"],
-          },
-        });
-
-        setData(res?.data ?? []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchCourses();
     }
-
-    fetchUnits();
   }, []);
 
-  const handleValueChange = (val: string) => {
-    const course = data.find(item => item?.id == val)
-    onCourseChange(course ?? null)
-  }
+  const handleValueChange = useCallback(
+    (val: string) => {
+      const course = courses.find((item) => item.id === val);
+      onCourseChange(course ?? null);
+    },
+    [courses, onCourseChange],
+  );
+
+  const memoizedCourses = useMemo(
+    () =>
+      courses.map((item) => (
+        <SelectItem key={item.id} value={item.id}>
+          {item.title}
+        </SelectItem>
+      )),
+    [courses],
+  );
 
   return (
-    <Select
-      value={selectedCourse?.id ?? ""}
-      onValueChange={handleValueChange}
-      disabled={loading}
-    >
-      <SelectTrigger className="flex items-center justify-between">
-        <span>
-          {selectedCourse?.title ? selectedCourse?.title : "Materi Pembelajaran"}
-        </span>
-        {loading && (
-          <span className="ml-2">
-            <Loader />
-          </span>
-        )}
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="">Semua</SelectItem>
-        {data.map((item) => (
-          <SelectItem key={item?.id} value={item?.id}>
-            {item?.title}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div>
+      {error ? (
+        <div className="flex flex-row items-center justify-between text-sm text-red-500">
+          <span>{error}</span>
+          <button
+            onClick={() => {
+              setError(null);
+              fetchCourses();
+            }}
+            className="mt-2 text-blue-500 underline"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <Select
+          value={selectedCourse?.id ?? defaultValue}
+          onValueChange={handleValueChange}
+          disabled={loading}
+        >
+          <SelectTrigger>
+            <div className="flex items-center justify-between w-full">
+              <span>
+                {loading
+                  ? "Loading courses..."
+                  : selectedCourse?.title || "Materi Pembelajaran"}
+              </span>
+              {loading && <Loader />}
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Semua</SelectItem>
+            {memoizedCourses.length > 0 ? (
+              memoizedCourses
+            ) : (
+              <SelectItem value="" disabled>
+                No courses available
+              </SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
   );
 }
