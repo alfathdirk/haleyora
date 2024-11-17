@@ -11,8 +11,8 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Loader } from "./ui/loader";
 
 interface SelectFilterCourseProps {
-  selectedCourse: string | null;
-  onCourseChange: (unit: string | null) => void;
+  selectedCourse: { id: string; title: string } | null;
+  onCourseChange: (unit: { id: string; title: string } | null) => void;
 }
 
 export default function SelectFilterCourse({
@@ -44,15 +44,20 @@ export default function SelectFilterCourse({
     fetchUnits();
   }, []);
 
+  const handleValueChange = (val: string) => {
+    const course = data.find(item => item?.id == val)
+    onCourseChange(course ?? null)
+  }
+
   return (
     <Select
-      value={selectedCourse ?? ""}
-      onValueChange={(value) => onCourseChange(value || null)}
+      value={selectedCourse?.id ?? ""}
+      onValueChange={handleValueChange}
       disabled={loading}
     >
       <SelectTrigger className="flex items-center justify-between">
         <span>
-          {selectedCourse ? selectedCourse : "Materi Pembelajaran"}
+          {selectedCourse?.title ? selectedCourse?.title : "Materi Pembelajaran"}
         </span>
         {loading && (
           <span className="ml-2">

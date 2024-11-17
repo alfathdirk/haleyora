@@ -17,7 +17,7 @@ import { DateRange } from "react-day-picker";
 
 interface Props {
   selectedUnit: string | null;
-  selectedCourse: string | null;
+  selectedCourse: { id: string; title: string } | null;
   dateRange: DateRange | undefined;
 }
 
@@ -121,8 +121,8 @@ export function EmployeeOverview({
       if (selectedUnit) {
         filters.employee = { unit_pln: { _eq: selectedUnit } };
       }
-      if (selectedCourse) {
-        filters.course = { _eq: selectedCourse };
+      if (selectedCourse?.id) {
+        filters.course = { _eq: selectedCourse?.id };
       }
 
       // Fetch all employee courses with related course information

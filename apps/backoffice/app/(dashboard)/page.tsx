@@ -22,7 +22,7 @@ export default function page() {
   // const fetch = useDirectusFetch();
 
   const [selectedUnit, setSeletedUnit] = useState<string | null>(null);
-  const [selectedCourse, setSeletedCourse] = useState<string | null>(null);
+  const [selectedCourse, setSeletedCourse] = useState<{ id: string; title: string } | null>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: startOfMonth(new Date()),
     to: new Date(),

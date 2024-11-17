@@ -14,7 +14,7 @@ import { DateRange } from "react-day-picker";
 
 interface Props {
   selectedUnit: string | null;
-  selectedCourse: string | null;
+  selectedCourse: { id: string; title: string } | null;
   dateRange: DateRange | undefined;
 }
 
@@ -58,7 +58,7 @@ export function UnitOverview({ selectedUnit, selectedCourse, dateRange }: Props)
       // Filter data based on selectedUnit and selectedCourse before grouping
       const filteredCourses = employeeCourses?.data?.filter((course: any) => {
         const matchesUnit = selectedUnit ? course.employee.unit === selectedUnit : true;
-        const matchesCourse = selectedCourse ? course.course.id === selectedCourse : true;
+        const matchesCourse = selectedCourse?.id ? course.course.id === selectedCourse?.id : true;
         return matchesUnit && matchesCourse;
       });
 
