@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { SetStateAction, useEffect, useState, useMemo, useCallback } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
@@ -8,6 +8,9 @@ import { columns } from "./columns";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import SelectFilterUnit from "@/components/SelectFilterUnit";
+import { CalendarDateRangePicker } from "@/components/date-range-picker";
+import { startOfMonth } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 export const EvaluationTable = ({
   members,
@@ -23,7 +26,14 @@ export const EvaluationTable = ({
   const [totalItems, setTotalItems] = useState(0);
 
   const [searchValue, setSearchValue] = useState("");
-  const [selectedUnit, setSeletedUnit] = useState<string | null>(null);
+  const [selectedUnit, setSeletedUnit] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: new Date(),
+  });
   const [sortingFields, setSortingFields] = useState<
     { id: string; desc: boolean }[]
   >([]);
@@ -46,7 +56,10 @@ export const EvaluationTable = ({
     debouncedSearchChange(nextValue);
   };
 
-  const handleUnitChange = (unit: string | null) => {
+  const handleUnitChange = (unit: {
+    id: string;
+    title: string;
+  } | null) => {
     setSeletedUnit(unit);
     setCurrentPage(1); // Reset to first page on unit change
     onFilterChange({ unit_pln: unit, search: searchValue });
@@ -56,10 +69,16 @@ export const EvaluationTable = ({
     setFetching(true);
 
     const filters: any = {
-      completed: true,
+      completed: { _eq: 1 },
       ...(searchValue && { course: { title: { _contains: searchValue } } }),
-      ...(selectedUnit && { employee: { unit_pln: { _eq: selectedUnit } } }),
+      ...(selectedUnit?.id && { employee: { unit_pln: { _eq: selectedUnit?.id } } }),
     };
+
+    if (dateRange?.from && dateRange?.to) {
+      filters.date_created = {
+        _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+      };
+    }
 
     try {
       const { data: employeeCourses } = await fetch.get(
@@ -172,6 +191,7 @@ export const EvaluationTable = ({
     members,
     selectedUnit,
     sortingFields,
+    dateRange
   ]);
 
   const handlePageChange = (page: number) => {
@@ -186,11 +206,19 @@ export const EvaluationTable = ({
   const headerActions = () => {
     return (
       <div className="flex items-center justify-between w-full">
-        <div className="w-1/3">
-          <SelectFilterUnit
-            selectedUnit={selectedUnit}
-            onUnitChange={handleUnitChange}
+        <div className="flex items-center w-full space-x-2 ">
+          <CalendarDateRangePicker
+            selectedRange={dateRange}
+            onChange={(range: SetStateAction<DateRange | undefined>) =>
+              setDateRange(range)
+            }
           />
+          <div className="w-1/3">
+            <SelectFilterUnit
+              selectedUnit={selectedUnit}
+              onUnitChange={handleUnitChange}
+            />
+          </div>
         </div>
         <div className="pr-4">
           <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
