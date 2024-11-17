@@ -8,6 +8,8 @@ import { AuthContext } from "@/provider/Auth";
 import { useContext } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
+import { DownloadCloud } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const { members, currentUser } = useContext(AuthContext);
@@ -102,13 +104,25 @@ export default function Page() {
     setFilters(newFilters);
   };
 
+  const handleExport = () => {
+
+  }
+
   return (
     <>
       <div className="flex-1 space-y-2">
         <BreadCrumb items={[{ title: "Karyawan", link: "/employees" }]} />
 
-        <div className="flex items-start justify-between !mb-10">
+        <div className="flex items-end justify-between !mb-10">
           <Heading title={`Karyawan`} description="Manajemen Karyawan" />
+          <div>
+            <Button
+              className="text-xs md:text-sm"
+              onClick={handleExport}
+            >
+              <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
+            </Button>
+          </div>
         </div>
 
         <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
