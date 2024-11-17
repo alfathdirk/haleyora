@@ -11,6 +11,7 @@ import SelectFilterUnit from "@/components/SelectFilterUnit";
 import { CalendarDateRangePicker } from "@/components/date-range-picker";
 import { startOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { useRouter } from "next/navigation";
 
 export const EvaluationTable = ({
   members,
@@ -18,6 +19,7 @@ export const EvaluationTable = ({
   onFilterChange,
 }: any) => {
   const fetch = useDirectusFetch();
+  const router = useRouter();
 
   const [fetching, setFetching] = useState(true);
   const [data, setData] = useState<any>([]);
@@ -248,6 +250,11 @@ export const EvaluationTable = ({
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
       onSortChange={handleSortChange}
+      onClickRow={(item) =>
+        router.push(
+          `/evaluation/${item?.id}?name=${encodeURIComponent(item?.title)}`,
+        )
+      }
     />
   );
 };
