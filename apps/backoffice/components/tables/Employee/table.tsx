@@ -1,22 +1,31 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback, useContext } from "react";
+import {
+  SetStateAction,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
-import {
-  Select,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-} from "@/components/ui/select";
 import { columns } from "./columns";
 import { cardColumns } from "./columns-card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import SelectFilterUnit from "@/components/SelectFilterUnit";
+import { CalendarDateRangePicker } from "@/components/date-range-picker";
+import { startOfMonth } from "date-fns";
+import { DateRange } from "react-day-picker";
 
-export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) => {
+export const EmployeesTable = ({
+  members,
+  currentUser,
+  onFilterChange,
+}: any) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
@@ -25,15 +34,27 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-  const [searchValue, setSearchValue] = useState("");
-  const [unitFilter, setUnitFilter] = useState<string | null>(null);
-  const [units, setUnits] = useState<string[]>([]);
-  const [sortingFields, setSortingFields] = useState<{ id: string; desc: boolean }[]>([]);
 
-  const onInputChange = useCallback((nextValue: string) => {
-    setSearchValue(nextValue);
-    onFilterChange({ unit: unitFilter, search: nextValue });
-  }, [unitFilter]);
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedUnit, setSeletedUnit] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: new Date(),
+  });
+  const [sortingFields, setSortingFields] = useState<
+    { id: string; desc: boolean }[]
+  >([]);
+
+  const onInputChange = useCallback(
+    (nextValue: string) => {
+      setSearchValue(nextValue);
+      onFilterChange({ unit: selectedUnit, search: nextValue });
+    },
+    [selectedUnit],
+  );
 
   const debouncedSearchChange = useMemo(
     () => debounce(onInputChange, 500),
@@ -45,42 +66,44 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
     debouncedSearchChange(nextValue);
   };
 
-  const handleUnitChange = (unit: string | null) => {
-    setUnitFilter(unit);
+  const handleUnitChange = (unit: {
+    id: string;
+    title: string;
+  } | null) => {
+    setSeletedUnit(unit);
     setCurrentPage(1); // Reset to first page on unit change
     onFilterChange({ unit_pln: unit, search: searchValue });
   };
 
-  async function fetchUnits() {
-    try {
-      const { data: res } = await fetch.get("items/employee", {
-        params: {
-          fields: ["unit_pln"],
-          groupBy: "unit_pln",
-        },
-      });
-      const uniqueUnits = res?.data
-        .map((item: any) => item.unit_pln)
-        .filter(Boolean);
-      setUnits(uniqueUnits ?? []);
-    } catch (error) {
-      console.error("Error fetching units:", error);
-    }
-  }
-
   async function fetchData() {
     try {
+      let deep = {};
       const filters: any = {
         ...(searchValue && { full_name: { _contains: searchValue } }),
-        ...(unitFilter && { unit_pln: { _eq: unitFilter } }),
+        ...(selectedUnit?.id && { unit_pln: { _eq: selectedUnit?.id } }),
       };
+
+      if (dateRange?.from && dateRange?.to) {
+        deep = {
+          employee_course: {
+            _filter: {
+              date_created: {
+                _between: [
+                  dateRange.from.toISOString(),
+                  dateRange.to.toISOString(),
+                ],
+              },
+            },
+          },
+        };
+      }
 
       if (!["Administrator", "Admin Pusat"].includes(currentUser?.role?.name)) {
         filters.employee_id = { _in: members };
       }
 
       const sortParams = sortingFields.map(
-        (field) => `${field.desc ? "-" : ""}${field.id}`
+        (field) => `${field.desc ? "-" : ""}${field.id}`,
       );
 
       const { data: res } = await fetch.get("items/employee", {
@@ -95,12 +118,14 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
             "employee_course.completed",
             "employee_course.exam_score",
             "employee_course.tasks_score",
+            "employee_course.date_created",
           ],
           limit: pageSize,
           offset: (currentPage - 1) * pageSize,
           filter: filters,
           sort: sortParams,
           meta: "total_count,filter_count",
+          deep,
         },
       });
 
@@ -113,13 +138,17 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
   }
 
   useEffect(() => {
-    fetchUnits();
-  }, []);
-
-  useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, searchValue, members, unitFilter, sortingFields])
+  }, [
+    currentPage,
+    pageSize,
+    searchValue,
+    members,
+    selectedUnit,
+    sortingFields,
+    dateRange,
+  ]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -133,23 +162,20 @@ export const EmployeesTable = ({ members, currentUser, onFilterChange }: any) =>
   const headerActions = () => {
     return (
       <div className="flex items-center justify-between w-full">
-        {/* Unit Filter Dropdown */}
-        <Select
-          value={unitFilter ?? ""}
-          onValueChange={(value) => handleUnitChange(value || null)}
-        >
-          <SelectTrigger className="w-48 border-2 border-[#787486] rounded-xl">
-            <span>{unitFilter ? unitFilter : "Pilih Unit PLN"}</span>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Units</SelectItem>
-            {units.map((unit) => (
-              <SelectItem key={unit} value={unit}>
-                {unit}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center w-full space-x-2 ">
+          <CalendarDateRangePicker
+            selectedRange={dateRange}
+            onChange={(range: SetStateAction<DateRange | undefined>) =>
+              setDateRange(range)
+            }
+          />
+          <div className="w-1/3">
+            <SelectFilterUnit
+              selectedUnit={selectedUnit}
+              onUnitChange={handleUnitChange}
+            />
+          </div>
+        </div>
         <div className="pr-4">
           <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
             <LucideSearch className="w-6 h-6 text-[#959595]" />
