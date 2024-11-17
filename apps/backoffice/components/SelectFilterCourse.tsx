@@ -73,11 +73,10 @@ export default function SelectFilterCourse({
   return (
     <div>
       {error ? (
-        <div className="flex flex-row items-center justify-between text-sm text-red-500">
+        <div className="flex flex-row items-center justify-between text-sm text-red-500 bg-red-50">
           <span>{error}</span>
           <button
             onClick={() => {
-              setError(null);
               fetchCourses();
             }}
             className="mt-2 text-blue-500 underline"
@@ -102,7 +101,9 @@ export default function SelectFilterCourse({
             </div>
           </SelectTrigger>
           <SelectContent className="overflow-y-auto max-h-40">
-            <SelectItem value="">Semua</SelectItem>
+            {memoizedCourses?.length > 0 && (
+              <SelectItem value="">Semua</SelectItem>
+            )}
             {memoizedCourses.length > 0 ? (
               memoizedCourses
             ) : (

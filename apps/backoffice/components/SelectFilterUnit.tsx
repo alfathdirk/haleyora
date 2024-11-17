@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
   Select,
   SelectTrigger,
@@ -10,9 +10,14 @@ import {
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { Loader } from "./ui/loader";
 
+interface Unit {
+  id: string;
+  title: string;
+}
+
 interface SelectFilterUnitProps {
-  selectedUnit: string | null;
-  onUnitChange: (unit: string | null) => void;
+  selectedUnit: Unit | null;
+  onUnitChange: (unit: Unit | null) => void;
 }
 
 export default function SelectFilterUnit({
@@ -20,56 +25,106 @@ export default function SelectFilterUnit({
   onUnitChange,
 }: SelectFilterUnitProps) {
   const fetch = useDirectusFetch();
-  const [units, setUnits] = useState<string[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchUnits() {
-      setLoading(true);
-      try {
-        const { data: res } = await fetch.get("items/employee", {
-          params: {
-            fields: ["unit_pln"],
-            groupBy: "unit_pln",
-          },
+  const hasFetched = useRef(false);
+
+  const fetchUnits = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data: res }: { data: { data: { unit_pln: string | null }[] } } =
+        await fetch.get("items/employee", {
+          params: { fields: ["unit_pln"], groupBy: "unit_pln" },
         });
 
-        const filtered = res?.data
-          .map((item: any) => item.unit_pln)
-          .filter(Boolean);
-        setUnits(filtered ?? []);
-      } catch (error) {
-        console.error("Error fetching units:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+      const filtered = res?.data
+        ?.map((item) => ({
+          id: item.unit_pln ?? "",
+          title: item.unit_pln ?? "",
+        }))
+        .filter((unit) => unit.id); // Remove any entries with empty ids
 
-    fetchUnits();
+      setUnits(filtered);
+    } catch (error) {
+      setLoading(false);
+      setError("Failed to fetch units. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchUnits();
+    }
   }, []);
 
+  const handleValueChange = useCallback(
+    (val: string) => {
+      const course = units.find((item) => item.id === val);
+      onUnitChange(course ?? null);
+    },
+    [units, onUnitChange],
+  );
+
+  const memoizedUnits = useMemo(
+    () =>
+      units.map((item) => (
+        <SelectItem key={item.id} value={item.id}>
+          {item.title}
+        </SelectItem>
+      )),
+    [units],
+  );
+
   return (
-    <Select
-      value={selectedUnit ?? ""}
-      onValueChange={(value) => onUnitChange(value || null)}
-      disabled={loading}
-    >
-      <SelectTrigger className="flex items-center justify-between">
-        <span>{selectedUnit ? selectedUnit : "Unit PLN"}</span>
-        {loading && (
-          <span className="ml-2">
-            <Loader />
-          </span>
-        )}
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="">Semua</SelectItem>
-        {units.map((unit) => (
-          <SelectItem key={unit} value={unit}>
-            {unit}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div>
+      {error ? (
+        <div className="flex flex-row items-center justify-between px-3 py-2 text-sm text-red-500 rounded-md bg-red-50">
+          <p>{error}</p>
+          <button
+            onClick={() => {
+              fetchUnits();
+            }}
+            className="underline ext-blue-500"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <Select
+          value={selectedUnit?.id ?? ""}
+          onValueChange={handleValueChange}
+          disabled={loading}
+        >
+          <SelectTrigger>
+            <div className="flex items-center justify-between w-full">
+              <span>
+                {loading
+                  ? "Loading units..."
+                  : selectedUnit?.title || "Unit PLN"}
+              </span>
+              {loading && <Loader />}
+            </div>
+          </SelectTrigger>
+          <SelectContent className="overflow-y-auto max-h-40">
+            {memoizedUnits?.length > 0 && (
+              <SelectItem value="">Semua</SelectItem>
+            )}
+            {memoizedUnits.length > 0 ? (
+              memoizedUnits
+            ) : (
+              <SelectItem value="" disabled>
+                No courses available
+              </SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
   );
 }

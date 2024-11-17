@@ -8,7 +8,7 @@ import { EmployeeCourse } from "@/types/quiz";
 import { DateRange } from "react-day-picker";
 
 interface Props {
-  selectedUnit: string | null;
+  selectedUnit: { id: string; title: string } | null;
   selectedCourse: { id: string; title: string } | null;
   dateRange: DateRange | undefined;
 }
@@ -57,8 +57,8 @@ export function CoursesSummary({ selectedUnit, selectedCourse, dateRange }: Prop
     const filters: any = {
       completed: true,
     };
-    if (selectedUnit) {
-      filters.employee = { unit_pln: { _eq: selectedUnit } };
+    if (selectedUnit?.id) {
+      filters.employee = { unit_pln: { _eq: selectedUnit?.id } };
     }
     if (selectedCourse?.id) {
       filters.course = { _eq: selectedCourse?.id };

@@ -21,14 +21,14 @@ export default function page() {
   const { currentUser } = useContext(AuthContext);
   // const fetch = useDirectusFetch();
 
-  const [selectedUnit, setSeletedUnit] = useState<string | null>(null);
+  const [selectedUnit, setSeletedUnit] = useState<{ id: string; title: string } | null>(null);
   const [selectedCourse, setSeletedCourse] = useState<{ id: string; title: string } | null>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: startOfMonth(new Date()),
     to: new Date(),
   });
 
-  const handleUnitChange = (unit: string | null) => {
+  const handleUnitChange = (unit: { id: string; title: string } | null) => {
     setSeletedUnit(unit);
   };
 
