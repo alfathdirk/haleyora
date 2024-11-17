@@ -113,37 +113,43 @@ export function EmployeeOverview({
       `${months[11].year}-${months[11].month}-31`;
 
     try {
-      // Set up filters based on selectedUnit, selectedCourse, and dateRange
       const filters: any = {
-        date_created: { _gte: startDate, _lte: endDate }, // Courses created in the specified range or last 12 months
+        completed: { _eq: 1 },
       };
 
       if (selectedUnit?.id) {
         filters.employee = { unit_pln: { _eq: selectedUnit?.id } };
       }
+
       if (selectedCourse?.id) {
         filters.course = { _eq: selectedCourse?.id };
       }
 
-      // Fetch all employee courses with related course information
-      const { data: allCourses } = await fetch.get("items/employee_course", {
-        params: {
-          filter: JSON.stringify(filters),
-          fields: [
-            "id",
-            "completed",
-            "exam_attempt",
-            "exam_score",
-            "date_created",
-            "course.min_score",
-          ], // Fetch related course.min_score
-        },
-      });
+      if (dateRange?.from && dateRange?.to) {
+        filters.date_created = {
+          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+        };
 
-      // Group the data by month and calculate the needed categories
-      const groupedData = groupDataByMonth(allCourses?.data);
+        // Fetch all employee courses with related course information
+        const { data: allCourses } = await fetch.get("items/employee_course", {
+          params: {
+            filter: JSON.stringify(filters),
+            fields: [
+              "id",
+              "completed",
+              "exam_attempt",
+              "exam_score",
+              "date_created",
+              "course.min_score",
+            ], // Fetch related course.min_score
+          },
+        });
 
-      setData(groupedData);
+        // Group the data by month and calculate the needed categories
+        const groupedData = groupDataByMonth(allCourses?.data);
+
+        setData(groupedData);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }

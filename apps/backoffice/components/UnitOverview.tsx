@@ -60,82 +60,84 @@ export function UnitOverview({
     setFetching(true);
     setError(null);
     try {
-      const filters: any = { completed: true };
+      const filters: any = {
+        completed: { _eq: 1 },
+      };
 
       if (dateRange?.from && dateRange?.to) {
         filters.date_created = {
           _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
         };
-      }
 
-      const { data: employeeCourses }: { data: { data: EmployeeCourse[] } } =
-        await fetch.get("items/employee_course", {
-          params: {
-            fields: [
-              "id",
-              "exam_score",
-              "tasks_score",
-              "course.is_open_exam",
-              "course.is_open_task",
-              "course.id",
-              "employee.employee_id",
-              "employee.unit",
-            ],
-            filter: filters,
-          },
+        const { data: employeeCourses }: { data: { data: EmployeeCourse[] } } =
+          await fetch.get("items/employee_course", {
+            params: {
+              fields: [
+                "id",
+                "exam_score",
+                "tasks_score",
+                "course.is_open_exam",
+                "course.is_open_task",
+                "course.id",
+                "employee.employee_id",
+                "employee.unit",
+              ],
+              filter: filters,
+            },
+          });
+
+        const filteredCourses = employeeCourses?.data?.filter((course) => {
+          const matchesUnit = selectedUnit?.id
+            ? course.employee.unit === selectedUnit.id
+            : true;
+          const matchesCourse = selectedCourse?.id
+            ? course.course.id === selectedCourse.id
+            : true;
+          return matchesUnit && matchesCourse;
         });
 
-      const filteredCourses = employeeCourses?.data?.filter((course) => {
-        const matchesUnit = selectedUnit?.id
-          ? course.employee.unit === selectedUnit.id
-          : true;
-        const matchesCourse = selectedCourse?.id
-          ? course.course.id === selectedCourse.id
-          : true;
-        return matchesUnit && matchesCourse;
-      });
+        const unitScores = filteredCourses.reduce<UnitScores>((acc, ec) => {
+          const unit = ec.employee.unit || "Unknown Unit";
+          const examScore = ec.exam_score || 0;
+          const tasksScore = ec.tasks_score || 0;
+          const isOpenExam = ec.course.is_open_exam;
+          const isOpenTask = ec.course.is_open_task;
 
-      const unitScores = filteredCourses.reduce<UnitScores>((acc, ec) => {
-        const unit = ec.employee.unit || "Unknown Unit";
-        const examScore = ec.exam_score || 0;
-        const tasksScore = ec.tasks_score || 0;
-        const isOpenExam = ec.course.is_open_exam;
-        const isOpenTask = ec.course.is_open_task;
+          if (!acc[unit]) {
+            acc[unit] = {
+              examTotal: 0,
+              tasksTotal: 0,
+              examCount: 0,
+              taskCount: 0,
+            };
+          }
 
-        if (!acc[unit]) {
-          acc[unit] = {
-            examTotal: 0,
-            tasksTotal: 0,
-            examCount: 0,
-            taskCount: 0,
-          };
-        }
+          if (isOpenExam) {
+            acc[unit].examTotal += examScore;
+            acc[unit].examCount += 1;
+          }
+          if (isOpenTask) {
+            acc[unit].tasksTotal += tasksScore;
+            acc[unit].taskCount += 1;
+          }
 
-        if (isOpenExam) {
-          acc[unit].examTotal += examScore;
-          acc[unit].examCount += 1;
-        }
-        if (isOpenTask) {
-          acc[unit].tasksTotal += tasksScore;
-          acc[unit].taskCount += 1;
-        }
+          return acc;
+        }, {});
 
-        return acc;
-      }, {});
+        const formattedData = Object.keys(unitScores).map((unit) => ({
+          name: unit,
+          examAverage:
+            unitScores[unit].examCount > 0
+              ? unitScores[unit].examTotal / unitScores[unit].examCount
+              : 0,
+          tasksAverage:
+            unitScores[unit].taskCount > 0
+              ? unitScores[unit].tasksTotal / unitScores[unit].taskCount
+              : 0,
+        }));
 
-      const formattedData = Object.keys(unitScores).map((unit) => ({
-        name: unit,
-        examAverage:
-          unitScores[unit].examCount > 0
-            ? unitScores[unit].examTotal / unitScores[unit].examCount
-            : 0,
-        tasksAverage:
-          unitScores[unit].taskCount > 0
-            ? unitScores[unit].tasksTotal / unitScores[unit].taskCount
-            : 0,
-      }));
-
-      setDataBarchart(formattedData);
+        setDataBarchart(formattedData);
+      }
     } catch (error) {
       console.error("Error fetching:", error);
       setError("Failed to fetch data. Please try again.");
