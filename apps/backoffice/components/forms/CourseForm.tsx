@@ -46,8 +46,9 @@ const formSchema = z.object({
   status: z.string().min(1, { message: "Select status" }),
   material_content: z
     .array(z.instanceof(File)),
-  video_content: z
-    .array(z.instanceof(File)),
+  // video_content: z
+  //   .array(z.instanceof(File)),
+  video_content_link: z.string().max(500).optional(),
   image: z
     .array(z.instanceof(File)),
 });
@@ -97,7 +98,8 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         status: "published",
         image: [],
         material_content: [],
-        video_content: [],
+        // video_content: [],
+        video_content_link: "",
       };
 
   const form = useForm<CourseFormValues>({
@@ -137,10 +139,10 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         data.material_content = resImage?.data?.data?.id ?? null;
       }
 
-      if (data.video_content && data.video_content.length > 0) {
-        const resImage = await fetch.upload("files", data.video_content);
-        data.video_content = resImage?.data?.data?.id ?? null;
-      }
+      // if (data.video_content && data.video_content.length > 0) {
+      //   const resImage = await fetch.upload("files", data.video_content);
+      //   data.video_content = resImage?.data?.data?.id ?? null;
+      // }
 
       // Clean data by removing empty arrays and null values
       const cleanedData = Object.fromEntries(
@@ -491,7 +493,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="video_content"
                 render={() => (
@@ -504,6 +506,41 @@ export const CourseForm: React.FC<ProductFormProps> = ({
                     </div>
                     <FormControl>
                       <FileUpload name="video_content" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+
+              {/* <FormField
+                control={form.control}
+                name="video_content_link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link video</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        disabled={loading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+              <FormField
+                control={form.control}
+                name="video_content_link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Link video</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        disabled={loading}
+                        placeholder="Deskripsi untuk tugas"
+                        {...field}
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
