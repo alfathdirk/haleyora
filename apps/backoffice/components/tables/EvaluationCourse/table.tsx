@@ -213,7 +213,7 @@ export const EvaluationCourseTable = ({
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [members, courseId]);
+  }, [members, courseId, selectedUnit, searchValue]);
 
   useEffect(() => {
     updatePaginatedData(allData, currentPage, pageSize, sortingFields);
