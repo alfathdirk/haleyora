@@ -58,10 +58,19 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
     },
   },
   {
-    accessorKey: "date_created",
-    header: "Mulai Pembelajaran",
+    accessorKey: "total_score",
+    header: "Nilai Keseluruhan",
     cell: ({ row }) => {
-      return <div>{format(new Date(row?.original.date_created), 'dd MMMM yyyy', { locale: id }) ?? '-'}</div>;
+      const examScore = row?.original?.exam_score || 0 * 0.7
+      const taskScore = row?.original?.tasks_score || 0 * 0.3
+      return <div>{examScore + taskScore}</div>;
     },
   },
+  // {
+  //   accessorKey: "date_created",
+  //   header: "Mulai Pembelajaran",
+  //   cell: ({ row }) => {
+  //     return <div>{format(new Date(row?.original.date_created), 'dd MMMM yyyy', { locale: id }) ?? '-'}</div>;
+  //   },
+  // },
 ];
