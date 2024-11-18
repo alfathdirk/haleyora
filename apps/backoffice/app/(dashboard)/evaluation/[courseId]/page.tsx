@@ -151,6 +151,7 @@ export default function Page() {
           members={members}
           currentUser={currentUser}
           // onFilterChange={handleFilterChange}
+          onFilterChange={() => {}}
           courseId={courseId}
         />
       </div>
