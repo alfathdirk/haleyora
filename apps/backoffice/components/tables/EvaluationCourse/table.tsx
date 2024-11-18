@@ -12,6 +12,7 @@ import SelectFilterUnit from "@/components/SelectFilterUnit";
 export const EvaluationCourseTable = ({
   members,
   onFilterChange,
+  onDataChange,
   courseId,
 }: any) => {
   const fetch = useDirectusFetch();
@@ -162,6 +163,10 @@ export const EvaluationCourseTable = ({
         const formattedData = Object.keys(employeeScores).map((employeeId) => {
           return { ...employeeScores[employeeId] };
         });
+
+        if (onDataChange) {
+          onDataChange(formattedData)
+        }
 
         setAllData(formattedData);
         setTotalItems(formattedData.length);
