@@ -6,6 +6,7 @@ import { CourseForm } from "@/components/forms/CourseForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { useParams } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
   const fetch = useDirectusFetch();

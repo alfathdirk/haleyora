@@ -32,6 +32,7 @@ import { Checkbox } from "../ui/checkbox";
 import { AlertModal } from "../modal/alert-modal";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import FileUpload from "../FileUpload";
+import { CourseAvailabilityTable } from "@/app/(dashboard)/course/[courseId]/components/table/CourseAvailabilityTable";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
@@ -548,6 +549,9 @@ export const CourseForm: React.FC<ProductFormProps> = ({
               />
             </div>
           </div>
+
+          <CourseAvailabilityTable courseId={initialData?.id ?? 'ppp'} />
+
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
