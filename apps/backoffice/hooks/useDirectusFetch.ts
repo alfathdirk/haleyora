@@ -111,7 +111,7 @@ export const useDirectusFetch = (): DirectusFetchMethods => {
     const finalOptions: RequestInit = {
       method,
       headers: new Headers({ ...defaultHeaders, ...headers }),
-      body: ["POST", "PUT", "PATCH"].includes(method) ? finalBody : null,
+      body: ["POST", "PUT", "PATCH", "DELETE"].includes(method) ? finalBody : null,
     };
 
     try {
