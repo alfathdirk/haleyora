@@ -35,10 +35,10 @@ import { DateRange } from "react-day-picker";
 import { CalendarDateRangePicker } from "@/components/date-range-picker";
 
 const formSchema = z.object({
-  entity: z.string(),
-  entity_name: z.string(),
-  start_date: z.string().nullable(),
-  end_date: z.string().nullable(),
+  entity: z.string().min(1, "Entitas harus dipilih."),
+  entity_name: z.string().min(1, "Nama entitas harus dipilih."),
+  start_date: z.string().min(1, "Tanggal mulai harus dipilih."),
+  end_date: z.string().min(1, "Tanggal berakhir harus dipilih."),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -48,17 +48,23 @@ export default function CourseAvailabilityFormDialog({
   triggerTitle,
   dialogTriggerProps,
   onSubmitCallback,
+  allData,
+  setAllData,
 }: {
   courseId: string;
   triggerTitle?: React.ReactNode | string;
   dialogTriggerProps?: ButtonProps;
   onSubmitCallback?: () => void;
+  allData: any[];
+  setAllData: (data: any[]) => void;
 }) {
   const fetch = useDirectusFetch();
 
   const [loading, setLoading] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
-  const [entityNames, setEntityNames] = useState<{ id: string; value: string }[]>([]);
+  const [entityNames, setEntityNames] = useState<
+    { id: string; value: string }[]
+  >([]);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const form = useForm<FormValues>({
@@ -66,14 +72,16 @@ export default function CourseAvailabilityFormDialog({
     defaultValues: {
       entity: "",
       entity_name: "",
-      start_date: null,
-      end_date: null,
+      start_date: "",
+      end_date: "",
     },
   });
 
   const fetchEnitityNames = async () => {
     const selectedEntity = form.getValues("entity");
-    const employeeKey = CourseAvailabilityArray.find((item) => item.id === selectedEntity)?.employee_key;
+    const employeeKey = CourseAvailabilityArray.find(
+      (item) => item.id === selectedEntity,
+    )?.employee_key;
 
     if (!employeeKey) return;
 
@@ -87,9 +95,10 @@ export default function CourseAvailabilityFormDialog({
 
     setLoading(true);
     try {
-      const { data: res }: { data: { data: Record<string, string | null>[] } } = await fetch.get("items/employee", {
-        params: { fields: [employeeKey], groupBy: employeeKey },
-      });
+      const { data: res }: { data: { data: Record<string, string | null>[] } } =
+        await fetch.get("items/employee", {
+          params: { fields: [employeeKey], groupBy: employeeKey },
+        });
 
       const groupedEntities = res?.data
         ?.map((item) => ({
@@ -116,38 +125,43 @@ export default function CourseAvailabilityFormDialog({
     } else {
       form.reset();
       setEntityNames([]);
-      form.setValue("entity_name", "");
+      setDateRange(undefined);
     }
   }, [showFormModal, form.watch("entity")]);
 
-  const onSubmit = async (data: FormValues) => {
-    setLoading(true);
+  const handleAddAvailability = async () => {
+    const values = form.getValues();
 
-    try {
-      await fetch.post("items/course_avaibility", {
-        body: { ...data, course: courseId },
+    const result = formSchema.safeParse(values);
+
+    if (!result.success) {
+      const errors = result.error.flatten().fieldErrors;
+      console.error("Validation errors:", errors);
+
+      Object.entries(errors).forEach(([field, messages]) => {
+        if (messages?.[0]) {
+          form.setError(field as keyof FormValues, {
+            type: "manual",
+            message: messages[0],
+          });
+        }
       });
 
-      if (onSubmitCallback) {
-        onSubmitCallback();
-      }
-
-      toast({
-        variant: "success",
-        title: "Berhasil!",
-        description: `Berhasil menambahkan jadwal.`,
-      });
-
-      setShowFormModal(false);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Gagal!",
-        description: error.message || "Terjadi kesalahan.",
-      });
-    } finally {
-      setLoading(false);
+      return; // Stop if validation fails
     }
+
+    const { from, to } = dateRange || {};
+    const availabilityEntry = {
+      ...result.data, // Safe, validated data
+      start_date: from?.toISOString() || "",
+      end_date: to?.toISOString() || "",
+    };
+
+    setAllData([...allData, availabilityEntry]);
+    setShowFormModal(false);
+    form.reset();
+    setEntityNames([]);
+    setDateRange(undefined);
   };
 
   return (
@@ -163,17 +177,7 @@ export default function CourseAvailabilityFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            id="category-form"
-            onSubmit={form.handleSubmit((data) =>
-              onSubmit({
-                ...data,
-                start_date: dateRange?.from?.toISOString() || null,
-                end_date: dateRange?.to?.toISOString() || null,
-              })
-            )}
-            className="w-full space-y-4"
-          >
+          <form id="form-course-availability" className="w-full space-y-4">
             <FormField
               control={form.control}
               name="entity"
@@ -252,19 +256,22 @@ export default function CourseAvailabilityFormDialog({
                 selectedRange={dateRange}
                 onChange={(range) => {
                   setDateRange(range);
-                  // Update form values directly
-                  form.setValue('start_date', range?.from?.toISOString() || null);
-                  form.setValue('end_date', range?.to?.toISOString() || null);
+                  form.setValue("start_date", range?.from?.toISOString() || "");
+                  form.setValue("end_date", range?.to?.toISOString() || "");
                 }}
               />
               <FormMessage />
             </FormItem>
-
           </form>
         </Form>
 
         <DialogFooter>
-          <Button type="submit" size="sm" form="category-form">
+          <Button
+            type="button"
+            size="sm"
+            form="form-course-availability"
+            onClick={handleAddAvailability}
+          >
             Simpan
           </Button>
         </DialogFooter>

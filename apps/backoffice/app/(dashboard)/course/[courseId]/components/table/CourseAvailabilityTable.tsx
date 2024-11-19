@@ -1,11 +1,8 @@
 "use client";
 
 import { DataTable } from "@/components/ui/data-table";
-// import { Input } from "@/components/ui/input";
-// import { LucideSearch } from "lucide-react";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-import { debounce } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import CourseAvailabilityFormDialog from "../dialog/CourseAvailabilityFormDialog";
 import { Button } from "@/components/ui/button";
@@ -15,29 +12,21 @@ import id from "date-fns/locale/id";
 import { CourseAvailability } from "@/types/courseAvailability";
 import { CourseAvailabilityType } from "@/constants/course_avaibility";
 
-export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
+export const CourseAvailabilityTable = ({
+  courseId,
+  setAvailabilityData,
+}: {
+  courseId: string;
+  setAvailabilityData: (data: any[]) => void;
+}) => {
   const fetch = useDirectusFetch();
 
-  const [data, setData] = useState<any>([]);
+  const [allData, setAllData] = useState<any[]>([]); // Store all data here
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
-  const [searchValue, setSearchValue] = useState("");
 
-  const onInputChange = useCallback((nextValue: string) => {
-    setSearchValue(nextValue);
-    setCurrentPage(1);
-  }, []);
-
-  const debouncedSearchChange = useMemo(
-    () => debounce(onInputChange, 500),
-    [onInputChange],
-  );
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = event.target.value;
-    debouncedSearchChange(nextValue);
-  };
+  // Total items count
+  const totalItems = allData.length;
 
   const columns: ColumnDef<CourseAvailability>[] = [
     {
@@ -87,24 +76,22 @@ export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
         return (
           <DeleteAction
             data={row.original}
-            onConfirmCallback={() => fetchData()}
+            onConfirmCallback={handleRemoveFromData}
           />
         );
       },
     },
   ];
 
+  const handleRemoveFromData = (data: any) => {
+    const updatedData = allData.filter((item) => item.id !== data.id);
+    setAllData(updatedData); // Update the state in the parent component
+  };
+
+  // Fetch all data once
   const fetchData = async function () {
     try {
       let filters = { course: { _eq: courseId } };
-
-      // if (searchValue) {
-      //   Object.assign(filters, {
-      //     course: {
-      //       title: { _contains: searchValue },
-      //     },
-      //   });
-      // }
 
       const { data: res } = await fetch.get("items/course_availability", {
         params: {
@@ -116,15 +103,11 @@ export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
             "start_date",
             "end_date",
           ],
-          limit: pageSize,
-          offset: (currentPage - 1) * pageSize,
           filter: filters,
-          meta: "total_count,filter_count",
         },
       });
 
-      setTotalItems(res?.meta?.filter_count);
-      setData(res?.data ?? []);
+      setAllData(res?.data ?? []); // Store all data locally
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
@@ -134,7 +117,19 @@ export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, pageSize, searchValue, courseId]);
+  }, [courseId]);
+
+  // Update setAvailabilityData when allData changes
+  useEffect(() => {
+    setAvailabilityData(allData);
+  }, [allData, setAvailabilityData]);
+
+  // Calculate paginated data using useMemo
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return allData.slice(start, end); // Get only the current page's items
+  }, [allData, currentPage, pageSize]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -144,18 +139,12 @@ export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
     return (
       <div className="flex items-center justify-between w-full">
         <div className="pr-4">
-          {/* <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
-            <LucideSearch className="w-6 h-6 text-[#959595]" />
-            <Input
-              className="!border-none shadow-none px-0 focus-visible:!ring-0"
-              placeholder="Search"
-              onChange={handleInputChange}
-            />
-          </div> */}
           <div className="mt-4 text-lg font-normal">Jadwal Ketersediaan</div>
         </div>
         <CourseAvailabilityFormDialog
           courseId={courseId}
+          allData={allData}
+          setAllData={setAllData}
           triggerTitle={
             <Button
               type="button"
@@ -179,7 +168,7 @@ export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
   return (
     <DataTable
       columns={columns}
-      data={data}
+      data={paginatedData} // Pass paginated data to the table
       canChangeLayout={false}
       headerActions={headerActions}
       currentPage={currentPage}

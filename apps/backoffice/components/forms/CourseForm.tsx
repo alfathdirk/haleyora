@@ -75,6 +75,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [availabilityData, setAvailabilityData] = useState<any[]>([]);
 
   const title = initialData
     ? `Ubah ${initialData?.title ?? ""}`
@@ -550,7 +551,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
             </div>
           </div>
 
-          <CourseAvailabilityTable courseId={initialData?.id ?? 'ppp'} />
+          <CourseAvailabilityTable courseId={initialData?.id ?? 'ppp'} setAvailabilityData={setAvailabilityData} />
 
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
