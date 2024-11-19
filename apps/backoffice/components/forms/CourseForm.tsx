@@ -171,21 +171,21 @@ export const CourseForm: React.FC<ProductFormProps> = ({
             }
           }
         });
-
-        const payload = availabilityData.map((item) => {
-          return {
-            course: initialData?.id,
-            entity: item?.entity,
-            entity_name: item?.entity_name,
-            start_date: item?.start_date,
-            end_date: item?.end_date,
-          }
-        })
-
-        await fetch.post("items/course_availability", {
-          body: payload,
-        });
       }
+
+      const payload = availabilityData.map((item) => {
+        return {
+          course: initialData?.id,
+          entity: item?.entity,
+          entity_name: item?.entity_name,
+          start_date: item?.start_date,
+          end_date: item?.end_date,
+        }
+      })
+
+      await fetch.post("items/course_availability", {
+        body: payload,
+      });
 
       toast({
         variant: "success",
