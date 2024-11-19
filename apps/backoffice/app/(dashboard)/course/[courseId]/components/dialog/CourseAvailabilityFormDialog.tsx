@@ -17,7 +17,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -32,12 +31,14 @@ import {
 } from "@/components/ui/select";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { CourseAvailabilityArray } from "@/constants/course_avaibility";
+import { DateRange } from "react-day-picker";
+import { CalendarDateRangePicker } from "@/components/date-range-picker";
 
 const formSchema = z.object({
   entity: z.string(),
   entity_name: z.string(),
-  start_date: z.string(),
-  end_date: z.string(),
+  start_date: z.string().nullable(),
+  end_date: z.string().nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,48 +58,48 @@ export default function CourseAvailabilityFormDialog({
 
   const [loading, setLoading] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
-  const [entityNames, setEntityNames] = useState<any[]>([]);
+  const [entityNames, setEntityNames] = useState<{ id: string; value: string }[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    shouldFocusError: true,
-    shouldUnregister: false,
-    shouldUseNativeValidation: false,
+    defaultValues: {
+      entity: "",
+      entity_name: "",
+      start_date: null,
+      end_date: null,
+    },
   });
 
   const fetchEnitityNames = async () => {
-    const selectedEntity = form.getValues('entity'); // Get the selected entity
+    const selectedEntity = form.getValues("entity");
     const employeeKey = CourseAvailabilityArray.find((item) => item.id === selectedEntity)?.employee_key;
 
-    if (!employeeKey) {
-      return;
-    }
+    if (!employeeKey) return;
 
     if (selectedEntity === "All") {
-      // If entity is "All", set entity_name to "All" and skip fetching
       setEntityNames([{ id: "All", value: "All" }]);
-      form.setValue('entity_name', 'All');
+      form.setValue("entity_name", "All");
       return;
+    } else {
+      form.setValue("entity_name", ""); // Reset entity_name for other selections
     }
 
     setLoading(true);
     try {
-      // Fetch entities dynamically based on the selected employee_key
       const { data: res }: { data: { data: Record<string, string | null>[] } } = await fetch.get("items/employee", {
         params: { fields: [employeeKey], groupBy: employeeKey },
       });
 
-      // Map and filter results based on the employee_key
       const groupedEntities = res?.data
         ?.map((item) => ({
           id: item[employeeKey] ?? "",
           value: item[employeeKey] ?? "",
         }))
-        .filter((entity) => entity.id); // Exclude entries with empty IDs
+        .filter((entity) => entity.id);
 
-      setEntityNames(groupedEntities); // Update state with the grouped data
+      setEntityNames(groupedEntities);
     } catch (error) {
-      console.error("Error fetching entity names:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -111,12 +112,13 @@ export default function CourseAvailabilityFormDialog({
 
   useEffect(() => {
     if (showFormModal) {
-      fetchEnitityNames(); // Fetch grouped entities when modal opens or entity changes
+      fetchEnitityNames();
     } else {
-      form.reset(); // Reset the form when modal closes
-      setEntityNames([]); // Clear entity names
+      form.reset();
+      setEntityNames([]);
+      form.setValue("entity_name", "");
     }
-  }, [showFormModal, form.watch('entity')]); // Watch 'entity' for changes
+  }, [showFormModal, form.watch("entity")]);
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
@@ -163,7 +165,13 @@ export default function CourseAvailabilityFormDialog({
         <Form {...form}>
           <form
             id="category-form"
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit((data) =>
+              onSubmit({
+                ...data,
+                start_date: dateRange?.from?.toISOString() || null,
+                end_date: dateRange?.to?.toISOString() || null,
+              })
+            )}
             className="w-full space-y-4"
           >
             <FormField
@@ -187,7 +195,6 @@ export default function CourseAvailabilityFormDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* @ts-ignore  */}
                       {CourseAvailabilityArray?.map((option) => (
                         <SelectItem key={option.id} value={option.id}>
                           {option.value}
@@ -221,22 +228,43 @@ export default function CourseAvailabilityFormDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {entityNames?.map((option) => (
-                        <SelectItem key={option.id} value={option.id}>
-                          {option.value}
+                      {entityNames.length > 0 ? (
+                        entityNames.map((option) => (
+                          <SelectItem key={option.id} value={option.id}>
+                            {option.value}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem disabled value="">
+                          No options available
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            <FormItem>
+              <FormLabel required>Tanggal Mulai dan Berakhir</FormLabel>
+              <CalendarDateRangePicker
+                selectedRange={dateRange}
+                onChange={(range) => {
+                  setDateRange(range);
+                  // Update form values directly
+                  form.setValue('start_date', range?.from?.toISOString() || null);
+                  form.setValue('end_date', range?.to?.toISOString() || null);
+                }}
+              />
+              <FormMessage />
+            </FormItem>
+
           </form>
         </Form>
 
         <DialogFooter>
-          <Button type="button" size="sm" form="category-form">
+          <Button type="submit" size="sm" form="category-form">
             Simpan
           </Button>
         </DialogFooter>
