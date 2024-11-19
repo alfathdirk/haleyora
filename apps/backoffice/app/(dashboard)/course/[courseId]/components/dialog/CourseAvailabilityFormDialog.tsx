@@ -156,7 +156,7 @@ export default function CourseAvailabilityFormDialog({
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="mb-4">
           <DialogTitle>Tambah Jadwal Ketersediaan</DialogTitle>
         </DialogHeader>
 
@@ -164,13 +164,14 @@ export default function CourseAvailabilityFormDialog({
           <form
             id="category-form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-8"
+            className="w-full space-y-4"
           >
             <FormField
               control={form.control}
               name="entity"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel required>Entitas</FormLabel>
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
@@ -204,6 +205,7 @@ export default function CourseAvailabilityFormDialog({
               name="entity_name"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel required>Nama Entitas</FormLabel>
                   <Select
                     disabled={loading || !entityNames.length}
                     onValueChange={field.onChange}
@@ -234,7 +236,7 @@ export default function CourseAvailabilityFormDialog({
         </Form>
 
         <DialogFooter>
-          <Button type="submit" size="sm" form="category-form">
+          <Button type="button" size="sm" form="category-form">
             Simpan
           </Button>
         </DialogFooter>
