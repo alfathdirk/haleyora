@@ -1,4 +1,4 @@
-export const CourseAvaibilityType = {
+export const CourseAvailabilityType = {
   All: 'All',
   unit_pelaksana_region: 'Unit Pelaksana (Region)',
   unit_layanan: 'Unit Layanan',
@@ -7,7 +7,7 @@ export const CourseAvaibilityType = {
   penempatan: 'Penempatan',
 }
 
-export const CourseAvaibilityToEmployee = {
+export const CourseAvailabilityToEmployee = {
   All: 'All',
   unit_pelaksana_region: 'unit_pln',
   unit_layanan: 'unit',
@@ -16,7 +16,7 @@ export const CourseAvaibilityToEmployee = {
   penempatan: 'position',
 }
 
-export const CourseAvaibilityArray = [
+export const CourseAvailabilityArray = [
   {
     id: 'All',
     value: 'All',

@@ -12,14 +12,10 @@ import { Button } from "@/components/ui/button";
 import { DeleteAction } from "../delete-action";
 import { format } from "date-fns";
 import id from "date-fns/locale/id";
-import { CourseAvaibility } from "@/types/courseAvailbility";
-import {CourseAvaibilityType} from "@/constants/course_avaibility";
+import { CourseAvailability } from "@/types/courseAvailability";
+import { CourseAvailabilityType } from "@/constants/course_avaibility";
 
-export const CourseAvailabilityTable = ({
-  courseId,
-}: {
-  courseId: string;
-}) => {
+export const CourseAvailabilityTable = ({ courseId }: { courseId: string }) => {
   const fetch = useDirectusFetch();
 
   const [data, setData] = useState<any>([]);
@@ -43,12 +39,12 @@ export const CourseAvailabilityTable = ({
     debouncedSearchChange(nextValue);
   };
 
-  const columns: ColumnDef<CourseAvaibility>[] = [
+  const columns: ColumnDef<CourseAvailability>[] = [
     {
       accessorKey: "entity",
       header: "Entitas",
       cell: ({ row }) => {
-        return <div>{CourseAvaibilityType[row?.original?.entity] ?? ""}</div>;
+        return <div>{CourseAvailabilityType[row?.original?.entity] ?? ""}</div>;
       },
     },
     {
@@ -62,14 +58,26 @@ export const CourseAvailabilityTable = ({
       accessorKey: "start_date",
       header: "Tanggal Mulai",
       cell: ({ row }) => {
-        return <div>{format(new Date(row?.original.start_date), 'dd MMMM yyyy', { locale: id }) ?? '-'}</div>;
+        return (
+          <div>
+            {format(new Date(row?.original.start_date), "dd MMMM yyyy", {
+              locale: id,
+            }) ?? "-"}
+          </div>
+        );
       },
     },
     {
       accessorKey: "end_date",
       header: "Tanggal Berakhir",
       cell: ({ row }) => {
-        return <div>{format(new Date(row?.original.end_date), 'dd MMMM yyyy', { locale: id }) ?? '-'}</div>;
+        return (
+          <div>
+            {format(new Date(row?.original.end_date), "dd MMMM yyyy", {
+              locale: id,
+            }) ?? "-"}
+          </div>
+        );
       },
     },
     {
@@ -83,7 +91,7 @@ export const CourseAvailabilityTable = ({
           />
         );
       },
-    }
+    },
   ];
 
   const fetchData = async function () {
@@ -98,25 +106,22 @@ export const CourseAvailabilityTable = ({
       //   });
       // }
 
-      const { data: res } = await fetch.get(
-        "items/course_availability",
-        {
-          params: {
-            fields: [
-              "id",
-              "course.id",
-              "entity",
-              "entity_name",
-              "start_date",
-              "end_date",
-            ],
-            limit: pageSize,
-            offset: (currentPage - 1) * pageSize,
-            filter: filters,
-            meta: "total_count,filter_count",
-          },
+      const { data: res } = await fetch.get("items/course_availability", {
+        params: {
+          fields: [
+            "id",
+            "course.id",
+            "entity",
+            "entity_name",
+            "start_date",
+            "end_date",
+          ],
+          limit: pageSize,
+          offset: (currentPage - 1) * pageSize,
+          filter: filters,
+          meta: "total_count,filter_count",
         },
-      );
+      });
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
@@ -152,7 +157,12 @@ export const CourseAvailabilityTable = ({
         <CourseAvailabilityFormDialog
           courseId={courseId}
           triggerTitle={
-            <Button type="button" size={'sm'} className="" variant={"secondary"}>
+            <Button
+              type="button"
+              size={"sm"}
+              className=""
+              variant={"secondary"}
+            >
               Tambah
             </Button>
           }

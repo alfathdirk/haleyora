@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button, ButtonProps } from "@/components/ui/button";
-import { CourseAvaibilityArray } from "@/constants/course_avaibility";
+import { CourseAvailabilityArray } from "@/constants/course_avaibility";
 
 const formSchema = z.object({
   entity: z.string(),
@@ -68,7 +68,7 @@ export default function CourseAvailabilityFormDialog({
 
   const fetchEnitityNames = async () => {
     const selectedEntity = form.getValues('entity'); // Get the selected entity
-    const employeeKey = CourseAvaibilityArray.find((item) => item.id === selectedEntity)?.employee_key;
+    const employeeKey = CourseAvailabilityArray.find((item) => item.id === selectedEntity)?.employee_key;
 
     if (!employeeKey) {
       return;
@@ -188,7 +188,7 @@ export default function CourseAvailabilityFormDialog({
                     </FormControl>
                     <SelectContent>
                       {/* @ts-ignore  */}
-                      {CourseAvaibilityArray?.map((option) => (
+                      {CourseAvailabilityArray?.map((option) => (
                         <SelectItem key={option.id} value={option.id}>
                           {option.value}
                         </SelectItem>

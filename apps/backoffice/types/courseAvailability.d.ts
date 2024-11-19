@@ -2,7 +2,7 @@ import { Course } from "./course";
 
 export interface Data {
   meta?: Meta;
-  data: CourseAvaibility[];
+  data: CourseAvailability[];
 }
 
 export interface Meta {
@@ -10,7 +10,7 @@ export interface Meta {
   filter_count: number;
 }
 
-export interface CourseAvaibility {
+export interface CourseAvailability {
   id: string;
   course: Course;
   entity: CourseAvailabilityEntity;
