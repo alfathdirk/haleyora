@@ -32,6 +32,7 @@ import { Checkbox } from "../ui/checkbox";
 import { AlertModal } from "../modal/alert-modal";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import FileUpload from "../FileUpload";
+import { CourseAvailabilityTable } from "@/app/(dashboard)/course/[courseId]/components/table/CourseAvailabilityTable";
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Judul harus di isi." }),
@@ -74,6 +75,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [availabilityData, setAvailabilityData] = useState<any[]>([]);
 
   const title = initialData
     ? `Ubah ${initialData?.title ?? ""}`
@@ -156,7 +158,34 @@ export const CourseForm: React.FC<ProductFormProps> = ({
           body: cleanedData,
         });
         notify.description = `Materi pembelajaran ${data?.title} telah diubah.`;
+
+        // Delete all first
+        await fetch.delete("items/course_availability", {
+          body: {
+            query: {
+              filter: {
+                course: {
+                  _eq: initialData?.id
+                }
+              }
+            }
+          }
+        });
       }
+
+      const payload = availabilityData.map((item) => {
+        return {
+          course: initialData?.id,
+          entity: item?.entity,
+          entity_name: item?.entity_name,
+          start_date: item?.start_date,
+          end_date: item?.end_date,
+        }
+      })
+
+      await fetch.post("items/course_availability", {
+        body: payload,
+      });
 
       toast({
         variant: "success",
@@ -548,6 +577,9 @@ export const CourseForm: React.FC<ProductFormProps> = ({
               />
             </div>
           </div>
+
+          <CourseAvailabilityTable courseId={initialData?.id ?? 'ppp'} setAvailabilityData={setAvailabilityData} />
+
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
