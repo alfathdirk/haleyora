@@ -17,7 +17,6 @@ export interface CourseAvailability {
   entity_name: string;
   start_date: string;
   end_date: string;
-  verified: boolean;
 }
 
 export type CourseAvailabilityEntity =
