@@ -56,8 +56,10 @@ export const columns: ColumnDef<Employee>[] = [
       let totalExamScore = 0;
 
       row.original?.employee_course?.map((course) => {
-        totalQuiz += 1;
-        totalExamScore += Number(course?.exam_score ?? 0);
+        if (course?.completed) {
+          totalQuiz += 1;
+          totalExamScore += Number(course?.exam_score ?? 0);
+        }
       })
 
       const averageExamScore = totalQuiz > 0 ? totalExamScore / totalQuiz : 0;
@@ -79,8 +81,10 @@ export const columns: ColumnDef<Employee>[] = [
       let totalTasksScore = 0;
 
       row.original?.employee_course?.map((course) => {
-        totalTasks += 1;
-        totalTasksScore += Number(course?.tasks_score ?? 0);
+        if (course?.completed) {
+          totalTasks += 1;
+          totalTasksScore += Number(course?.tasks_score ?? 0);
+        }
       })
 
       const averageTaskScore = totalTasks > 0 ? totalTasksScore / totalTasks : 0;

@@ -6,6 +6,7 @@ import { CourseForm } from "@/components/forms/CourseForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { useParams } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
   const fetch = useDirectusFetch();
@@ -75,6 +76,7 @@ export default function Page() {
           is_open_task: res?.data?.is_open_task,
           task_description: res?.data?.task_description,
           description: res?.data?.description ?? "",
+          video_content_link: res?.data?.video_content_link ?? "",
           min_score: String(res?.data?.min_score) ?? "",
           status: res?.data?.status ?? "",
         });

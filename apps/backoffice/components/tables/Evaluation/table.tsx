@@ -1,27 +1,19 @@
 "use client";
 
-import {
-  SetStateAction,
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-  useContext,
-} from "react";
+import { SetStateAction, useEffect, useState, useMemo, useCallback } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
 import { columns } from "./columns";
-import { cardColumns } from "./columns-card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import SelectFilterUnit from "@/components/SelectFilterUnit";
 import { CalendarDateRangePicker } from "@/components/date-range-picker";
 import { startOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { useRouter } from "next/navigation";
 
-export const EmployeesTable = ({
+export const EvaluationTable = ({
   members,
   currentUser,
   onFilterChange,
@@ -29,7 +21,7 @@ export const EmployeesTable = ({
   const fetch = useDirectusFetch();
   const router = useRouter();
 
-  const [currentLayout, setCurrentLayout] = useState<"card" | "table">("table");
+  const [fetching, setFetching] = useState(true);
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -76,66 +68,120 @@ export const EmployeesTable = ({
   };
 
   async function fetchData() {
-    try {
-      let deep = {};
-      const filters: any = {
-        ...(searchValue && { full_name: { _contains: searchValue } }),
-        ...(selectedUnit?.id && { unit_pln: { _eq: selectedUnit?.id } }),
+    setFetching(true);
+
+    const filters: any = {
+      completed: { _eq: 1 },
+      ...(searchValue && { course: { title: { _contains: searchValue } } }),
+      ...(selectedUnit?.id && { employee: { unit_pln: { _eq: selectedUnit?.id } } }),
+    };
+
+    if (dateRange?.from && dateRange?.to) {
+      filters.date_created = {
+        _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
       };
+    }
 
-      if (dateRange?.from && dateRange?.to) {
-        deep = {
-          employee_course: {
-            _filter: {
-              date_created: {
-                _between: [
-                  dateRange.from.toISOString(),
-                  dateRange.to.toISOString(),
-                ],
-              },
-            },
+    try {
+      const { data: employeeCourses } = await fetch.get(
+        "items/employee_course",
+        {
+          params: {
+            fields: [
+              "id",
+              "exam_score",
+              "tasks_score",
+              "course.id",
+              "course.title",
+              "course.is_open_exam",
+              "course.is_open_task",
+              "employee.employee_id",
+              "employee.unit_pln",
+              "employee.unit",
+            ],
+            filter: filters,
           },
-        };
-      }
-
-      if (!["Administrator", "Admin Pusat"].includes(currentUser?.role?.name)) {
-        filters.employee_id = { _in: members };
-      }
-
-      const sortParams = sortingFields.map(
-        (field) => `${field.desc ? "-" : ""}${field.id}`,
+        },
       );
 
-      const { data: res } = await fetch.get("items/employee", {
-        params: {
-          fields: [
-            "id",
-            "employee_id",
-            "email",
-            "full_name",
-            "status",
-            "employee_course.id",
-            "employee_course.completed",
-            "employee_course.exam_score",
-            "employee_course.tasks_score",
-            "employee_course.date_created",
-          ],
-          limit: pageSize,
-          offset: (currentPage - 1) * pageSize,
-          filter: filters,
-          sort: sortParams,
-          meta: "total_count,filter_count",
-          deep,
+      const courseScores = employeeCourses?.data?.reduce(
+        (
+          acc: Record<
+            string,
+            {
+              title: string;
+              passedCount: number;
+              notPassedCount: number;
+            }
+          >,
+          course: any,
+        ) => {
+          const courseId = course.course.id;
+          const title = course.course.title;
+          const examScore = course.exam_score || 0;
+          const tasksScore = course.tasks_score || 0;
+          const isOpenExam = course.course.is_open_exam;
+          const isOpenTask = course.course.is_open_task;
+
+          // Initialize course data if not already present
+          if (!acc[courseId]) {
+            acc[courseId] = {
+              title,
+              passedCount: 0,
+              notPassedCount: 0,
+            };
+          }
+
+          // Apply the pass/fail evaluation formula
+          const examEvaluation = isOpenExam ? (examScore / 100) * 70 : 0;
+          const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
+          const totalEvaluation = examEvaluation + taskEvaluation;
+
+          // Increment pass/fail counts based on total evaluation
+          if (totalEvaluation >= 70) {
+            acc[courseId].passedCount += 1;
+          } else {
+            acc[courseId].notPassedCount += 1;
+          }
+
+          return acc;
         },
+        {},
+      );
+
+      // Format data to include pass percentage
+      const formattedData = Object.keys(courseScores).map((courseId) => {
+        const { title, passedCount, notPassedCount } = courseScores[courseId];
+        const totalEvaluations = passedCount + notPassedCount;
+        const passPercentage =
+          totalEvaluations > 0 ? (passedCount / totalEvaluations) * 100 : 0;
+        const notPassPercentage = 100 - passPercentage;
+
+        return {
+          id: courseId,
+          title,
+          pass_percentage: passPercentage.toFixed(2), // Pass percentage
+          not_pass_percentage: notPassPercentage.toFixed(2), // Not pass percentage
+        };
       });
 
-      setTotalItems(res?.meta?.filter_count);
-      setData(res?.data ?? []);
+      setData(formattedData);
+      setTotalItems(formattedData.length);
+      setFetching(false);
+      updatePaginatedData(formattedData, currentPage, pageSize);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+    } finally {
+      setFetching(false);
     }
   }
+
+  // Updates paginated data based on current page and page size
+  const updatePaginatedData = (allData: any[], page: number, size: number) => {
+    const startIndex = (page - 1) * size;
+    const paginatedData = allData.slice(startIndex, startIndex + size);
+    setData(paginatedData);
+  };
 
   useEffect(() => {
     fetchData();
@@ -147,7 +193,7 @@ export const EmployeesTable = ({
     members,
     selectedUnit,
     sortingFields,
-    dateRange,
+    dateRange
   ]);
 
   const handlePageChange = (page: number) => {
@@ -192,9 +238,8 @@ export const EmployeesTable = ({
 
   return (
     <DataTable
-      layout={currentLayout}
-      columns={currentLayout === "card" ? cardColumns : columns}
-      onLayoutChange={(val: any) => setCurrentLayout(val)}
+      layout="table"
+      columns={columns}
       canChangeLayout={false}
       data={data}
       headerActions={headerActions}
@@ -204,14 +249,12 @@ export const EmployeesTable = ({
       onPageChange={handlePageChange}
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
-      cardContainerStyles="!grid-cols-3 gap-8 py-4 pr-8"
-      cardStyles="p-4 rounded-xl shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] border border-[#F4F4F4] bg-[#F9FAFC] group hover:bg-[#F5F9FF] transition-all ease-in-out duration-500 cursor-pointer"
+      onSortChange={handleSortChange}
       onClickRow={(item) =>
         router.push(
-          `/employees/${item?.id}?name=${encodeURIComponent(item?.full_name)}`,
+          `/evaluation/${item?.id}?name=${encodeURIComponent(item?.title)}`,
         )
       }
-      onSortChange={handleSortChange}
     />
   );
 };

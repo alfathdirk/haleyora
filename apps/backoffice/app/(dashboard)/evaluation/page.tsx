@@ -8,8 +8,7 @@ import { AuthContext } from "@/provider/Auth";
 import { useContext } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
-import { DownloadCloud } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { EvaluationTable } from "@/components/tables/Evaluation/table";
 
 export default function Page() {
   const { members, currentUser } = useContext(AuthContext);
@@ -104,28 +103,16 @@ export default function Page() {
     setFilters(newFilters);
   };
 
-  const handleExport = () => {
-
-  }
-
   return (
     <>
       <div className="flex-1 space-y-2">
-        <BreadCrumb items={[{ title: "Karyawan", link: "/employees" }]} />
+        <BreadCrumb items={[{ title: "Evaluasi", link: "/evaluation" }]} />
 
-        <div className="flex items-end justify-between !mb-10">
-          <Heading title={`Karyawan`} description="Manajemen Karyawan" />
-          <div>
-            <Button
-              className="text-xs md:text-sm"
-              onClick={handleExport}
-            >
-              <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
-            </Button>
-          </div>
+        <div className="flex items-start justify-between !mb-10">
+          <Heading title={`Evaluasi`} description="Evaluasi Pembelajaran" />
         </div>
 
-        <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
+        {/* <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
@@ -156,9 +143,9 @@ export default function Page() {
               <div className="text-2xl font-bold">{totalAvgTaskScore}</div>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
 
-        <EmployeesTable
+        <EvaluationTable
           members={members}
           currentUser={currentUser}
           onFilterChange={handleFilterChange}

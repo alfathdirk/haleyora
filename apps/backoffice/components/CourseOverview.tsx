@@ -6,8 +6,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { DateRange } from "react-day-picker";
 
 interface Props {
-  selectedUnit: string | null;
-  selectedCourse: string | null;
+  selectedUnit: { id: string; title: string } | null;
+  selectedCourse: { id: string; title: string } | null;
   dateRange: DateRange | undefined;
 }
 
@@ -29,56 +29,59 @@ export function CourseOverview({
         completed: { _eq: 1 },
       };
 
-      if (selectedUnit) {
-        // filters.unit_id = { _eq: selectedUnit };
+      if (selectedUnit?.id) {
+        filters.employee = { unit_pln: { _eq: selectedUnit?.id } };
       }
-      if (selectedCourse) {
-        filters.course = { _eq: selectedCourse };
+
+      if (selectedCourse?.id) {
+        filters.course = { _eq: selectedCourse?.id };
       }
+
       if (dateRange?.from && dateRange?.to) {
         filters.date_created = {
           _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
         };
+
+        const { data: resTotalCompleted } = await fetch.get("items/employee_course", {
+          params: {
+            filter: JSON.stringify(filters),
+            aggregate: JSON.stringify({ count: "id" }),
+          },
+        });
+
+        const { data: resTotalOngoing } = await fetch.get("items/employee_course", {
+          params: {
+            filter: JSON.stringify({
+              ...filters,
+              completed: { _eq: 0 },
+              exam_score: { _eq: 0 },
+              exam_attempt: { _lte: 3 },
+            }),
+            aggregate: JSON.stringify({ count: "id" }),
+          },
+        });
+
+        const { data: resTotalQuizTaken } = await fetch.get("items/employee_course", {
+          params: {
+            filter: JSON.stringify({
+              ...filters,
+              completed: { _eq: 1 },
+              exam_score: { _lte: 0 },
+            }),
+            aggregate: JSON.stringify({ count: "id" }),
+          },
+        });
+
+        setSummary([
+          { name: "Selesai", value: resTotalCompleted.data[0].count.id || 0 },
+          { name: "Ujian", value: resTotalQuizTaken.data[0].count.id || 0 },
+          {
+            name: "Sedang Berjalan",
+            value: resTotalOngoing.data[0].count.id || 0,
+          },
+        ]);
+
       }
-
-      const { data: resTotalCompleted } = await fetch.get("items/employee_course", {
-        params: {
-          filter: JSON.stringify(filters),
-          aggregate: JSON.stringify({ count: "id" }),
-        },
-      });
-
-      const { data: resTotalOngoing } = await fetch.get("items/employee_course", {
-        params: {
-          filter: JSON.stringify({
-            ...filters,
-            completed: { _eq: 0 },
-            exam_score: { _eq: 0 },
-            exam_attempt: { _lte: 3 },
-          }),
-          aggregate: JSON.stringify({ count: "id" }),
-        },
-      });
-
-      const { data: resTotalQuizTaken } = await fetch.get("items/employee_course", {
-        params: {
-          filter: JSON.stringify({
-            ...filters,
-            completed: { _eq: 1 },
-            exam_score: { _lte: 0 },
-          }),
-          aggregate: JSON.stringify({ count: "id" }),
-        },
-      });
-
-      setSummary([
-        { name: "Selesai", value: resTotalCompleted.data[0].count.id || 0 },
-        { name: "Ujian", value: resTotalQuizTaken.data[0].count.id || 0 },
-        {
-          name: "Sedang Berjalan",
-          value: resTotalOngoing.data[0].count.id || 0,
-        },
-      ]);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
