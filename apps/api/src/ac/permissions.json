@@ -407,18 +407,6 @@
     ]
   },
   {
-    "id": 37,
-    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
-    "collection": "employee_certificate",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
     "id": 38,
     "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "employee",
@@ -795,6 +783,1326 @@
     "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "notification",
     "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 70,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 74,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 75,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 76,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 77,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 100,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 101,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 102,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 103,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 104,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 105,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 106,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 107,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 108,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 109,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 110,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 111,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 112,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 113,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 114,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 115,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 116,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 117,
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 123,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 124,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 125,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 126,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 128,
+    "role": null,
+    "collection": "course",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 129,
+    "role": null,
+    "collection": "course",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 130,
+    "role": null,
+    "collection": "course",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 132,
+    "role": null,
+    "collection": "course",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 133,
+    "role": null,
+    "collection": "employee_course",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 134,
+    "role": null,
+    "collection": "employee_course",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 135,
+    "role": null,
+    "collection": "employee_course",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 137,
+    "role": null,
+    "collection": "employee_course",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 138,
+    "role": null,
+    "collection": "quiz",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 139,
+    "role": null,
+    "collection": "quiz",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 140,
+    "role": null,
+    "collection": "quiz",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 141,
+    "role": null,
+    "collection": "quiz",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 143,
+    "role": null,
+    "collection": "category",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 144,
+    "role": null,
+    "collection": "category",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 145,
+    "role": null,
+    "collection": "category",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 147,
+    "role": null,
+    "collection": "category",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 148,
+    "role": null,
+    "collection": "employee_search",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 149,
+    "role": null,
+    "collection": "employee_search",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 150,
+    "role": null,
+    "collection": "employee_search",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 152,
+    "role": null,
+    "collection": "employee_search",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 153,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 154,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 155,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 157,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 158,
+    "role": null,
+    "collection": "user",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 159,
+    "role": null,
+    "collection": "user",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 160,
+    "role": null,
+    "collection": "user",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 162,
+    "role": null,
+    "collection": "user",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 163,
+    "role": null,
+    "collection": "employee",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 165,
+    "role": null,
+    "collection": "employee",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 166,
+    "role": null,
+    "collection": "employee",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 167,
+    "role": null,
+    "collection": "employee",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 168,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 169,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 171,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 172,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 173,
+    "role": null,
+    "collection": "sector",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 174,
+    "role": null,
+    "collection": "sector",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 175,
+    "role": null,
+    "collection": "sector",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 176,
+    "role": null,
+    "collection": "sector",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 178,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 179,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 180,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 181,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 183,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 184,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 185,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 186,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 188,
+    "role": null,
+    "collection": "activities",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 189,
+    "role": null,
+    "collection": "activities",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 191,
+    "role": null,
+    "collection": "activities",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 192,
+    "role": null,
+    "collection": "activities",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 193,
+    "role": null,
+    "collection": "course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 194,
+    "role": null,
+    "collection": "course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 195,
+    "role": null,
+    "collection": "course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 196,
+    "role": null,
+    "collection": "course_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 197,
+    "role": null,
+    "collection": "course_files",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 198,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 199,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 200,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 201,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 203,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 204,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 206,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 207,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 208,
+    "role": null,
+    "collection": "notification",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 209,
+    "role": null,
+    "collection": "notification",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 211,
+    "role": null,
+    "collection": "notification",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 212,
+    "role": null,
+    "collection": "notification",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 213,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 214,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 215,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 216,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 217,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 218,
+    "role": null,
+    "collection": "articles",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 219,
+    "role": null,
+    "collection": "articles",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 220,
+    "role": null,
+    "collection": "articles",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 221,
+    "role": null,
+    "collection": "articles",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 222,
+    "role": null,
+    "collection": "articles",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 223,
+    "role": null,
+    "collection": "term_condition",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 224,
+    "role": null,
+    "collection": "term_condition",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 225,
+    "role": null,
+    "collection": "term_condition",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 227,
+    "role": null,
+    "collection": "term_condition",
+    "action": "share",
     "permissions": {},
     "validation": {},
     "presets": null,
