@@ -27,7 +27,7 @@ const QuizFieldArray = ({ control, register, errors, getValues, setValue, setDel
 
   return (
     <div className="gap-8 mb-8 md:grid md:grid-cols-2">
-      {fields.map((item, index) => {
+      {fields.map((item: any, index) => {
         return (
           <React.Fragment key={item.id || index}>
             <FormField

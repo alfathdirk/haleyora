@@ -64,7 +64,7 @@ export const EvaluationTable = ({
   } | null) => {
     setSeletedUnit(unit);
     setCurrentPage(1); // Reset to first page on unit change
-    onFilterChange({ unit_pln: unit, search: searchValue });
+    onFilterChange({ id_region: unit, search: searchValue });
   };
 
   async function fetchData() {
@@ -73,7 +73,7 @@ export const EvaluationTable = ({
     const filters: any = {
       completed: { _eq: 1 },
       ...(searchValue && { course: { title: { _contains: searchValue } } }),
-      ...(selectedUnit?.id && { employee: { unit_pln: { _eq: selectedUnit?.id } } }),
+      ...(selectedUnit?.id && { employee: { id_region: { _eq: selectedUnit?.id } } }),
     };
 
     if (dateRange?.from && dateRange?.to) {

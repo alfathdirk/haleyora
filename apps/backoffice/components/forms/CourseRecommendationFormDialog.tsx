@@ -55,7 +55,7 @@ export default function CourseRecommendationFormDialog({
     shouldFocusError: true,
     shouldUnregister: false,
     shouldUseNativeValidation: false,
-    defaultValues: initialData,
+    defaultValues: initialData as any,
   });
 
   const fetchData = async () => {
@@ -149,11 +149,11 @@ export default function CourseRecommendationFormDialog({
         <Form {...form}>
           <form
             id="category-form"
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit as any)}
             className="w-full space-y-8"
           >
             <FormField
-              control={form.control}
+              control={form.control as any}
               name="tasks_score"
               render={({ field }) => (
                 <FormItem>
