@@ -4433,6 +4433,30 @@ var index = defineEndpoint((router, ctx) => {
           id_region: result.data.DATA_SPK.DATA_REGION.ID_REGION
         });
         await sleep(800);
+      } else {
+        users.updateByQuery({
+          filter: {
+            employee_id: result.data.NO_INDUK
+          }
+        }, {
+          full_name: result.data.NAMA,
+          email,
+          status: "active",
+          work_status: result.data.STATUS_KERJA,
+          photo: result.data.FOTO,
+          placement: result.data.PENEMPATAN,
+          gender: result.data.KELAMIN,
+          date_of_birth: result.data.FTGL_LAHIR,
+          place_of_birth: result.data.TP_LAHIR,
+          address: result.data.ALAMAT,
+          phone: result.data.HP,
+          religion: result.data.AGAMA,
+          unit_pln: result.data.DATA_SPK.UNIT_PLN,
+          position: result.data.DATA_SPK.JABATAN,
+          unit: result.data.DATA_SPK.DATA_UNIT.NAMA_UNIT,
+          job: result.data.DATA_SPK.ID_KONTRAK.JENIS_PEKERJAAN,
+          id_region: result.data.DATA_SPK.DATA_REGION.ID_REGION
+        });
       }
       directusUsers.updateByQuery({
         filter: {
@@ -4440,21 +4464,7 @@ var index = defineEndpoint((router, ctx) => {
         }
       }, {
         role: "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
-        password: body.password,
-        work_status: result.data.STATUS_KERJA,
-        photo: result.data.FOTO,
-        placement: result.data.PENEMPATAN,
-        gender: result.data.KELAMIN,
-        date_of_birth: result.data.FTGL_LAHIR,
-        place_of_birth: result.data.TP_LAHIR,
-        address: result.data.ALAMAT,
-        phone: result.data.HP,
-        religion: result.data.AGAMA,
-        unit_pln: result.data.DATA_SPK.UNIT_PLN,
-        position: result.data.DATA_SPK.JABATAN,
-        unit: result.data.DATA_SPK.DATA_UNIT.NAMA_UNIT,
-        job: result.data.DATA_SPK.ID_KONTRAK.JENIS_PEKERJAAN,
-        id_region: result.data.DATA_SPK.DATA_REGION.ID_REGION
+        password: body.password
       });
       await sleep(800);
       login(email, body.password);
