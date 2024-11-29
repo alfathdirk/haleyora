@@ -31,7 +31,7 @@ interface EmployeeCourse {
   employee: {
     employee_id: string;
     unit: string;
-    id_region: { id_region: string, name: string };
+    id_region: { id_region: string | undefined, name: string };
   };
 }
 
@@ -90,9 +90,9 @@ export function UnitOverview({
           });
 
         const filteredCourses = employeeCourses?.data?.filter((course) => {
-          console.log(course.employee.id_region.id_region);
+          // console.log(course.employee.id_region.id_region);
           const matchesUnit = selectedUnit?.id
-            ? course.employee.id_region.id_region === selectedUnit.id
+            ? course.employee?.id_region?.id_region === selectedUnit.id
             : true;
           const matchesCourse = selectedCourse?.id
             ? course.course.id === selectedCourse.id
@@ -101,7 +101,7 @@ export function UnitOverview({
         });
 
         const unitScores = filteredCourses.reduce<UnitScores>((acc, ec) => {
-          const unit = ec.employee.id_region.name
+          const unit = ec.employee?.id_region?.name || "Unknown";
           const examScore = ec.exam_score || 0;
           const tasksScore = ec.tasks_score || 0;
           const isOpenExam = ec.course.is_open_exam;
@@ -127,8 +127,6 @@ export function UnitOverview({
 
           return acc;
         }, {});
-
-        console.log(unitScores);
 
         const formattedData = Object.keys(unitScores).map((unit) => ({
           name: unit.split("-")[1],

@@ -65,7 +65,6 @@ export default function SelectFilterUnit({
   const handleValueChange = useCallback(
     (val: string) => {
       const course = units.find((item) => item.id === val);
-      console.log(course);
       onUnitChange(course ?? null);
     },
     [units, onUnitChange],
