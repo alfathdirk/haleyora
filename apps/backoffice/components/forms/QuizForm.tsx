@@ -75,7 +75,6 @@ export const QuizForm: React.FC<FormProps> = ({ initialData, activities }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deletedQuestions, setDeletedQuestions] = useState<string[]>([]);
-  console.log('\n \x1b[33m ~ deletedQuestions:', deletedQuestions);
 
   const title = initialData ? `Ubah ${initialData?.title ?? ""}` : "Buat Ujian";
   const description = initialData ? "Ubah data Ujian." : "Buat Ujian baru.";
