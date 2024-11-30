@@ -29,9 +29,39 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
       </div>
     ),
   },
+  // {
+  //   accessorKey: "minScore",
+  //   header: "Minimum",
+  //   cell: ({ row }) => (
+  //     <div className="px-2.5 py-1 w-fit">
+  //       {row.original?.minScore ?? ""}
+  //     </div>
+  //   ),
+  //   enableSorting: true,
+  // },
+  // {
+  //   accessorKey: "examScore",
+  //   header: "Ujian",
+  //   cell: ({ row }) => (
+  //     <div className="px-2.5 py-1 w-fit">
+  //       {row.original?.examScore ?? ""}
+  //     </div>
+  //   ),
+  //   enableSorting: true,
+  // },
+  // {
+  //   accessorKey: "tasksScore",
+  //   header: "Tugas",
+  //   cell: ({ row }) => (
+  //     <div className="px-2.5 py-1 w-fit">
+  //       {row.original?.tasksScore ?? ""}
+  //     </div>
+  //   ),
+  //   enableSorting: true,
+  // },
   {
     accessorKey: "totalEvaluation",
-    header: "Nilai",
+    header: "Nilai Keseluruhan",
     cell: ({ row }) => (
       <div className="px-2.5 py-1 w-fit">
         {row.original?.totalEvaluation ?? ""}

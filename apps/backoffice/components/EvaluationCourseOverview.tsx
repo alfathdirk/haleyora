@@ -16,7 +16,7 @@ export function EvaluationCourseOverview({ data }: Props) {
     Array<{ name: string; value: number }>
   >([]);
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = ["#00C49F", "#ff5b5b"];
 
   async function convertData(data: Array<any>) {
     setFetching(true);

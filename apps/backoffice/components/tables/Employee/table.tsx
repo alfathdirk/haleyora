@@ -89,6 +89,7 @@ export const EmployeesTable = ({
         deep = {
           employee_course: {
             _filter: {
+              completed: { _eq: 1 },
               date_created: {
                 _between: [
                   dateRange.from.toISOString(),

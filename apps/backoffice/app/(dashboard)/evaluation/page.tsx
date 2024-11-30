@@ -93,7 +93,7 @@ export default function Page() {
   }, [filters, currentUser, members, fetch]);
 
   useEffect(() => {
-    fetchAverageScores();
+    // fetchAverageScores();
   }, [fetchAverageScores]);
 
   const handleFilterChange = (newFilters: {

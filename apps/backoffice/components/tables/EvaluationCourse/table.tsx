@@ -96,6 +96,7 @@ export const EvaluationCourseTable = ({
                 "course.title",
                 "course.is_open_exam",
                 "course.is_open_task",
+                "course.min_score",
                 "employee.employee_id",
                 "employee.full_name",
                 "employee.unit_pln",
@@ -114,6 +115,9 @@ export const EvaluationCourseTable = ({
                 name: string;
                 unit: string;
                 passed: string;
+                minScore: string;
+                examScore: string;
+                tasksScore: string;
                 examEvaluation: string;
                 taskEvaluation: string;
                 totalEvaluation: number;
@@ -133,6 +137,9 @@ export const EvaluationCourseTable = ({
             if (!acc[employeeId]) {
               acc[employeeId] = {
                 name: fullName,
+                minScore: record.course.min_score,
+                examScore: '0',
+                tasksScore: '0',
                 unit,
                 passed: "Tidak",
                 examEvaluation: "0",
@@ -141,7 +148,11 @@ export const EvaluationCourseTable = ({
               };
             }
 
-            const examEvaluation = isOpenExam ? (examScore / 100) * 70 : 0;
+            acc[employeeId].minScore = record.course.min_score;
+            acc[employeeId].examScore = examScore;
+            acc[employeeId].tasksScore = tasksScore;
+
+            const examEvaluation = isOpenExam ? (examScore / 100) * (isOpenTask ? 70 : 100) : 0;
             const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
             const totalEvaluation = examEvaluation + taskEvaluation;
 
@@ -151,7 +162,7 @@ export const EvaluationCourseTable = ({
               totalEvaluation.toFixed(2),
             );
 
-            if (totalEvaluation >= 80) {
+            if (totalEvaluation >= Number(acc[employeeId].minScore)) {
               acc[employeeId].passed = "Ya";
             }
 
