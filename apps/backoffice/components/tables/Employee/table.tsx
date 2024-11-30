@@ -31,6 +31,7 @@ export const EmployeesTable = ({
 
   const [currentLayout, setCurrentLayout] = useState<"card" | "table">("table");
   const [data, setData] = useState<any>([]);
+  const [fetching, setFetching] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -77,6 +78,7 @@ export const EmployeesTable = ({
 
   async function fetchData() {
     try {
+      setFetching(true)
       let deep = {};
       const filters: any = {
         ...(searchValue && { full_name: { _contains: searchValue } }),
@@ -131,9 +133,11 @@ export const EmployeesTable = ({
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
+      setFetching(false)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+      setFetching(false)
     }
   }
 
@@ -169,7 +173,7 @@ export const EmployeesTable = ({
               setDateRange(range)
             }
           />
-          <div className="w-1/3">
+          <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
@@ -197,6 +201,7 @@ export const EmployeesTable = ({
       onLayoutChange={(val: any) => setCurrentLayout(val)}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}
