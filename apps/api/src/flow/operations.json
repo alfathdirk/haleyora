@@ -60,5 +60,19 @@
     "resolve": null,
     "reject": null,
     "flow": "7cf044d5-4f8c-4285-a66b-dfd34d03f7de"
+  },
+  {
+    "id": "fec8f168-1e1c-4522-8e8b-91e5e95359a5",
+    "name": "Run Script",
+    "key": "exec_76qi9",
+    "type": "exec",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function(data) {\n\n\treturn data\n}"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "0d53911c-fe7e-49a4-b751-5c60ff32a620"
   }
 ]

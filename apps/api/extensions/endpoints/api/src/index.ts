@@ -353,10 +353,10 @@ export default defineEndpoint((router, ctx) => {
         },
       });
 
-      const email = result.data.EMAIL;
+      const email = result.data.NO_INDUK + '@haleyora.co.id';
+      const directusUsers = await useItemService(ctx, 'directus_users');
 
       if (!data) {
-        const directusUsers = await useItemService(ctx, 'directus_users');
         users.createOne({
           employee_id: result.data.NO_INDUK,
           username: result.data.NO_INDUK,
@@ -379,18 +379,18 @@ export default defineEndpoint((router, ctx) => {
         });
 
         await sleep(800);
-
-        directusUsers.updateByQuery({
-          filter: {
-            email,
-          },
-        }, {
-          password: body.password,
-        });
       }
+      directusUsers.updateByQuery({
+        filter: {
+          email,
+        },
+      }, {
+        role: 'e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d',
+        password: body.password,
+      });
+      await sleep(800);
       login(email, body.password);
     } catch (error: unknown) {
-      console.log('error kesini', error.message);
       if (axios.isAxiosError(error)) {
         if (error.response) {
           return res.status(400).send(error.response.data);

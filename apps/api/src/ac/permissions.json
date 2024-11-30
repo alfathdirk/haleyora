@@ -407,18 +407,6 @@
     ]
   },
   {
-    "id": 37,
-    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
-    "collection": "employee_certificate",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
     "id": 38,
     "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
     "collection": "employee",
@@ -804,47 +792,11 @@
   },
   {
     "id": 70,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_files",
-    "action": "create",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 71,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_files",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
     "action": "read",
     "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 72,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_files",
-    "action": "update",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 73,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_files",
-    "action": "delete",
-    "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -852,11 +804,11 @@
   },
   {
     "id": 74,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_dashboards",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course",
     "action": "create",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -864,11 +816,11 @@
   },
   {
     "id": 75,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_dashboards",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "course",
+    "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -876,11 +828,11 @@
   },
   {
     "id": 76,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_dashboards",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
     "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -888,319 +840,8 @@
   },
   {
     "id": 77,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_dashboards",
-    "action": "delete",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 78,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_panels",
-    "action": "create",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 79,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_panels",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 80,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_panels",
-    "action": "update",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 81,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_panels",
-    "action": "delete",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 82,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_folders",
-    "action": "create",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 83,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_folders",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 84,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_folders",
-    "action": "update",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 85,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_folders",
-    "action": "delete",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": null
-  },
-  {
-    "id": 86,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_users",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 87,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_users",
-    "action": "update",
-    "permissions": {
-      "id": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "first_name",
-      "last_name",
-      "email",
-      "password",
-      "location",
-      "title",
-      "description",
-      "avatar",
-      "language",
-      "appearance",
-      "theme_light",
-      "theme_dark",
-      "theme_light_overrides",
-      "theme_dark_overrides",
-      "tfa_secret"
-    ]
-  },
-  {
-    "id": 88,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_roles",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 89,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_shares",
-    "action": "read",
-    "permissions": {
-      "_or": [
-        {
-          "role": {
-            "_eq": "$CURRENT_ROLE"
-          }
-        },
-        {
-          "role": {
-            "_null": true
-          }
-        }
-      ]
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 90,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_shares",
-    "action": "create",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 91,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_shares",
-    "action": "update",
-    "permissions": {
-      "user_created": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 92,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_shares",
-    "action": "delete",
-    "permissions": {
-      "user_created": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 93,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "directus_flows",
-    "action": "read",
-    "permissions": {
-      "trigger": {
-        "_eq": "manual"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "id",
-      "status",
-      "name",
-      "icon",
-      "color",
-      "options",
-      "trigger"
-    ]
-  },
-  {
-    "id": 94,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "employee",
-    "action": "create",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 95,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "employee",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 96,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "employee",
-    "action": "share",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 97,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "employee",
-    "action": "update",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 98,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "employee",
-    "action": "delete",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 99,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "course",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -1211,9 +852,9 @@
   },
   {
     "id": 100,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "course",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "create",
     "permissions": {},
     "validation": {},
     "presets": null,
@@ -1223,9 +864,9 @@
   },
   {
     "id": 101,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "course",
-    "action": "update",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "read",
     "permissions": {},
     "validation": {},
     "presets": null,
@@ -1235,9 +876,9 @@
   },
   {
     "id": 102,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "course",
-    "action": "delete",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "update",
     "permissions": {},
     "validation": {},
     "presets": null,
@@ -1247,9 +888,9 @@
   },
   {
     "id": 103,
-    "role": "fbedb151-cfa0-49fa-b053-fcb0e0c68ec4",
-    "collection": "course",
-    "action": "share",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "delete",
     "permissions": {},
     "validation": {},
     "presets": null,
@@ -1259,11 +900,11 @@
   },
   {
     "id": 104,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_files",
-    "action": "create",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_certificate",
+    "action": "share",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1271,11 +912,11 @@
   },
   {
     "id": 105,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_files",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
+    "action": "create",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1283,11 +924,11 @@
   },
   {
     "id": 106,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_files",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
     "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1295,11 +936,11 @@
   },
   {
     "id": 107,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_files",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "employee_course_recommendation",
     "action": "delete",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1307,11 +948,11 @@
   },
   {
     "id": 108,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_dashboards",
-    "action": "create",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "share",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1319,11 +960,11 @@
   },
   {
     "id": 109,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_dashboards",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "delete",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1331,11 +972,11 @@
   },
   {
     "id": 110,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_dashboards",
-    "action": "update",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "create",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1343,11 +984,11 @@
   },
   {
     "id": 111,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_dashboards",
-    "action": "delete",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "read",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1355,11 +996,11 @@
   },
   {
     "id": 112,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_panels",
-    "action": "create",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "term_condition",
+    "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1367,11 +1008,11 @@
   },
   {
     "id": 113,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_panels",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "certificate_setting",
+    "action": "delete",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1379,11 +1020,11 @@
   },
   {
     "id": 114,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_panels",
-    "action": "update",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "create",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1391,11 +1032,11 @@
   },
   {
     "id": 115,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_panels",
-    "action": "delete",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1403,11 +1044,11 @@
   },
   {
     "id": 116,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_folders",
-    "action": "create",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "delete",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1415,87 +1056,11 @@
   },
   {
     "id": 117,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_folders",
-    "action": "read",
+    "role": "e40bc4b2-8ada-4251-9957-a3f7f7bd6e3d",
+    "collection": "category",
+    "action": "share",
     "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 118,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_folders",
-    "action": "update",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 119,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_folders",
-    "action": "delete",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": null
-  },
-  {
-    "id": 120,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_users",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 121,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_users",
-    "action": "update",
-    "permissions": {
-      "id": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "first_name",
-      "last_name",
-      "email",
-      "password",
-      "location",
-      "title",
-      "description",
-      "avatar",
-      "language",
-      "appearance",
-      "theme_light",
-      "theme_dark",
-      "theme_light_overrides",
-      "theme_dark_overrides",
-      "tfa_secret"
-    ]
-  },
-  {
-    "id": 122,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_roles",
-    "action": "read",
-    "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1503,24 +1068,11 @@
   },
   {
     "id": 123,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_shares",
-    "action": "read",
-    "permissions": {
-      "_or": [
-        {
-          "role": {
-            "_eq": "$CURRENT_ROLE"
-          }
-        },
-        {
-          "role": {
-            "_null": true
-          }
-        }
-      ]
-    },
-    "validation": null,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1528,11 +1080,11 @@
   },
   {
     "id": 124,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_shares",
-    "action": "create",
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "update",
     "permissions": {},
-    "validation": null,
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1540,15 +1092,11 @@
   },
   {
     "id": 125,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_shares",
-    "action": "update",
-    "permissions": {
-      "user_created": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
@@ -1556,46 +1104,20 @@
   },
   {
     "id": 126,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_shares",
-    "action": "delete",
-    "permissions": {
-      "user_created": {
-        "_eq": "$CURRENT_USER"
-      }
-    },
-    "validation": null,
+    "role": null,
+    "collection": "certificate_setting",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
     "presets": null,
     "fields": [
       "*"
     ]
   },
   {
-    "id": 127,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "directus_flows",
-    "action": "read",
-    "permissions": {
-      "trigger": {
-        "_eq": "manual"
-      }
-    },
-    "validation": null,
-    "presets": null,
-    "fields": [
-      "id",
-      "status",
-      "name",
-      "icon",
-      "color",
-      "options",
-      "trigger"
-    ]
-  },
-  {
     "id": 128,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz",
+    "role": null,
+    "collection": "course",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -1606,20 +1128,8 @@
   },
   {
     "id": 129,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 130,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz",
+    "role": null,
+    "collection": "course",
     "action": "update",
     "permissions": {},
     "validation": {},
@@ -1629,10 +1139,10 @@
     ]
   },
   {
-    "id": 131,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz",
-    "action": "delete",
+    "id": 130,
+    "role": null,
+    "collection": "course",
+    "action": "read",
     "permissions": {},
     "validation": {},
     "presets": null,
@@ -1642,8 +1152,8 @@
   },
   {
     "id": 132,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz",
+    "role": null,
+    "collection": "course",
     "action": "share",
     "permissions": {},
     "validation": {},
@@ -1654,8 +1164,8 @@
   },
   {
     "id": 133,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "course",
+    "role": null,
+    "collection": "employee_course",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -1666,8 +1176,8 @@
   },
   {
     "id": 134,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "course",
+    "role": null,
+    "collection": "employee_course",
     "action": "read",
     "permissions": {},
     "validation": {},
@@ -1678,8 +1188,8 @@
   },
   {
     "id": 135,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "course",
+    "role": null,
+    "collection": "employee_course",
     "action": "update",
     "permissions": {},
     "validation": {},
@@ -1689,21 +1199,9 @@
     ]
   },
   {
-    "id": 136,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "course",
-    "action": "delete",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
     "id": 137,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "course",
+    "role": null,
+    "collection": "employee_course",
     "action": "share",
     "permissions": {},
     "validation": {},
@@ -1714,8 +1212,8 @@
   },
   {
     "id": 138,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "employee_course",
+    "role": null,
+    "collection": "quiz",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -1726,44 +1224,8 @@
   },
   {
     "id": 139,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "employee_course",
-    "action": "read",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 140,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "employee_course",
-    "action": "update",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 141,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "employee_course",
-    "action": "delete",
-    "permissions": {},
-    "validation": {},
-    "presets": null,
-    "fields": [
-      "*"
-    ]
-  },
-  {
-    "id": 142,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "employee_course",
+    "role": null,
+    "collection": "quiz",
     "action": "share",
     "permissions": {},
     "validation": {},
@@ -1773,9 +1235,33 @@
     ]
   },
   {
+    "id": 140,
+    "role": null,
+    "collection": "quiz",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 141,
+    "role": null,
+    "collection": "quiz",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
     "id": 143,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz_question",
+    "role": null,
+    "collection": "category",
     "action": "create",
     "permissions": {},
     "validation": {},
@@ -1786,8 +1272,8 @@
   },
   {
     "id": 144,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz_question",
+    "role": null,
+    "collection": "category",
     "action": "read",
     "permissions": {},
     "validation": {},
@@ -1798,7 +1284,91 @@
   },
   {
     "id": 145,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
+    "role": null,
+    "collection": "category",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 147,
+    "role": null,
+    "collection": "category",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 148,
+    "role": null,
+    "collection": "employee_search",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 149,
+    "role": null,
+    "collection": "employee_search",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 150,
+    "role": null,
+    "collection": "employee_search",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 152,
+    "role": null,
+    "collection": "employee_search",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 153,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 154,
+    "role": null,
     "collection": "quiz_question",
     "action": "update",
     "permissions": {},
@@ -1809,9 +1379,405 @@
     ]
   },
   {
-    "id": 146,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
+    "id": 155,
+    "role": null,
     "collection": "quiz_question",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 157,
+    "role": null,
+    "collection": "quiz_question",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 158,
+    "role": null,
+    "collection": "user",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 159,
+    "role": null,
+    "collection": "user",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 160,
+    "role": null,
+    "collection": "user",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 162,
+    "role": null,
+    "collection": "user",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 163,
+    "role": null,
+    "collection": "employee",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 165,
+    "role": null,
+    "collection": "employee",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 166,
+    "role": null,
+    "collection": "employee",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 167,
+    "role": null,
+    "collection": "employee",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 168,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 169,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 171,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 172,
+    "role": null,
+    "collection": "employee_course_recommendation",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 173,
+    "role": null,
+    "collection": "sector",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 174,
+    "role": null,
+    "collection": "sector",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 175,
+    "role": null,
+    "collection": "sector",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 176,
+    "role": null,
+    "collection": "sector",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 178,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 179,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 180,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 181,
+    "role": null,
+    "collection": "employee_bookmark",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 183,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 184,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 185,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 186,
+    "role": null,
+    "collection": "sub_sector",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 188,
+    "role": null,
+    "collection": "activities",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 189,
+    "role": null,
+    "collection": "activities",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 191,
+    "role": null,
+    "collection": "activities",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 192,
+    "role": null,
+    "collection": "activities",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 193,
+    "role": null,
+    "collection": "course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 194,
+    "role": null,
+    "collection": "course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 195,
+    "role": null,
+    "collection": "course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 196,
+    "role": null,
+    "collection": "course_files",
     "action": "delete",
     "permissions": {},
     "validation": {},
@@ -1821,9 +1787,321 @@
     ]
   },
   {
-    "id": 147,
-    "role": "3912ae49-5580-48be-87d1-ee2116b7ee69",
-    "collection": "quiz_question",
+    "id": 197,
+    "role": null,
+    "collection": "course_files",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 198,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 199,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 200,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 201,
+    "role": null,
+    "collection": "employee_certificate",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 203,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 204,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 206,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 207,
+    "role": null,
+    "collection": "course_files_1",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 208,
+    "role": null,
+    "collection": "notification",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 209,
+    "role": null,
+    "collection": "notification",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 211,
+    "role": null,
+    "collection": "notification",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 212,
+    "role": null,
+    "collection": "notification",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 213,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 214,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 215,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 216,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 217,
+    "role": null,
+    "collection": "employee_course_files",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 218,
+    "role": null,
+    "collection": "articles",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 219,
+    "role": null,
+    "collection": "articles",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 220,
+    "role": null,
+    "collection": "articles",
+    "action": "delete",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 221,
+    "role": null,
+    "collection": "articles",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 222,
+    "role": null,
+    "collection": "articles",
+    "action": "share",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 223,
+    "role": null,
+    "collection": "term_condition",
+    "action": "create",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 224,
+    "role": null,
+    "collection": "term_condition",
+    "action": "read",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 225,
+    "role": null,
+    "collection": "term_condition",
+    "action": "update",
+    "permissions": {},
+    "validation": {},
+    "presets": null,
+    "fields": [
+      "*"
+    ]
+  },
+  {
+    "id": 227,
+    "role": null,
+    "collection": "term_condition",
     "action": "share",
     "permissions": {},
     "validation": {},

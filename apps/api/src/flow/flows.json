@@ -1,5 +1,26 @@
 [
   {
+    "id": "0d53911c-fe7e-49a4-b751-5c60ff32a620",
+    "name": "create-certificate",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "event",
+    "accountability": "all",
+    "options": {
+      "type": "action",
+      "scope": [
+        "items.create",
+        "items.update"
+      ],
+      "collections": [
+        "employee_course"
+      ]
+    },
+    "operation": "fec8f168-1e1c-4522-8e8b-91e5e95359a5"
+  },
+  {
     "id": "51776e27-4efd-41e2-9edd-6d374a4d3d1d",
     "name": "CreateUserOnEmployeeCreated",
     "icon": "bolt",
