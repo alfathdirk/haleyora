@@ -167,8 +167,8 @@ export const EvaluationTable = ({
 
       setData(formattedData);
       setTotalItems(formattedData.length);
-      setFetching(false);
       updatePaginatedData(formattedData, currentPage, pageSize);
+      setFetching(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -215,7 +215,7 @@ export const EvaluationTable = ({
               setDateRange(range)
             }
           />
-          <div className="w-1/3">
+          <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
@@ -242,6 +242,7 @@ export const EvaluationTable = ({
       columns={columns}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

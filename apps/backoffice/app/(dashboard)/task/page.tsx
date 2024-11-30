@@ -15,6 +15,7 @@ export default function MasterDataSectorPage() {
   const pageName = "Tugas";
   const fetch = useDirectusFetch();
 
+  const [fetching, setFetching] = useState<boolean>(true);
   const [data, setData] = useState<Array<any>>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -41,6 +42,7 @@ export default function MasterDataSectorPage() {
   };
 
   async function fetchData() {
+    setFetching(true);
     let filters = searchValue ? { course: { title: { _contains: searchValue }, is_open_task: { _eq: 1 } } } : { course: { is_open_task: { _eq: 1 } } };
 
     try {
@@ -56,9 +58,11 @@ export default function MasterDataSectorPage() {
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
+      setFetching(false);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+      setFetching(false);
     }
   }
 
@@ -134,6 +138,7 @@ export default function MasterDataSectorPage() {
 
       <TaskTable
         data={data}
+        loading={fetching}
         customColumns={columnsWithAction}
         currentPage={currentPage}
         pageSize={pageSize}

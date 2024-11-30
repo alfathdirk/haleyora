@@ -237,7 +237,7 @@ export const EvaluationCourseTable = ({
     return (
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center w-full space-x-2 ">
-          <div className="w-1/3">
+          <div className="w-3/5">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
@@ -264,6 +264,7 @@ export const EvaluationCourseTable = ({
       columns={columns}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}
