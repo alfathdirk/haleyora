@@ -35,17 +35,16 @@ export default function SelectFilterUnit({
     setLoading(true);
     setError(null);
     try {
-      const { data: res }: { data: { data: { unit_pln: string | null }[] } } =
-        await fetch.get("items/employee", {
-          params: { fields: ["unit_pln"], groupBy: "unit_pln" },
+      const { data: res }: { data: { data: { id_region: string | null, name: string }[] } } =
+        await fetch.get("items/unit_region", {
+          params: { fields: ["*"] },
         });
 
       const filtered = res?.data
         ?.map((item) => ({
-          id: item.unit_pln ?? "",
-          title: item.unit_pln ?? "",
+          id: item.id_region ?? "",
+          title: item.name ?? "",
         }))
-        .filter((unit) => unit.id); // Remove any entries with empty ids
 
       setUnits(filtered);
     } catch (error) {

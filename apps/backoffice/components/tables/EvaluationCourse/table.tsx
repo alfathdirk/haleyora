@@ -80,7 +80,7 @@ export const EvaluationCourseTable = ({
       }
 
       if (selectedUnit?.id) {
-        filters["employee"].unit_pln = { _eq: selectedUnit?.id.toString() };
+        filters["employee"].id_region = { _eq: selectedUnit?.id.toString() };
       }
 
       try {

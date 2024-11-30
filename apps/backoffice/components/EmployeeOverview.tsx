@@ -118,7 +118,7 @@ export function EmployeeOverview({
       };
 
       if (selectedUnit?.id) {
-        filters.employee = { unit_pln: { _eq: selectedUnit?.id } };
+        filters.employee = { id_region: { _eq: selectedUnit?.id } };
       }
 
       if (selectedCourse?.id) {
