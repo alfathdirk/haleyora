@@ -110,7 +110,7 @@ export default function SelectFilterUnit({
               {loading && <Loader />}
             </div>
           </SelectTrigger>
-          <SelectContent className="overflow-y-auto max-h-40">
+          <SelectContent className="overflow-y-auto max-h-60">
             {memoizedUnits?.length > 0 && (
               <SelectItem value="">Semua</SelectItem>
             )}
