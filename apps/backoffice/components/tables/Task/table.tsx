@@ -9,6 +9,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface TaskTableProps<TData, TValue> {
+  loading: boolean;
   defaultLayout?: string;
   customColumns?: any;
   data: TData[];
@@ -25,6 +26,7 @@ interface TaskTableProps<TData, TValue> {
 }
 
 export const TaskTable = <TData, TValue>({
+  loading = false,
   data,
   currentPage,
   pageSize,
@@ -64,6 +66,7 @@ export const TaskTable = <TData, TValue>({
       onLayoutChange={(val: string) => setCurrentLayout(val)}
       tableHeader={false}
       data={data}
+      loading={loading}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

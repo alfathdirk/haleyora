@@ -396,6 +396,34 @@
       }
     },
     {
+      "collection": "employee_employee_course",
+      "meta": {
+        "accountability": "all",
+        "archive_app_filter": true,
+        "archive_field": null,
+        "archive_value": null,
+        "collapse": "open",
+        "collection": "employee_employee_course",
+        "color": null,
+        "display_template": null,
+        "group": null,
+        "hidden": true,
+        "icon": "import_export",
+        "item_duplication_fields": null,
+        "note": null,
+        "preview_url": null,
+        "singleton": false,
+        "sort": 9,
+        "sort_field": null,
+        "translations": null,
+        "unarchive_value": null,
+        "versioning": false
+      },
+      "schema": {
+        "name": "employee_employee_course"
+      }
+    },
+    {
       "collection": "employee_search",
       "meta": {
         "accountability": "all",
@@ -421,6 +449,34 @@
       },
       "schema": {
         "name": "employee_search"
+      }
+    },
+    {
+      "collection": "employee_summary_employee",
+      "meta": {
+        "accountability": "all",
+        "archive_app_filter": true,
+        "archive_field": null,
+        "archive_value": null,
+        "collapse": "open",
+        "collection": "employee_summary_employee",
+        "color": null,
+        "display_template": null,
+        "group": null,
+        "hidden": true,
+        "icon": "import_export",
+        "item_duplication_fields": null,
+        "note": null,
+        "preview_url": null,
+        "singleton": false,
+        "sort": 11,
+        "sort_field": null,
+        "translations": null,
+        "unarchive_value": null,
+        "versioning": false
+      },
+      "schema": {
+        "name": "employee_summary_employee"
       }
     },
     {
@@ -2443,6 +2499,48 @@
     },
     {
       "collection": "course",
+      "field": "min_score",
+      "type": "integer",
+      "meta": {
+        "collection": "course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "min_score",
+        "group": null,
+        "hidden": false,
+        "interface": "input",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 21,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "min_score",
+        "table": "course",
+        "data_type": "integer",
+        "default_value": 80,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "course",
       "field": "exam_quiz",
       "type": "string",
       "meta": {
@@ -2600,14 +2698,14 @@
     },
     {
       "collection": "course",
-      "field": "min_score",
-      "type": "integer",
+      "field": "video_content_link",
+      "type": "string",
       "meta": {
         "collection": "course",
         "conditions": null,
         "display": null,
         "display_options": null,
-        "field": "min_score",
+        "field": "video_content_link",
         "group": null,
         "hidden": false,
         "interface": "input",
@@ -2623,10 +2721,52 @@
         "width": "full"
       },
       "schema": {
-        "name": "min_score",
+        "name": "video_content_link",
+        "table": "course",
+        "data_type": "varchar",
+        "default_value": null,
+        "max_length": 255,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "course",
+      "field": "a",
+      "type": "integer",
+      "meta": {
+        "collection": "course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "a",
+        "group": null,
+        "hidden": true,
+        "interface": "select-dropdown-m2o",
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 22,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "a",
         "table": "course",
         "data_type": "integer",
-        "default_value": 80,
+        "default_value": null,
         "max_length": null,
         "numeric_precision": null,
         "numeric_scale": null,
@@ -5516,7 +5656,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 7,
+        "sort": 8,
         "special": [
           "m2o"
         ],
@@ -5560,7 +5700,7 @@
         "options": null,
         "readonly": false,
         "required": true,
-        "sort": 10,
+        "sort": 9,
         "special": [
           "cast-boolean"
         ],
@@ -5595,7 +5735,7 @@
         "collection": "employee_course",
         "conditions": null,
         "display": null,
-        "display_options": null,
+        "display_options": {},
         "field": "employee",
         "group": null,
         "hidden": false,
@@ -5648,7 +5788,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 11,
+        "sort": 10,
         "special": [
           "files"
         ],
@@ -5675,7 +5815,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 12,
+        "sort": 11,
         "special": null,
         "translations": null,
         "validation": null,
@@ -5717,7 +5857,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 13,
+        "sort": 12,
         "special": null,
         "translations": null,
         "validation": null,
@@ -5759,7 +5899,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 14,
+        "sort": 13,
         "special": null,
         "translations": null,
         "validation": null,
@@ -5801,7 +5941,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 15,
+        "sort": 14,
         "special": null,
         "translations": null,
         "validation": null,
@@ -5843,7 +5983,7 @@
         "options": null,
         "readonly": false,
         "required": false,
-        "sort": 16,
+        "sort": 15,
         "special": null,
         "translations": null,
         "validation": null,
@@ -6313,6 +6453,132 @@
       }
     },
     {
+      "collection": "employee_employee_course",
+      "field": "id",
+      "type": "integer",
+      "meta": {
+        "collection": "employee_employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "id",
+        "group": null,
+        "hidden": true,
+        "interface": null,
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 1,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "id",
+        "table": "employee_employee_course",
+        "data_type": "integer",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": false,
+        "is_unique": false,
+        "is_primary_key": true,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": true,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_employee_course",
+      "field": "employee_id",
+      "type": "string",
+      "meta": {
+        "collection": "employee_employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "employee_id",
+        "group": null,
+        "hidden": true,
+        "interface": null,
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 2,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "employee_id",
+        "table": "employee_employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_employee_course",
+      "field": "employee_course_id",
+      "type": "string",
+      "meta": {
+        "collection": "employee_employee_course",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "employee_course_id",
+        "group": null,
+        "hidden": true,
+        "interface": null,
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 3,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "employee_course_id",
+        "table": "employee_employee_course",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "employee_course",
+        "foreign_key_column": "id"
+      }
+    },
+    {
       "collection": "employee_search",
       "field": "id",
       "type": "uuid",
@@ -6619,6 +6885,90 @@
       "schema": {
         "name": "employee",
         "table": "employee_search",
+        "data_type": "char",
+        "default_value": null,
+        "max_length": 36,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": true,
+        "is_unique": false,
+        "is_primary_key": false,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": false,
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id"
+      }
+    },
+    {
+      "collection": "employee_summary_employee",
+      "field": "id",
+      "type": "integer",
+      "meta": {
+        "collection": "employee_summary_employee",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "id",
+        "group": null,
+        "hidden": true,
+        "interface": null,
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 1,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "id",
+        "table": "employee_summary_employee",
+        "data_type": "integer",
+        "default_value": null,
+        "max_length": null,
+        "numeric_precision": null,
+        "numeric_scale": null,
+        "is_nullable": false,
+        "is_unique": false,
+        "is_primary_key": true,
+        "is_generated": false,
+        "generation_expression": null,
+        "has_auto_increment": true,
+        "foreign_key_table": null,
+        "foreign_key_column": null
+      }
+    },
+    {
+      "collection": "employee_summary_employee",
+      "field": "employee_id",
+      "type": "string",
+      "meta": {
+        "collection": "employee_summary_employee",
+        "conditions": null,
+        "display": null,
+        "display_options": null,
+        "field": "employee_id",
+        "group": null,
+        "hidden": true,
+        "interface": null,
+        "note": null,
+        "options": null,
+        "readonly": false,
+        "required": false,
+        "sort": 3,
+        "special": null,
+        "translations": null,
+        "validation": null,
+        "validation_message": null,
+        "width": "full"
+      },
+      "schema": {
+        "name": "employee_id",
+        "table": "employee_summary_employee",
         "data_type": "char",
         "default_value": null,
         "max_length": 36,
@@ -10557,6 +10907,56 @@
       }
     },
     {
+      "collection": "employee_employee_course",
+      "field": "employee_course_id",
+      "related_collection": "employee_course",
+      "meta": {
+        "junction_field": "employee_id",
+        "many_collection": "employee_employee_course",
+        "many_field": "employee_course_id",
+        "one_allowed_collections": null,
+        "one_collection": "employee_course",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_employee_course",
+        "column": "employee_course_id",
+        "foreign_key_table": "employee_course",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
+      "collection": "employee_employee_course",
+      "field": "employee_id",
+      "related_collection": "employee",
+      "meta": {
+        "junction_field": "employee_course_id",
+        "many_collection": "employee_employee_course",
+        "many_field": "employee_id",
+        "one_allowed_collections": null,
+        "one_collection": "employee",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_employee_course",
+        "column": "employee_id",
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
+      }
+    },
+    {
       "collection": "employee_search",
       "field": "user_created",
       "related_collection": "directus_users",
@@ -10629,6 +11029,31 @@
         "constraint_name": null,
         "on_update": "NO ACTION",
         "on_delete": "NO ACTION"
+      }
+    },
+    {
+      "collection": "employee_summary_employee",
+      "field": "employee_id",
+      "related_collection": "employee",
+      "meta": {
+        "junction_field": "employee_summary_id",
+        "many_collection": "employee_summary_employee",
+        "many_field": "employee_id",
+        "one_allowed_collections": null,
+        "one_collection": "employee",
+        "one_collection_field": null,
+        "one_deselect_action": "nullify",
+        "one_field": null,
+        "sort_field": null
+      },
+      "schema": {
+        "table": "employee_summary_employee",
+        "column": "employee_id",
+        "foreign_key_table": "employee",
+        "foreign_key_column": "id",
+        "constraint_name": null,
+        "on_update": "NO ACTION",
+        "on_delete": "SET NULL"
       }
     },
     {

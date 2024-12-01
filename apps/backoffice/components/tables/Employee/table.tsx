@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  SetStateAction,
   useEffect,
   useState,
   useMemo,
   useCallback,
-  useContext,
 } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
@@ -31,6 +29,7 @@ export const EmployeesTable = ({
 
   const [currentLayout, setCurrentLayout] = useState<"card" | "table">("table");
   const [data, setData] = useState<any>([]);
+  const [fetching, setFetching] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -51,7 +50,7 @@ export const EmployeesTable = ({
   const onInputChange = useCallback(
     (nextValue: string) => {
       setSearchValue(nextValue);
-      onFilterChange({ unit: selectedUnit, search: nextValue });
+      onFilterChange({ dateRange: dateRange, id_region: selectedUnit, search: nextValue });
     },
     [selectedUnit],
   );
@@ -71,12 +70,19 @@ export const EmployeesTable = ({
     title: string;
   } | null) => {
     setSeletedUnit(unit);
-    setCurrentPage(1); // Reset to first page on unit change
-    onFilterChange({ id_region: unit, search: searchValue });
+    setCurrentPage(1);
+    onFilterChange({ dateRange: dateRange, id_region: unit, search: searchValue });
+  };
+
+  const handleDateChange = (range: DateRange | undefined) => {
+    setDateRange(range)
+    setCurrentPage(1);
+    onFilterChange({ dateRange: range, id_region: selectedUnit, search: searchValue });
   };
 
   async function fetchData() {
     try {
+      setFetching(true)
       let deep = {};
       const filters: any = {
         ...(searchValue && { full_name: { _contains: searchValue } }),
@@ -87,6 +93,7 @@ export const EmployeesTable = ({
         deep = {
           employee_course: {
             _filter: {
+              completed: { _eq: 1 },
               date_created: {
                 _between: [
                   dateRange.from.toISOString(),
@@ -131,9 +138,11 @@ export const EmployeesTable = ({
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
+      setFetching(false)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+      setFetching(false)
     }
   }
 
@@ -163,18 +172,16 @@ export const EmployeesTable = ({
     return (
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center w-full space-x-2 ">
-          <CalendarDateRangePicker
-            selectedRange={dateRange}
-            onChange={(range: SetStateAction<DateRange | undefined>) =>
-              setDateRange(range)
-            }
-          />
-          <div className="w-1/3">
+          <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
             />
           </div>
+          <CalendarDateRangePicker
+            selectedRange={dateRange}
+            onChange={handleDateChange}
+          />
         </div>
         <div className="pr-4">
           <div className="flex items-center w-full px-4 border-2 border-[#787486] rounded-xl gap-x-2 focus-within:!border-[#00A9E3]">
@@ -197,6 +204,7 @@ export const EmployeesTable = ({
       onLayoutChange={(val: any) => setCurrentLayout(val)}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

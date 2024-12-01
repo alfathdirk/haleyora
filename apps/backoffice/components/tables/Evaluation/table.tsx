@@ -91,11 +91,14 @@ export const EvaluationTable = ({
               "id",
               "exam_score",
               "tasks_score",
+              "completed",
               "course.id",
               "course.title",
               "course.is_open_exam",
               "course.is_open_task",
+              "course.min_score",
               "employee.employee_id",
+              "employee.id_region",
               "employee.unit_pln",
               "employee.unit",
             ],
@@ -118,6 +121,7 @@ export const EvaluationTable = ({
         ) => {
           const courseId = course.course.id;
           const title = course.course.title;
+          const minScore = course.course.min_score || 0;
           const examScore = course.exam_score || 0;
           const tasksScore = course.tasks_score || 0;
           const isOpenExam = course.course.is_open_exam;
@@ -133,12 +137,16 @@ export const EvaluationTable = ({
           }
 
           // Apply the pass/fail evaluation formula
-          const examEvaluation = isOpenExam ? (examScore / 100) * 70 : 0;
+          const examEvaluation = isOpenExam ? (examScore / 100) * (isOpenTask ? 70 : 100) : 0;
           const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
           const totalEvaluation = examEvaluation + taskEvaluation;
 
-          // Increment pass/fail counts based on total evaluation
-          if (totalEvaluation >= 70) {
+          // console.log('\n \x1b[33m ~ Evaluation:', title);
+          // console.log('\n \x1b[33m ~ examEvaluation, taskEvaluation:', examEvaluation, taskEvaluation);
+          // console.log('\n \x1b[33m ~ totalEvaluation:', totalEvaluation);
+          // console.log('\n \x1b[33m ~ minScore:', minScore);
+
+          if (totalEvaluation >= minScore) {
             acc[courseId].passedCount += 1;
           } else {
             acc[courseId].notPassedCount += 1;
@@ -167,8 +175,8 @@ export const EvaluationTable = ({
 
       setData(formattedData);
       setTotalItems(formattedData.length);
-      setFetching(false);
       updatePaginatedData(formattedData, currentPage, pageSize);
+      setFetching(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -215,7 +223,7 @@ export const EvaluationTable = ({
               setDateRange(range)
             }
           />
-          <div className="w-1/3">
+          <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
@@ -242,6 +250,7 @@ export const EvaluationTable = ({
       columns={columns}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

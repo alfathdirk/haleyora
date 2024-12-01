@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
-import { Book, Edit2Icon, EditIcon, LucideSearch, ThumbsUpIcon } from "lucide-react";
+import { EditIcon, LucideSearch } from "lucide-react";
 import { columns } from "./columns";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
@@ -11,11 +11,9 @@ import { useDirectusContext } from "@/hooks/useDirectusContext";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Clock, Clock5, Users2Icon } from "lucide-react";
+import { Clock5, Users2Icon } from "lucide-react";
 import { formatDurationFromMinutes } from "@/lib/helper";
 import { ColumnDef } from "@tanstack/react-table";
-// import CourseRecommendationFormDialog from "@/components/forms/CourseRecommendationFormDialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DeleteAction } from "@/app/(dashboard)/course/components/delete-action";
 
@@ -195,20 +193,6 @@ export const CourseTable = () => {
             data={row.original}
             onConfirmCallback={() => fetchData()}
           />
-          {/* <CourseRecommendationFormDialog
-              initialData={row?.original}
-              triggerTitle={(
-                <Button className="font-semibold" size={"sm"} variant="default">
-                  <ThumbsUpIcon className="w-4 h-4 mr-2" />
-                  Rekomendasi
-                </Button>
-              )}
-              dialogTriggerProps={{
-                className: "p-0 h-fit group hover:bg-transparent",
-                variant: "ghost",
-              }}
-              // onSubmitCallback={() => fetchData()}
-            /> */}
         </div>
       ),
     }

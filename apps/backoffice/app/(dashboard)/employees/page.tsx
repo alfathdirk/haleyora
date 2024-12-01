@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import BreadCrumb from "@/components/breadcrumb";
 import { EmployeesTable } from "@/components/tables/Employee/table";
 import { Heading } from "@/components/ui/heading";
@@ -10,103 +10,138 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { DownloadCloud } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/ui/loader";
+import { debounce } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
 export default function Page() {
   const { members, currentUser } = useContext(AuthContext);
   const fetch = useDirectusFetch();
 
+  const [fetching, setFetching] = useState<boolean>(true);
   const [totalCourseCompleted, setTotalCourseCompleted] = useState<number>(0);
   const [totalAvgQuizScore, setTotalAvgQuizScore] = useState<number>(0);
   const [totalAvgTaskScore, setTotalAvgTaskScore] = useState<number>(0);
   const [filters, setFilters] = useState<{
-    unit_pln: string | null;
+    dateRange: DateRange,
+    id_region: {
+      id: string | null;
+      title: string | null;
+    };
     search: string;
   }>({
-    unit_pln: null,
+    dateRange: {
+      from: undefined,
+      to: undefined,
+    },
+    id_region: {
+      id: null,
+      title: null,
+    },
     search: "",
   });
 
-  const fetchAverageScores = useCallback(async () => {
-    try {
-      const filterParams: any = {};
+  const fetchAverageScores = useCallback(
+    async (appliedFilters: typeof filters) => {
+      try {
+        setFetching(true);
+        const filters: any = {
+          completed: { _eq: 1 },
+          employee: {
+            full_name: {},
+            unit_pln: {},
+          },
+        };
 
-      if (filters.search) {
-        filterParams["full_name"] = { _contains: filters.search };
-      }
-      if (filters.unit_pln) {
-        filterParams["unit_pln"] = { _eq: filters.unit_pln };
-      }
-      if (!["Administrator", "Admin Pusat"].includes(currentUser?.role?.name ?? "")) {
-        filterParams["employee_id"] = { _in: members };
-      }
+        if (appliedFilters.search) {
+          filters["employee"].full_name = { _contains: appliedFilters.search };
+        }
 
-      const { data: res } = await fetch.get("items/employee", {
-        params: {
-          fields: [
-            "id",
-            "employee_course.exam_score",
-            "employee_course.tasks_score",
-            "employee_course.completed",
-            "employee_course.course.is_open_task",
-            "employee_course.course.is_open_exam",
-          ],
-          filter: filterParams,
-        },
-      });
+        if (appliedFilters.id_region?.id) {
+          filters["employee"].id_region = { _eq: appliedFilters.id_region?.id.toString() };
+        }
 
-      // Aggregation variables
-      let totalQuizCount = 0;
-      let totalExamScore = 0;
-      let totalTaskCount = 0;
-      let totalTaskScore = 0;
-      let completedCourseCount = 0;
 
-      // Iterate over each employee's courses to compute totals
-      res?.data?.forEach((employee: any) => {
-        employee.employee_course?.forEach((course: any) => {
-          if (course?.completed) {
-            completedCourseCount += 1;
-
-            if (course.course?.is_open_exam) {
-              totalQuizCount += 1;
-              totalExamScore += Number(course.exam_score ?? 0);
-            }
-
-            if (course.course?.is_open_task) {
-              totalTaskCount += 1;
-              totalTaskScore += Number(course.tasks_score ?? 0);
-            }
+        if (appliedFilters?.dateRange?.from && appliedFilters?.dateRange?.to) {
+          filters["date_created"] = {
+            _between: [
+              appliedFilters?.dateRange?.from.toISOString(),
+              appliedFilters?.dateRange?.to.toISOString(),
+            ],
           }
+        }
+
+        if (
+          !["Administrator", "Admin Pusat"].includes(
+            currentUser?.role?.name ?? "",
+          ) &&
+          members
+        ) {
+          filters["employee"] = { _in: members };
+        }
+
+        const { data: res } = await fetch.get("items/employee_course", {
+          params: {
+            filter: filters,
+            aggregate: {
+              count: "*",
+              avg: ["exam_score", "tasks_score"],
+            }
+          },
         });
-      });
 
-      // Calculate averages
-      const averageExamScore = totalQuizCount > 0 ? totalExamScore / totalQuizCount : 0;
-      const averageTaskScore = totalTaskCount > 0 ? totalTaskScore / totalTaskCount : 0;
+        if (!!res?.data[0]) {
+          const data = res?.data[0];
+          setTotalCourseCompleted(data?.count);
+          setTotalAvgQuizScore(Math.round(data?.avg?.exam_score) || 0);
+          setTotalAvgTaskScore(Math.round(data?.avg?.tasks_score) || 0);
+        }
+      } catch (error) {
+        console.error("Error fetching average scores:", error);
+      } finally {
+        setFetching(false);
+      }
+    },
+    [currentUser, members, fetch],
+  );
 
-      // Update state with calculated totals and averages
-      setTotalCourseCompleted(completedCourseCount);
-      setTotalAvgQuizScore(Number(averageExamScore.toFixed(1)) || 0);
-      setTotalAvgTaskScore(Number(averageTaskScore.toFixed(1)) || 0);
-    } catch (error) {
-      console.error("Error fetching average scores:", error);
-    }
-  }, [filters, currentUser, members, fetch]);
+  const debouncedFetchRef = useRef(debounce(fetchAverageScores, 300));
 
   useEffect(() => {
-    fetchAverageScores();
-  }, [fetchAverageScores]);
+    debouncedFetchRef.current(filters);
+  }, [filters]);
 
-  const handleFilterChange = (newFilters: {
-    unit_pln: string | null;
-    search: string;
-  }) => {
+  const handleFilterChange = (newFilters: typeof filters) => {
     setFilters(newFilters);
+    debouncedFetchRef.current(newFilters);
   };
 
   const handleExport = () => {
+    // Export logic
+  };
 
-  }
+  const SummaryCard = React.memo(
+    ({
+      title,
+      value,
+      fetching,
+    }: {
+      title: string;
+      value: number;
+      fetching: boolean;
+    }) => (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+          <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            {fetching ? <Loader /> : value}
+          </div>
+        </CardContent>
+      </Card>
+    ),
+  );
 
   return (
     <>
@@ -116,46 +151,28 @@ export default function Page() {
         <div className="flex items-end justify-between !mb-10">
           <Heading title={`Karyawan`} description="Manajemen Karyawan" />
           <div>
-            <Button
-              className="text-xs md:text-sm"
-              onClick={handleExport}
-            >
+            <Button className="text-xs md:text-sm" onClick={handleExport}>
               <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
             </Button>
           </div>
         </div>
 
         <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Pembelajaran Selesai
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalCourseCompleted}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Nilai Rata - rata Ujian
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalAvgQuizScore}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Nilai Rata - rata Tugas
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalAvgTaskScore}</div>
-            </CardContent>
-          </Card>
+          <SummaryCard
+            title="Pembelajaran Selesai"
+            value={totalCourseCompleted}
+            fetching={fetching}
+          />
+          <SummaryCard
+            title="Nilai Rata - rata Ujian"
+            value={totalAvgQuizScore}
+            fetching={fetching}
+          />
+          <SummaryCard
+            title="Nilai Rata - rata Tugas"
+            value={totalAvgTaskScore}
+            fetching={fetching}
+          />
         </div>
 
         <EmployeesTable
