@@ -18,7 +18,6 @@ export const EvaluationCourseTable = ({
   const fetch = useDirectusFetch();
 
   const [fetching, setFetching] = useState(true);
-  const [allData, setAllData] = useState<any[]>([]); // Complete dataset
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState<any[]>([]); // Paginated and sorted data
@@ -58,8 +57,8 @@ export const EvaluationCourseTable = ({
     } | null,
   ) => {
     setSeletedUnit(unit);
-    setCurrentPage(1); // Reset to first page on unit change
-    onFilterChange({ unit_pln: unit, search: searchValue });
+    setCurrentPage(1);
+    onFilterChange({ unit: unit, search: searchValue });
   };
 
   async function fetchData() {
@@ -84,104 +83,41 @@ export const EvaluationCourseTable = ({
       }
 
       try {
-        const { data: employeeCourses } = await fetch.get(
+        const { data: res } = await fetch.get(
           "items/employee_course",
           {
             params: {
               fields: [
                 "id",
                 "exam_score",
+                "exam_score_final",
                 "tasks_score",
-                "course.id",
-                "course.title",
-                "course.is_open_exam",
-                "course.is_open_task",
-                "course.min_score",
-                "employee.employee_id",
+                "tasks_score_final",
+                "score_final",
+                "is_passed",
                 "employee.full_name",
-                "employee.unit_pln",
-                "employee.unit",
+                "employee.id_region.name",
               ],
               filter: filters,
+              limit: pageSize,
+              offset: (currentPage - 1) * pageSize,
+              sort: sortingFields.map((field) => {
+                if (field.id === "employee_full_name") {
+                  return `${field.desc ? "-" : ""}employee.full_name`;
+                }
+                return `${field.desc ? "-" : ""}${field.id}`;
+              }),
+              meta: "total_count,filter_count",
             },
           },
         );
 
-        const employeeScores = employeeCourses?.data?.reduce(
-          (
-            acc: Record<
-              string,
-              {
-                name: string;
-                unit: string;
-                passed: string;
-                minScore: string;
-                examScore: string;
-                tasksScore: string;
-                examEvaluation: string;
-                taskEvaluation: string;
-                totalEvaluation: number;
-              }
-            >,
-            record: any,
-          ) => {
-            const employeeId = record.employee.employee_id;
-            const fullName = record.employee.full_name;
-            const unit = record.employee.unit_pln;
-
-            const examScore = record.exam_score || 0;
-            const tasksScore = record.tasks_score || 0;
-            const isOpenExam = record.course.is_open_exam;
-            const isOpenTask = record.course.is_open_task;
-
-            if (!acc[employeeId]) {
-              acc[employeeId] = {
-                name: fullName,
-                minScore: record.course.min_score,
-                examScore: '0',
-                tasksScore: '0',
-                unit,
-                passed: "Tidak",
-                examEvaluation: "0",
-                taskEvaluation: "0",
-                totalEvaluation: 0,
-              };
-            }
-
-            acc[employeeId].minScore = record.course.min_score;
-            acc[employeeId].examScore = examScore;
-            acc[employeeId].tasksScore = tasksScore;
-
-            const examEvaluation = isOpenExam ? (examScore / 100) * (isOpenTask ? 70 : 100) : 0;
-            const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
-            const totalEvaluation = examEvaluation + taskEvaluation;
-
-            acc[employeeId].examEvaluation = examEvaluation.toFixed(2);
-            acc[employeeId].taskEvaluation = taskEvaluation.toFixed(2);
-            acc[employeeId].totalEvaluation = Number(
-              totalEvaluation.toFixed(2),
-            );
-
-            if (totalEvaluation >= Number(acc[employeeId].minScore)) {
-              acc[employeeId].passed = "Ya";
-            }
-
-            return acc;
-          },
-          {},
-        );
-
-        const formattedData = Object.keys(employeeScores).map((employeeId) => {
-          return { ...employeeScores[employeeId] };
-        });
-
         if (onDataChange) {
-          onDataChange(formattedData)
+          onDataChange(res?.data)
         }
 
-        setAllData(formattedData);
-        setTotalItems(formattedData.length);
-        updatePaginatedData(formattedData, currentPage, pageSize);
+        setData(res?.data ?? []);
+        setTotalItems(res?.meta?.filter_count);
       } catch (error) {
         console.error("Error fetching:", error);
       } finally {
@@ -190,50 +126,18 @@ export const EvaluationCourseTable = ({
     }
   }
 
-  const updatePaginatedData = (
-    allData: any[],
-    page: number,
-    size: number,
-    sortingFields: { id: string; desc: boolean }[] = [],
-  ) => {
-    let sortedData = [...allData];
-
-    // Apply sorting
-    sortingFields.forEach(({ id, desc }) => {
-      sortedData.sort((a, b) => {
-        const aValue = a[id] ?? "";
-        const bValue = b[id] ?? "";
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          // Case-insensitive sorting for strings
-          return desc
-            ? bValue.localeCompare(aValue)
-            : aValue.localeCompare(bValue);
-        }
-
-        if (typeof aValue === "number" && typeof bValue === "number") {
-          // Numeric sorting
-          return desc ? bValue - aValue : aValue - bValue;
-        }
-
-        return 0; // No sorting for other data types
-      });
-    });
-
-    // Apply pagination
-    const startIndex = (page - 1) * size;
-    const paginatedData = sortedData.slice(startIndex, startIndex + size);
-    setData(paginatedData);
-  };
-
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [members, courseId, selectedUnit, searchValue]);
-
-  useEffect(() => {
-    updatePaginatedData(allData, currentPage, pageSize, sortingFields);
-  }, [allData, currentPage, pageSize, sortingFields]);
+  }, [
+    courseId,
+    currentPage,
+    pageSize,
+    searchValue,
+    members,
+    selectedUnit,
+    sortingFields,
+  ]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

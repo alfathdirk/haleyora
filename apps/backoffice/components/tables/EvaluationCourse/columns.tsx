@@ -5,14 +5,14 @@ import { EmployeeCourse } from "@/types/quiz";
 
 export const columns: ColumnDef<EmployeeCourse>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "employee.full_name",
     header: "Nama",
     cell: ({ row }) => (
       <div
         id={row.original?.id}
         className="flex items-center justify-between font-semibold"
       >
-        {row.original?.name ?? "-"}
+        {row.original?.employee?.full_name ?? "-"}
       </div>
     ),
     enableSorting: true,
@@ -25,55 +25,25 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
         id={row.original?.id}
         className="flex items-center justify-between font-semibold"
       >
-        {row.original?.unit ?? "-"}
+        {row.original?.employee?.id_region?.name ?? "-"}
       </div>
     ),
   },
-  // {
-  //   accessorKey: "minScore",
-  //   header: "Minimum",
-  //   cell: ({ row }) => (
-  //     <div className="px-2.5 py-1 w-fit">
-  //       {row.original?.minScore ?? ""}
-  //     </div>
-  //   ),
-  //   enableSorting: true,
-  // },
-  // {
-  //   accessorKey: "examScore",
-  //   header: "Ujian",
-  //   cell: ({ row }) => (
-  //     <div className="px-2.5 py-1 w-fit">
-  //       {row.original?.examScore ?? ""}
-  //     </div>
-  //   ),
-  //   enableSorting: true,
-  // },
-  // {
-  //   accessorKey: "tasksScore",
-  //   header: "Tugas",
-  //   cell: ({ row }) => (
-  //     <div className="px-2.5 py-1 w-fit">
-  //       {row.original?.tasksScore ?? ""}
-  //     </div>
-  //   ),
-  //   enableSorting: true,
-  // },
   {
-    accessorKey: "totalEvaluation",
+    accessorKey: "score_final",
     header: "Nilai Keseluruhan",
     cell: ({ row }) => (
       <div className="px-2.5 py-1 w-fit">
-        {row.original?.totalEvaluation ?? ""}
+        {row.original?.score_final ?? ""}
       </div>
     ),
     enableSorting: true,
   },
   {
-    accessorKey: "passed",
+    accessorKey: "is_passed",
     header: "Lulus",
     cell: ({ row }) => (
-      <div className="px-2.5 py-1 w-fit">{row.original?.passed ?? ""}</div>
+      <div className="px-2.5 py-1 w-fit">{row.original?.is_passed ? "Ya" : "Tidak"}</div>
     ),
     enableSorting: true,
   },

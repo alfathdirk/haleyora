@@ -6,10 +6,17 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { DateRange } from "react-day-picker";
 
 interface Props {
-  data: Array<object>;
+  courseId?: any;
+  parentFilters?: {
+    unit: {
+      id: string;
+      title: string;
+    } | null;
+    search: string;
+  };
 }
 
-export function EvaluationCourseOverview({ data }: Props) {
+export function EvaluationCourseOverview({ courseId, parentFilters }: Props) {
   const fetch = useDirectusFetch();
   const [fetching, setFetching] = useState(true);
   const [summary, setSummary] = useState<
@@ -18,26 +25,65 @@ export function EvaluationCourseOverview({ data }: Props) {
 
   const COLORS = ["#00C49F", "#ff5b5b"];
 
-  async function convertData(data: Array<any>) {
-    setFetching(true);
-    try {
-      const lulus = data?.filter((item) => item?.passed === 'Ya')?.length;
-      const tidakLulus = data?.filter((item) => item?.passed !== 'Ya')?.length;
+  async function fetchData() {
+    if (courseId) {
+      setFetching(true);
 
-      setSummary([
-        { name: "Lulus", value: lulus },
-        { name: "Tidak Lulus", value: tidakLulus },
-      ]);
-    } catch (error) {
-      console.error("Error fetching:", error);
-    } finally {
-      setFetching(false);
+      const filters: any = {
+        completed: { _eq: 1 },
+        course: { _eq: courseId },
+        employee: {
+          full_name: {},
+          id_region: {},
+        },
+      };
+
+      if (parentFilters?.search) {
+        filters["employee"].full_name = { _contains: parentFilters?.search };
+      }
+
+      if (parentFilters?.unit?.id) {
+        filters["employee"].id_region = {
+          _eq: parentFilters?.unit?.id.toString(),
+        };
+      }
+
+      try {
+        const { data: resPassed } = await fetch.get("items/employee_course", {
+          params: {
+            filter: { ...filters, is_passed: { _eq: 1 } },
+            aggregate: JSON.stringify({
+              count: ["id"],
+            }),
+          },
+        });
+        const { data: resNotPassed } = await fetch.get(
+          "items/employee_course",
+          {
+            params: {
+              filter: { ...filters, is_passed: { _eq: 0 } },
+              aggregate: JSON.stringify({
+                count: ["id"],
+              }),
+            },
+          },
+        );
+
+        setSummary([
+          { name: "Lulus", value: resPassed?.data[0]?.count?.id ?? 0 },
+          { name: "Tidak Lulus", value: resNotPassed?.data[0]?.count?.id ?? 0 },
+        ]);
+      } catch (error) {
+        console.error("Error fetching:", error);
+      } finally {
+        setFetching(false);
+      }
     }
   }
 
   useEffect(() => {
-    convertData(data);
-  }, [data]);
+    fetchData();
+  }, [parentFilters]);
 
   const renderCustomizedLabel = ({
     cx,

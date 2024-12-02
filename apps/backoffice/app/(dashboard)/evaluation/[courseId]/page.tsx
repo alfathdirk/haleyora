@@ -22,10 +22,13 @@ export default function Page() {
   const [totalAvgQuizScore, setTotalAvgQuizScore] = useState<number>(0);
   const [totalAvgTaskScore, setTotalAvgTaskScore] = useState<number>(0);
   const [filters, setFilters] = useState<{
-    unit_pln: string | null;
+    unit: {
+      id: string;
+      title: string;
+    } | null;
     search: string;
   }>({
-    unit_pln: null,
+    unit: null,
     search: "",
   });
 
@@ -42,7 +45,10 @@ export default function Page() {
   }, []);
 
   const handleFilterChange = (newFilters: {
-    unit_pln: string | null;
+    unit: {
+      id: string;
+      title: string;
+    } | null;
     search: string;
   }) => {
     setFilters(newFilters);
@@ -64,11 +70,12 @@ export default function Page() {
 
         <div className="grid gap-4 !mb-10 md:grid-cols-2">
           <Card className="col-span-1">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-
-            </CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0"></CardHeader>
             <CardContent className="w-full h-72">
-              <EvaluationCourseOverview data={data} />
+              <EvaluationCourseOverview
+                courseId={courseId}
+                parentFilters={filters}
+              />
             </CardContent>
           </Card>
         </div>
@@ -76,8 +83,7 @@ export default function Page() {
         <EvaluationCourseTable
           members={members}
           currentUser={currentUser}
-          // onFilterChange={handleFilterChange}
-          onFilterChange={() => {}}
+          onFilterChange={handleFilterChange}
           onDataChange={(items: React.SetStateAction<any[]>) => setData(items)}
           courseId={courseId}
         />
