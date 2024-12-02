@@ -71,10 +71,8 @@ export function CoursesSummary({
     }
 
     if (dateRange?.from && dateRange?.to) {
-      filters["employee_course"] = {
-        date_created: {
-          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
-        },
+      deep.employee_course._filter.date_created = {
+        _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
       };
     }
 
