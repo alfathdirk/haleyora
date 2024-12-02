@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
-import { DateRange } from "react-day-picker";
 
 interface Props {
   courseId?: any;
@@ -13,6 +12,7 @@ interface Props {
       title: string;
     } | null;
     search: string;
+    dateRange: any;
   };
 }
 
@@ -45,6 +45,15 @@ export function EvaluationCourseOverview({ courseId, parentFilters }: Props) {
       if (parentFilters?.unit?.id) {
         filters["employee"].id_region = {
           _eq: parentFilters?.unit?.id.toString(),
+        };
+      }
+
+      if (parentFilters?.dateRange?.from && parentFilters?.dateRange?.to) {
+        filters.date_created = {
+          _between: [
+            parentFilters?.dateRange.from.toISOString(),
+            parentFilters?.dateRange.to.toISOString(),
+          ],
         };
       }
 

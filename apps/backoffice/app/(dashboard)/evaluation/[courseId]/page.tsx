@@ -10,6 +10,8 @@ import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { EvaluationCourseTable } from "@/components/tables/EvaluationCourse/table";
 import { useParams, useSearchParams } from "next/navigation";
 import { EvaluationCourseOverview } from "@/components/EvaluationCourseOverview";
+import { DateRange } from "react-day-picker";
+import { startOfMonth } from "date-fns";
 
 export default function Page() {
   const { members, currentUser } = useContext(AuthContext);
@@ -27,9 +29,14 @@ export default function Page() {
       title: string;
     } | null;
     search: string;
+    dateRange: DateRange | {};
   }>({
     unit: null,
     search: "",
+    dateRange: {
+      from: startOfMonth(new Date()),
+      to: new Date(),
+    },
   });
 
   const fetchData = useCallback(async () => {
@@ -50,6 +57,7 @@ export default function Page() {
       title: string;
     } | null;
     search: string;
+    dateRange: DateRange | {};
   }) => {
     setFilters(newFilters);
   };

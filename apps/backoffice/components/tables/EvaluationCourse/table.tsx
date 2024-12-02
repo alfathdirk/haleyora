@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import {
+  SetStateAction,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
@@ -8,6 +14,9 @@ import { columns } from "./columns";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
 import SelectFilterUnit from "@/components/SelectFilterUnit";
+import { CalendarDateRangePicker } from "@/components/date-range-picker";
+import { startOfMonth } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 export const EvaluationCourseTable = ({
   members,
@@ -28,6 +37,10 @@ export const EvaluationCourseTable = ({
     id: string;
     title: string;
   } | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(new Date()),
+    to: new Date(),
+  });
   const [sortingFields, setSortingFields] = useState<
     { id: string; desc: boolean }[]
   >([]);
@@ -35,7 +48,11 @@ export const EvaluationCourseTable = ({
   const onInputChange = useCallback(
     (nextValue: string) => {
       setSearchValue(nextValue);
-      onFilterChange({ unit: selectedUnit, search: nextValue });
+      onFilterChange({
+        unit: selectedUnit,
+        search: nextValue,
+        dateRange: dateRange,
+      });
     },
     [selectedUnit],
   );
@@ -58,7 +75,7 @@ export const EvaluationCourseTable = ({
   ) => {
     setSeletedUnit(unit);
     setCurrentPage(1);
-    onFilterChange({ unit: unit, search: searchValue });
+    onFilterChange({ unit: unit, search: searchValue, dateRange: dateRange });
   };
 
   async function fetchData() {
@@ -70,7 +87,7 @@ export const EvaluationCourseTable = ({
         course: { _eq: courseId },
         employee: {
           full_name: {},
-          unit_pln: {},
+          id_region: {},
         },
       };
 
@@ -82,38 +99,41 @@ export const EvaluationCourseTable = ({
         filters["employee"].id_region = { _eq: selectedUnit?.id.toString() };
       }
 
+      if (dateRange?.from && dateRange?.to) {
+        filters.date_created = {
+          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+        };
+      }
+
       try {
-        const { data: res } = await fetch.get(
-          "items/employee_course",
-          {
-            params: {
-              fields: [
-                "id",
-                "exam_score",
-                "exam_score_final",
-                "tasks_score",
-                "tasks_score_final",
-                "score_final",
-                "is_passed",
-                "employee.full_name",
-                "employee.id_region.name",
-              ],
-              filter: filters,
-              limit: pageSize,
-              offset: (currentPage - 1) * pageSize,
-              sort: sortingFields.map((field) => {
-                if (field.id === "employee_full_name") {
-                  return `${field.desc ? "-" : ""}employee.full_name`;
-                }
-                return `${field.desc ? "-" : ""}${field.id}`;
-              }),
-              meta: "total_count,filter_count",
-            },
+        const { data: res } = await fetch.get("items/employee_course", {
+          params: {
+            fields: [
+              "id",
+              "exam_score",
+              "exam_score_final",
+              "tasks_score",
+              "tasks_score_final",
+              "score_final",
+              "is_passed",
+              "employee.full_name",
+              "employee.id_region.name",
+            ],
+            filter: filters,
+            limit: pageSize,
+            offset: (currentPage - 1) * pageSize,
+            sort: sortingFields.map((field) => {
+              if (field.id === "employee_full_name") {
+                return `${field.desc ? "-" : ""}employee.full_name`;
+              }
+              return `${field.desc ? "-" : ""}${field.id}`;
+            }),
+            meta: "total_count,filter_count",
           },
-        );
+        });
 
         if (onDataChange) {
-          onDataChange(res?.data)
+          onDataChange(res?.data);
         }
 
         setData(res?.data ?? []);
@@ -136,6 +156,7 @@ export const EvaluationCourseTable = ({
     searchValue,
     members,
     selectedUnit,
+    dateRange,
     sortingFields,
   ]);
 
@@ -152,6 +173,18 @@ export const EvaluationCourseTable = ({
     return (
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center w-full space-x-2 ">
+          <CalendarDateRangePicker
+            selectedRange={dateRange}
+            onChange={(range: SetStateAction<DateRange | undefined>) => {
+              console.log("\n \x1b[33m ~ range:", range);
+              setDateRange(range);
+              onFilterChange({
+                unit: selectedUnit,
+                search: searchValue,
+                dateRange: range,
+              });
+            }}
+          />
           <div className="w-3/5">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
