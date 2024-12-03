@@ -186,7 +186,7 @@ export const EvaluationCourseTable = ({
       }
 
       if (selectedUnit?.id) {
-        filters.employee = Object.assign(filters.employee, {
+        filters.employee = Object.assign(filters?.employee ?? {}, {
           id_region: { _eq: selectedUnit?.id.toString() }
         })
       }
