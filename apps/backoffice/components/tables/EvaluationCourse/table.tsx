@@ -9,7 +9,7 @@ import {
 } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
-import { LucideSearch } from "lucide-react";
+import { DownloadCloud, LucideSearch } from "lucide-react";
 import { columns } from "./columns";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { debounce } from "@/lib/utils";
@@ -17,6 +17,8 @@ import SelectFilterUnit from "@/components/SelectFilterUnit";
 import { CalendarDateRangePicker } from "@/components/date-range-picker";
 import { startOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { Button } from "@/components/ui/button";
+import { useDirectusContext } from "@/hooks/useDirectusContext";
 
 export const EvaluationCourseTable = ({
   members,
@@ -25,8 +27,10 @@ export const EvaluationCourseTable = ({
   courseId,
 }: any) => {
   const fetch = useDirectusFetch();
+  const { accessToken } = useDirectusContext();
 
   const [fetching, setFetching] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState<any[]>([]); // Paginated and sorted data
@@ -169,6 +173,107 @@ export const EvaluationCourseTable = ({
     setCurrentPage(1);
   };
 
+  const handleExport = async () => {
+    if (courseId) {
+      setExporting(true);
+      const filters: any = {
+        completed: { _eq: 1 },
+        course: { _eq: courseId },
+      };
+
+      if (searchValue) {
+        filters.employee = { full_name: { _contains: searchValue } };
+      }
+
+      if (selectedUnit?.id) {
+        filters.employee = Object.assign(filters.employee, {
+          id_region: { _eq: selectedUnit?.id.toString() }
+        })
+      }
+
+      if (dateRange?.from && dateRange?.to) {
+        filters.date_created = {
+          _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
+        };
+      }
+
+      const timestamp = new Date().toISOString().replace(/[:.-]/g, "_");
+      const title = `report-evaluation-${timestamp}`;
+
+      try {
+        await fetch.post("utils/export/employee_course", {
+          body: {
+            format: "csv",
+            file: {
+              title,
+            },
+            query: {
+              fields: [
+                // "exam_score",
+                "exam_score_final",
+                // "tasks_score",
+                "tasks_score_final",
+                "score_final",
+                "is_passed",
+                "employee.full_name",
+                "employee.employee_id",
+                // "employee.id_region.name",
+              ],
+              filter: filters,
+              limit: 10000
+            },
+          },
+        });
+
+        const file = await pollForFile(title);
+
+        const downloadUrl = getDownloadUrl(file.id);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = "";
+        link.click();
+
+      } catch (error) {
+        console.error("Error fetching:", error);
+      } finally {
+        setExporting(false);
+      }
+    }
+  };
+
+  const pollForFile = async (title: string, maxAttempts: number = 10, delayMs: number = 3000) => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const { data: res } = await fetch.get("files", {
+          params: {
+            fields: ["id", "title"],
+            filter: {
+              title: {
+                _eq: title,
+              },
+            },
+          },
+        });
+
+        if (res?.data.length > 0) {
+          // File is ready
+          return res?.data[0]; // Return the file metadata
+        }
+      } catch (error) {
+        console.error(`Attempt ${attempt}: Error checking file readiness`, error);
+      }
+
+      // Wait before the next attempt
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+
+    throw new Error("File not ready after maximum attempts");
+  };
+
+  const getDownloadUrl = (fileId: string) => {
+    return `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${fileId}?download=&access_token=${accessToken}`;
+  };
+
   const headerActions = () => {
     return (
       <div className="flex items-center justify-between w-full">
@@ -176,7 +281,6 @@ export const EvaluationCourseTable = ({
           <CalendarDateRangePicker
             selectedRange={dateRange}
             onChange={(range: SetStateAction<DateRange | undefined>) => {
-              console.log("\n \x1b[33m ~ range:", range);
               setDateRange(range);
               onFilterChange({
                 unit: selectedUnit,
@@ -185,11 +289,17 @@ export const EvaluationCourseTable = ({
               });
             }}
           />
-          <div className="w-3/5">
+          <div className="w-full">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
             />
+          </div>
+          <div className="w-2/5">
+            <Button className="text-xs md:text-sm" onClick={handleExport}>
+              <DownloadCloud className="w-4 h-4 mr-2" />{" "}
+              {exporting ? "Mohon Tunggu.." : "Unduh Data"}
+            </Button>
           </div>
         </div>
         <div className="pr-4">
