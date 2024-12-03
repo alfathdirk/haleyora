@@ -13,12 +13,15 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 import { debounce } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+import { useDirectusContext } from "@/hooks/useDirectusContext";
 
 export default function Page() {
+  const { accessToken } = useDirectusContext();
   const { members, currentUser } = useContext(AuthContext);
   const fetch = useDirectusFetch();
 
   const [fetching, setFetching] = useState<boolean>(true);
+  const [exporting, setExporting] = useState(false);
   const [totalCourseCompleted, setTotalCourseCompleted] = useState<number>(0);
   const [totalAvgQuizScore, setTotalAvgQuizScore] = useState<number>(0);
   const [totalAvgTaskScore, setTotalAvgTaskScore] = useState<number>(0);
@@ -118,66 +121,72 @@ export default function Page() {
   };
 
   const handleExport = async () => {
-    // const appliedFilters = filters;
+    setExporting(true);
+    const appliedFilters = filters;
 
-    // const apiFilter: any = {
-    //   completed: { _eq: 1 },
-    // };
+    const apiFilter: any = {
+      completed: { _eq: 1 },
+    };
 
-    // const deep: any = {
-    //   employee: {
-    //     _filter: {},
-    //   },
-    // };
+    if (appliedFilters.search) {
+      apiFilter.employee = { full_name: { _contains: appliedFilters.search } };
+    }
 
-    // if (appliedFilters.search) {
-    //   deep.employee._filter['full_name'] = { _contains: appliedFilters.search };
-    // }
+    if (appliedFilters.id_region?.id) {
+      apiFilter.employee = Object.assign(apiFilter?.employee ?? {}, {
+        id_region: { _eq: appliedFilters.id_region?.id.toString() },
+      });
+    }
 
-    // if (appliedFilters.id_region?.id) {
-    //   deep.employee._filter['id_region'] = { _eq: appliedFilters.id_region?.id.toString() };
-    // }
+    if (appliedFilters?.dateRange?.from && appliedFilters?.dateRange?.to) {
+      apiFilter.date_created = {
+        _between: [
+          appliedFilters?.dateRange?.from.toISOString(),
+          appliedFilters?.dateRange?.to.toISOString(),
+        ],
+      };
+    }
 
-    // if (appliedFilters?.dateRange?.from && appliedFilters?.dateRange?.to) {
-    //   apiFilter["date_created"] = {
-    //     _between: [
-    //       appliedFilters?.dateRange?.from.toISOString(),
-    //       appliedFilters?.dateRange?.to.toISOString(),
-    //     ],
-    //   };
-    // }
-    // // Export logic
-    // const { data: res } = await fetch.post("utils/export/employee_course", {
-    //   body: {
-    //     "format": "csv",
-    //     "file": {
-    //         "title": "report-monitoring"
-    //     },
-    //     "query": {
-    //         "sort": ["-date_created"],
-    //         "limit": 10,
-    //         "fields": [
-    //             "employee.full_name",
-    //             "employee.employee_id",
-    //             "course.title",
-    //             "exam_score",
-    //             "tasks_score",
-    //             "exam_score_final",
-    //             "tasks_score_final",
-    //             "score_final",
-    //             "is_passed"
-    //         ],
-    //         "filter": {
-    //             "completed": {
-    //                 "_eq": 1
-    //             },
-    //             ...apiFilter
-    //         },
-    //         deep
-    //     }
-    // },
-    // });
-    // console.log('\n \x1b[33m ~ res:', res);
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, "_");
+    const title = `report-monitoring-${timestamp}`;
+
+    try {
+      await fetch.post("utils/export/employee_course", {
+        body: {
+          format: "csv",
+          file: {
+            title,
+          },
+          query: {
+            fields: [
+              // "exam_score",
+              "exam_score_final",
+              // "tasks_score",
+              "tasks_score_final",
+              "score_final",
+              "is_passed",
+              "employee.full_name",
+              "employee.employee_id",
+              // "employee.id_region.name",
+            ],
+            filter: apiFilter,
+            limit: 10,
+          },
+        },
+      });
+
+      const file = await pollForFile(title);
+
+      const downloadUrl = getDownloadUrl(file.id);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "";
+      link.click();
+    } catch (error) {
+      console.error("Error fetching:", error);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const SummaryCard = React.memo(
@@ -203,6 +212,46 @@ export default function Page() {
     ),
   );
 
+  const pollForFile = async (
+    title: string,
+    maxAttempts: number = 10,
+    delayMs: number = 3000,
+  ) => {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const { data: res } = await fetch.get("files", {
+          params: {
+            fields: ["id", "title"],
+            filter: {
+              title: {
+                _eq: title,
+              },
+            },
+          },
+        });
+
+        if (res?.data.length > 0) {
+          // File is ready
+          return res?.data[0]; // Return the file metadata
+        }
+      } catch (error) {
+        console.error(
+          `Attempt ${attempt}: Error checking file readiness`,
+          error,
+        );
+      }
+
+      // Wait before the next attempt
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+
+    throw new Error("File not ready after maximum attempts");
+  };
+
+  const getDownloadUrl = (fileId: string) => {
+    return `${process.env.NEXT_PUBLIC_BACKEND_URL}/assets/${fileId}?download=&access_token=${accessToken}`;
+  };
+
   return (
     <div className="flex-1 space-y-2">
       <BreadCrumb items={[{ title: "Karyawan", link: "/employees" }]} />
@@ -211,7 +260,8 @@ export default function Page() {
         <Heading title={`Karyawan`} description="Manajemen Karyawan" />
         <div>
           <Button className="text-xs md:text-sm" onClick={handleExport}>
-            <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
+            <DownloadCloud className="w-4 h-4 mr-2" />{" "}
+            {exporting ? "Mohon Tunggu.." : "Unduh Data"}
           </Button>
         </div>
       </div>
