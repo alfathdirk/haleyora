@@ -111,8 +111,8 @@ export default function Page() {
                   <CardTitle className="text-lg font-normal">
                     Grafik Kelulusan Karyawan
                     <p className="text-sm font-light text-gray-400">
-                      Grafik berikut ini merupakan kelulusan dari Nilai
-                      Keseluruhan
+                      Grafik berikut ini merupakan kelulusan dari nilai
+                      keseluruhan
                     </p>
                   </CardTitle>
                 </CardHeader>
@@ -130,10 +130,10 @@ export default function Page() {
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle className="text-lg font-normal">
-                    Bagan Nilai Rata - rata per Unit
+                    Bagan nilai rata - rata per unit
                     <p className="text-sm font-light text-gray-400">
-                      Bagan berikut ini merupakan rata - rata nilai Ujian &
-                      Tugas
+                      Bagan berikut ini merupakan rata - rata nilai ujian &
+                      tugas
                     </p>
                   </CardTitle>
                 </CardHeader>
@@ -148,10 +148,10 @@ export default function Page() {
               <Card className="col-span-4 md:col-span-4">
                 <CardHeader>
                   <CardTitle className="text-lg font-normal">
-                    Rata - rata Nilai Keseluruhan per Materi Pembelajaran
+                    Rata - rata nilai keseluruhan per materi pembelajaran
                     <p className="text-sm font-light text-gray-400">
-                      Daftar berikut ini merupakan rata - rata dari Nilai
-                      Keseluruhan (Kelulusan)
+                      Daftar berikut ini merupakan rata - rata dari nilai
+                      keseluruhan (Kelulusan)
                     </p>
                   </CardTitle>
                 </CardHeader>

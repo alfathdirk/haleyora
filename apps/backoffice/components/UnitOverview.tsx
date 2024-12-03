@@ -6,6 +6,7 @@ import {
   BarChart,
   ResponsiveContainer,
   CartesianGrid,
+  YAxis,
   XAxis,
   Tooltip,
   Bar,
@@ -173,6 +174,19 @@ export function UnitOverview({
     );
   };
 
+  const CustomXAxisTick = ({ x, y, payload }) => {
+    const words = payload.value.split(" ");
+    return (
+      <text x={x} y={y + 10} textAnchor="middle" style={{ fontSize: "10px" }}>
+        {words.map((word, index) => (
+          <tspan key={index} x={x} dy={index === 0 ? 0 : 14}>
+            {word}
+          </tspan>
+        ))}
+      </text>
+    );
+  };
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       {fetching ? (
@@ -194,20 +208,34 @@ export function UnitOverview({
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            width={500}
-            height={300}
             data={dataBarchart}
             margin={{
-              top: 5,
               right: 30,
-              left: 20,
-              bottom: 5,
+              bottom: 50,
             }}
+            barCategoryGap="15%"
+            barGap={0}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <YAxis
+              type="number"
+              domain={['auto', 'auto']}
+              style={{
+                fontSize: "12px",
+              }}
+            />
+            <XAxis
+              tick={<CustomXAxisTick />}
+              dataKey="name"
+              interval={0}
+              tickLine={true}
+            />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="examAverage" fill="#3aaed7" name="Rata - rata Ujian" />
+            <Bar
+              dataKey="examAverage"
+              fill="#3aaed7"
+              name="Rata - rata Ujian"
+            />
             <Bar
               dataKey="tasksAverage"
               fill="#e6df5a"
