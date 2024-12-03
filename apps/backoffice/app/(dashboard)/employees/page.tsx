@@ -23,7 +23,7 @@ export default function Page() {
   const [totalAvgQuizScore, setTotalAvgQuizScore] = useState<number>(0);
   const [totalAvgTaskScore, setTotalAvgTaskScore] = useState<number>(0);
   const [filters, setFilters] = useState<{
-    dateRange: DateRange,
+    dateRange: DateRange;
     id_region: {
       id: string | null;
       title: string | null;
@@ -58,9 +58,10 @@ export default function Page() {
         }
 
         if (appliedFilters.id_region?.id) {
-          filters["employee"].id_region = { _eq: appliedFilters.id_region?.id.toString() };
+          filters["employee"].id_region = {
+            _eq: appliedFilters.id_region?.id.toString(),
+          };
         }
-
 
         if (appliedFilters?.dateRange?.from && appliedFilters?.dateRange?.to) {
           filters["date_created"] = {
@@ -68,7 +69,7 @@ export default function Page() {
               appliedFilters?.dateRange?.from.toISOString(),
               appliedFilters?.dateRange?.to.toISOString(),
             ],
-          }
+          };
         }
 
         if (
@@ -86,7 +87,7 @@ export default function Page() {
             aggregate: {
               count: "*",
               avg: ["exam_score", "tasks_score"],
-            }
+            },
           },
         });
 
@@ -116,8 +117,67 @@ export default function Page() {
     debouncedFetchRef.current(newFilters);
   };
 
-  const handleExport = () => {
-    // Export logic
+  const handleExport = async () => {
+    // const appliedFilters = filters;
+
+    // const apiFilter: any = {
+    //   completed: { _eq: 1 },
+    // };
+
+    // const deep: any = {
+    //   employee: {
+    //     _filter: {},
+    //   },
+    // };
+
+    // if (appliedFilters.search) {
+    //   deep.employee._filter['full_name'] = { _contains: appliedFilters.search };
+    // }
+
+    // if (appliedFilters.id_region?.id) {
+    //   deep.employee._filter['id_region'] = { _eq: appliedFilters.id_region?.id.toString() };
+    // }
+
+    // if (appliedFilters?.dateRange?.from && appliedFilters?.dateRange?.to) {
+    //   apiFilter["date_created"] = {
+    //     _between: [
+    //       appliedFilters?.dateRange?.from.toISOString(),
+    //       appliedFilters?.dateRange?.to.toISOString(),
+    //     ],
+    //   };
+    // }
+    // // Export logic
+    // const { data: res } = await fetch.post("utils/export/employee_course", {
+    //   body: {
+    //     "format": "csv",
+    //     "file": {
+    //         "title": "report-monitoring"
+    //     },
+    //     "query": {
+    //         "sort": ["-date_created"],
+    //         "limit": 10,
+    //         "fields": [
+    //             "employee.full_name",
+    //             "employee.employee_id",
+    //             "course.title",
+    //             "exam_score",
+    //             "tasks_score",
+    //             "exam_score_final",
+    //             "tasks_score_final",
+    //             "score_final",
+    //             "is_passed"
+    //         ],
+    //         "filter": {
+    //             "completed": {
+    //                 "_eq": 1
+    //             },
+    //             ...apiFilter
+    //         },
+    //         deep
+    //     }
+    // },
+    // });
+    // console.log('\n \x1b[33m ~ res:', res);
   };
 
   const SummaryCard = React.memo(
@@ -144,43 +204,41 @@ export default function Page() {
   );
 
   return (
-    <>
-      <div className="flex-1 space-y-2">
-        <BreadCrumb items={[{ title: "Karyawan", link: "/employees" }]} />
+    <div className="flex-1 space-y-2">
+      <BreadCrumb items={[{ title: "Karyawan", link: "/employees" }]} />
 
-        <div className="flex items-end justify-between !mb-10">
-          <Heading title={`Karyawan`} description="Manajemen Karyawan" />
-          <div>
-            <Button className="text-xs md:text-sm" onClick={handleExport}>
-              <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
-            </Button>
-          </div>
+      <div className="flex items-end justify-between !mb-10">
+        <Heading title={`Karyawan`} description="Manajemen Karyawan" />
+        <div>
+          <Button className="text-xs md:text-sm" onClick={handleExport}>
+            <DownloadCloud className="w-4 h-4 mr-2" /> Unduh Data
+          </Button>
         </div>
+      </div>
 
-        <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
-          <SummaryCard
-            title="Pembelajaran Selesai"
-            value={totalCourseCompleted}
-            fetching={fetching}
-          />
-          <SummaryCard
-            title="Nilai Rata - rata Ujian"
-            value={totalAvgQuizScore}
-            fetching={fetching}
-          />
-          <SummaryCard
-            title="Nilai Rata - rata Tugas"
-            value={totalAvgTaskScore}
-            fetching={fetching}
-          />
-        </div>
-
-        <EmployeesTable
-          members={members}
-          currentUser={currentUser}
-          onFilterChange={handleFilterChange}
+      <div className="grid gap-4 !mb-10 md:grid-cols-2 lg:grid-cols-3">
+        <SummaryCard
+          title="Pembelajaran Selesai"
+          value={totalCourseCompleted}
+          fetching={fetching}
+        />
+        <SummaryCard
+          title="Nilai Rata - rata Ujian"
+          value={totalAvgQuizScore}
+          fetching={fetching}
+        />
+        <SummaryCard
+          title="Nilai Rata - rata Tugas"
+          value={totalAvgTaskScore}
+          fetching={fetching}
         />
       </div>
-    </>
+
+      <EmployeesTable
+        members={members}
+        currentUser={currentUser}
+        onFilterChange={handleFilterChange}
+      />
+    </div>
   );
 }
