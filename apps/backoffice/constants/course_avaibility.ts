@@ -1,6 +1,6 @@
 export const CourseAvailabilityType = {
   All: 'All',
-  unit_pelaksana_region: 'Unit Pelaksana (Region)',
+  unit_region: 'Unit Pelaksana (Region)',
   unit_layanan: 'Unit Layanan',
   unit_pln: 'Unit PLN',
   pekerjaan: 'Pekerjaan',
@@ -23,7 +23,7 @@ export const CourseAvailabilityArray = [
     employee_key: 'All',
   },
   {
-    id: 'unit_pelaksana_region',
+    id: 'unit_region',
     value: 'Unit Pelaksana (Region)',
     employee_key: 'unit_pln',
   },
