@@ -21,7 +21,7 @@ export interface CourseAvailability {
 
 export type CourseAvailabilityEntity =
     | 'All'
-    | 'unit_pelaksana_region'
+    | 'unit_region'
     | 'unit_layanan'
     | 'unit_pln'
     | 'pekerjaan'
