@@ -1,6 +1,12 @@
 "use client";
 
-import { SetStateAction, useEffect, useState, useMemo, useCallback } from "react";
+import {
+  SetStateAction,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { Input } from "@/components/ui/input";
 import { LucideSearch } from "lucide-react";
@@ -58,10 +64,12 @@ export const EvaluationTable = ({
     debouncedSearchChange(nextValue);
   };
 
-  const handleUnitChange = (unit: {
-    id: string;
-    title: string;
-  } | null) => {
+  const handleUnitChange = (
+    unit: {
+      id: string;
+      title: string;
+    } | null,
+  ) => {
     setSeletedUnit(unit);
     setCurrentPage(1); // Reset to first page on unit change
     onFilterChange({ id_region: unit, search: searchValue });
@@ -73,7 +81,9 @@ export const EvaluationTable = ({
     const filters: any = {
       completed: { _eq: 1 },
       ...(searchValue && { course: { title: { _contains: searchValue } } }),
-      ...(selectedUnit?.id && { employee: { id_region: { _eq: selectedUnit?.id } } }),
+      ...(selectedUnit?.id && {
+        employee: { id_region: { _eq: selectedUnit?.id } },
+      }),
     };
 
     if (dateRange?.from && dateRange?.to) {
@@ -90,16 +100,16 @@ export const EvaluationTable = ({
             fields: [
               "id",
               "exam_score",
+              "exam_score_final",
               "tasks_score",
+              "tasks_score_final",
+              "score_final",
+              "is_passed",
               "course.id",
               "course.title",
-              "course.is_open_exam",
-              "course.is_open_task",
-              "employee.employee_id",
-              "employee.unit_pln",
-              "employee.unit",
             ],
             filter: filters,
+            limit: 1000000,
           },
         },
       );
@@ -114,31 +124,20 @@ export const EvaluationTable = ({
               notPassedCount: number;
             }
           >,
-          course: any,
+          ec: any,
         ) => {
-          const courseId = course.course.id;
-          const title = course.course.title;
-          const examScore = course.exam_score || 0;
-          const tasksScore = course.tasks_score || 0;
-          const isOpenExam = course.course.is_open_exam;
-          const isOpenTask = course.course.is_open_task;
+          const courseId = ec.course.id;
 
           // Initialize course data if not already present
           if (!acc[courseId]) {
             acc[courseId] = {
-              title,
+              title: ec.course.title,
               passedCount: 0,
               notPassedCount: 0,
             };
           }
 
-          // Apply the pass/fail evaluation formula
-          const examEvaluation = isOpenExam ? (examScore / 100) * 70 : 0;
-          const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
-          const totalEvaluation = examEvaluation + taskEvaluation;
-
-          // Increment pass/fail counts based on total evaluation
-          if (totalEvaluation >= 70) {
+          if (ec?.is_passed) {
             acc[courseId].passedCount += 1;
           } else {
             acc[courseId].notPassedCount += 1;
@@ -167,8 +166,8 @@ export const EvaluationTable = ({
 
       setData(formattedData);
       setTotalItems(formattedData.length);
-      setFetching(false);
       updatePaginatedData(formattedData, currentPage, pageSize);
+      setFetching(false);
     } catch (error) {
       console.error("Error fetching:", error);
     } finally {
@@ -193,7 +192,7 @@ export const EvaluationTable = ({
     members,
     selectedUnit,
     sortingFields,
-    dateRange
+    dateRange,
   ]);
 
   const handlePageChange = (page: number) => {
@@ -215,7 +214,7 @@ export const EvaluationTable = ({
               setDateRange(range)
             }
           />
-          <div className="w-1/3">
+          <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}
               onUnitChange={handleUnitChange}
@@ -242,6 +241,7 @@ export const EvaluationTable = ({
       columns={columns}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

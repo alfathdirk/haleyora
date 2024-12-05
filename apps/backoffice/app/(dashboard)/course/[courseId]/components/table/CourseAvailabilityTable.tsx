@@ -21,7 +21,8 @@ export const CourseAvailabilityTable = ({
 }) => {
   const fetch = useDirectusFetch();
 
-  const [allData, setAllData] = useState<any[]>([]); // Store all data here
+  const [allData, setAllData] = useState<any[]>([]);
+  const [unitRegion, setUnitRegion] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -40,6 +41,13 @@ export const CourseAvailabilityTable = ({
       accessorKey: "entity_name",
       header: "Nama Entitas",
       cell: ({ row }) => {
+        const enitity = row?.original?.entity;
+        if (enitity == "unit_region") {
+          const value = unitRegion?.find(
+            (i) => i.id_region == row?.original?.entity_name,
+          );
+          return <div>{value?.name ?? ""}</div>;
+        }
         return <div>{row?.original?.entity_name ?? ""}</div>;
       },
     },
@@ -92,6 +100,14 @@ export const CourseAvailabilityTable = ({
   const fetchData = async function () {
     try {
       let filters = { course: { _eq: courseId } };
+
+      const {
+        data: res2,
+      }: { data: { data: { id_region: string | null; name: string }[] } } =
+        await fetch.get("items/unit_region", {
+          params: { fields: ["*"] },
+        });
+      setUnitRegion(res2?.data);
 
       const { data: res } = await fetch.get("items/course_availability", {
         params: {

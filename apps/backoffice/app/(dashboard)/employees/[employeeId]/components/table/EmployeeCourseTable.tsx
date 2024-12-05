@@ -13,6 +13,7 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
   const router = useRouter();
 
+  const [fetching, setFetching] = useState<boolean>(true);
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -36,6 +37,7 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
 
   async function fetchData() {
     try {
+      setFetching(true)
       let filters = { employee: { _eq: employeeId } };
 
       if (searchValue) {
@@ -58,9 +60,11 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
+      setFetching(false)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+      setFetching(false)
     }
   }
 
@@ -95,6 +99,7 @@ export const EmployeeCourseTable = ({ employeeId }: { employeeId: string }) => {
       columns={columns}
       canChangeLayout={false}
       data={data}
+      loading={fetching}
       headerActions={headerActions}
       currentPage={currentPage}
       pageSize={pageSize}

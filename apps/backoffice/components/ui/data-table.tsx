@@ -23,8 +23,10 @@ import { cn } from "@/lib/utils";
 import { ClassValue, clsx } from "clsx";
 import { PauseHorizontalIcon } from "../icons/PauseHorizontalIcon";
 import { DotsIcon } from "../icons/DotsIcon";
+import { Loader } from "./loader";
 
 interface DataTableProps<TData, TValue> {
+  loading?: boolean;
   layout?: "table" | "card";
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -51,6 +53,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({
+  loading = false,
   columns,
   data,
   currentPage,
@@ -126,6 +129,21 @@ export function DataTable<TData, TValue>({
       return updatedSorting;
     });
   };
+
+  const renderLoading = () => (
+    <TableRow>
+      <TableCell
+        colSpan={columns.length}
+        className="text-center h-52"
+      >
+        <div className="flex justify-center w-full">
+          <div className="flex items-center gap-x-2 w-fit">
+            <Loader /> Sedang mengambil data..
+          </div>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
 
   const renderPagination = () => (
     <Pagination
@@ -233,7 +251,7 @@ export function DataTable<TData, TValue>({
               </TableHeader>
             )}
             <TableBody>
-              {tableInstance.getRowModel().rows.length ? (
+              {loading ? renderLoading() : tableInstance.getRowModel().rows.length ? (
                 tableInstance.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}

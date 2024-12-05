@@ -16,6 +16,7 @@ import { DeleteAction } from "../delete-action";
 export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: string }) => {
   const fetch = useDirectusFetch();
 
+  const [fetching, setFetching] = useState<boolean>(true);
   const [data, setData] = useState<any>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -95,6 +96,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
 
   const fetchData = async function () {
     try {
+      setFetching(true)
       let filters = { employee: { _eq: employeeId } };
 
       if (searchValue) {
@@ -120,9 +122,11 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
 
       setTotalItems(res?.meta?.filter_count);
       setData(res?.data ?? []);
+      setFetching(false)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error fetching:", error);
+      setFetching(false)
     }
   }
 
@@ -173,6 +177,7 @@ export const EmployeeCourseRecommendationTable = ({ employeeId }: { employeeId: 
     <DataTable
       columns={columns}
       data={data}
+      loading={fetching}
       canChangeLayout={false}
       headerActions={headerActions}
       currentPage={currentPage}

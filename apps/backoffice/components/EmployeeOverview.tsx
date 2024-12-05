@@ -14,6 +14,7 @@ import {
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { EmployeeCourse } from "@/types/quiz";
 import { DateRange } from "react-day-picker";
+import { Loader } from "./ui/loader";
 
 interface Props {
   selectedUnit: { id: string; title: string } | null;
@@ -21,7 +22,6 @@ interface Props {
   dateRange: DateRange | undefined;
 }
 
-// Helper function to format the month name
 const formatMonth = (month: any, year: any) => {
   const months = [
     "Jan",
@@ -40,19 +40,18 @@ const formatMonth = (month: any, year: any) => {
   return `${months[month - 1]} ${year}`;
 };
 
-// Function to get the last 12 months from the current date
 const getLastTwelveMonths = () => {
   const today = new Date();
   const months = [];
 
   for (let i = 0; i < 12; i++) {
     const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Month in 'MM' format
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const year = date.getFullYear().toString();
     months.push({ month, year });
   }
 
-  return months.reverse(); // Reverse to start from the oldest month
+  return months.reverse();
 };
 
 export function EmployeeOverview({
@@ -61,19 +60,14 @@ export function EmployeeOverview({
   dateRange,
 }: Props) {
   const fetch = useDirectusFetch();
-  const [data, setData] = useState(
-    Array<{
-      name: string;
-      Lulus: number;
-      "Tidak Lulus": number;
-    }>,
-  );
+  const [data, setData] = useState<
+    Array<{ name: string; Lulus: number; "Tidak Lulus": number }>
+  >([]);
+  const [loading, setLoading] = useState(false);
 
-  // Function to group data by month and category
   const groupDataByMonth = (allCourses: EmployeeCourse[]) => {
-    const months = getLastTwelveMonths(); // Get last 12 months dynamically
+    const months = getLastTwelveMonths();
     const groupedData = months.map(({ month, year }) => {
-      // Filter courses by the current month
       const coursesInMonth = allCourses.filter((course) => {
         const courseDate = new Date(course.date_created);
         return (
@@ -82,19 +76,43 @@ export function EmployeeOverview({
         );
       });
 
-      // Calculate the number of completed, running, and failed courses
-      const completed = coursesInMonth.filter(
-        (course) =>
-          course.completed && course.exam_score >= course.course.min_score,
-      ).length;
-      const failed = coursesInMonth.filter(
-        (course) =>
-          course.completed && course.exam_score < course.course.min_score,
-      ).length;
+      const passed = coursesInMonth.filter((course) => {
+        const isOpenExam = course.course.is_open_exam;
+        const isOpenTask = course.course.is_open_task;
+
+        const examScore = course.exam_score || 0;
+        const tasksScore = course.tasks_score || 0;
+
+        const examEvaluation = isOpenExam
+          ? (examScore / 100) * (isOpenTask ? 70 : 100)
+          : 0;
+        const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
+
+        const totalEvaluation = examEvaluation + taskEvaluation;
+
+        return totalEvaluation >= course.course.min_score;
+      }).length;
+
+      const failed = coursesInMonth.filter((course) => {
+        const isOpenExam = course.course.is_open_exam;
+        const isOpenTask = course.course.is_open_task;
+
+        const examScore = course.exam_score || 0;
+        const tasksScore = course.tasks_score || 0;
+
+        const examEvaluation = isOpenExam
+          ? (examScore / 100) * (isOpenTask ? 70 : 100)
+          : 0;
+        const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : 0;
+
+        const totalEvaluation = examEvaluation + taskEvaluation;
+
+        return totalEvaluation < course.course.min_score;
+      }).length;
 
       return {
         name: formatMonth(parseInt(month, 10), year),
-        Lulus: completed,
+        Lulus: passed,
         "Tidak Lulus": failed,
       };
     });
@@ -102,70 +120,68 @@ export function EmployeeOverview({
     return groupedData;
   };
 
-  // Function to fetch all courses for the last 12 months, including filters
-  async function fetchAllCourses() {
-    const months = getLastTwelveMonths();
-    const startDate =
-      dateRange?.from?.toISOString() ||
-      `${months[0].year}-${months[0].month}-01`;
-    const endDate =
-      dateRange?.to?.toISOString() ||
-      `${months[11].year}-${months[11].month}-31`;
-
+  const fetchAllCourses = async () => {
     try {
-      const filters: any = {
-        completed: { _eq: 1 },
-      };
+      setLoading(true);
+      const filters: any = { completed: { _eq: 1 } };
 
       if (selectedUnit?.id) {
-        filters.employee = { id_region: { _eq: selectedUnit?.id } };
+        filters.employee = { id_region: { _eq: selectedUnit.id } };
       }
 
       if (selectedCourse?.id) {
-        filters.course = { _eq: selectedCourse?.id };
+        filters.course = { _eq: selectedCourse.id };
       }
 
       if (dateRange?.from && dateRange?.to) {
         filters.date_created = {
           _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
         };
-
-        // Fetch all employee courses with related course information
-        const { data: allCourses } = await fetch.get("items/employee_course", {
-          params: {
-            filter: JSON.stringify(filters),
-            fields: [
-              "id",
-              "completed",
-              "exam_attempt",
-              "exam_score",
-              "date_created",
-              "course.min_score",
-            ], // Fetch related course.min_score
-          },
-        });
-
-        // Group the data by month and calculate the needed categories
-        const groupedData = groupDataByMonth(allCourses?.data);
-
-        setData(groupedData);
       }
+
+      const { data: allCourses } = await fetch.get("items/employee_course", {
+        params: {
+          filter: JSON.stringify(filters),
+          fields: [
+            "id",
+            "exam_score",
+            "tasks_score",
+            "date_created",
+            "course.id",
+            "course.title",
+            "course.is_open_exam",
+            "course.is_open_task",
+            "course.min_score",
+            "employee.employee_id",
+            "employee.full_name",
+          ],
+        },
+      });
+
+      const groupedData = groupDataByMonth(allCourses?.data || []);
+      setData(groupedData);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  // Debounce fetchAllCourses to avoid multiple calls on rapid state changes
   useEffect(() => {
-    const debounceFetch = setTimeout(() => {
-      fetchAllCourses();
-    }, 500);
-
+    const debounceFetch = setTimeout(fetchAllCourses, 500);
     return () => clearTimeout(debounceFetch);
   }, [selectedUnit, selectedCourse, dateRange]);
 
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader />
+        <p className="ml-2 text-sm">Sedang mengambil data...</p>
+      </div>
+    );
+
   return (
-    <ResponsiveContainer width="100%" height="100%" className={"relative"}>
+    <ResponsiveContainer width="100%" height={400}>
       <LineChart
         width={730}
         height={250}
@@ -175,23 +191,18 @@ export function EmployeeOverview({
         <Legend align="right" />
         <CartesianGrid strokeDasharray="1 1" />
         <YAxis stroke="" />
-        <XAxis
-          dataKey="name"
-          className="!px-16 !text-red-200"
-          padding={{ left: 30, right: 30 }}
-          stroke=""
-        />
+        <XAxis dataKey="name" padding={{ left: 30, right: 30 }} stroke="" />
         <Tooltip cursor={false} />
         <Line
           type="monotone"
           dataKey="Lulus"
-          stroke="#6956E5"
+          stroke="#00C49F"
           strokeWidth={2}
         />
         <Line
           type="monotone"
           dataKey="Tidak Lulus"
-          stroke="#FF0000"
+          stroke="#ff5b5b"
           strokeWidth={2}
         />
       </LineChart>

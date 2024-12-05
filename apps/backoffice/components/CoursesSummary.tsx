@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "./ui/data-table";
@@ -45,151 +45,116 @@ export function CoursesSummary({
   const fetch = useDirectusFetch();
 
   const [allData, setAllData] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [totalItems, setTotalItems] = useState(0);
-  const [sortingFields, setSortingFields] = useState<
-    { id: string; desc: boolean }[]
-  >([]);
   const [fetching, setFetching] = useState(true);
 
   async function fetchData() {
     setFetching(true);
 
-    const filters: any = {
-      completed: { _eq: 1 },
+    const filters: any = {};
+    const deep: any = {
+      employee_course: {
+        _filter: {
+          completed: {
+            _eq: 1,
+          },
+        },
+      },
     };
 
     if (selectedUnit?.id) {
-      filters.employee = { id_region: { _eq: selectedUnit?.id } };
-    }
-
-    if (selectedCourse?.id) {
-      filters.course = { _eq: selectedCourse?.id };
+      deep.employee_course._filter.employee = {
+        id_region: { _eq: selectedUnit?.id },
+      };
     }
 
     if (dateRange?.from && dateRange?.to) {
-      filters.date_created = {
+      deep.employee_course._filter.date_created = {
         _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
       };
+    }
 
-      try {
-        const { data: employeeCourses } = await fetch.get(
-          "items/employee_course",
-          {
-            params: {
-              fields: [
-                "id",
-                "exam_score",
-                "tasks_score",
-                "course.id",
-                "course.title",
-                "course.is_open_exam",
-                "course.is_open_task",
-                "employee.employee_id",
-                "employee.unit",
-              ],
-              filter: filters,
-            },
+    if (selectedCourse?.id) {
+      filters.id = { _eq: selectedCourse?.id };
+    }
+
+    try {
+      const { data: employeeCourses } = await fetch.get("items/course", {
+        params: {
+          fields: [
+            "id",
+            "title",
+            "is_open_exam",
+            "is_open_task",
+            "employee_course.exam_score",
+            "employee_course.tasks_score",
+          ],
+          filter: filters,
+          deep,
+        },
+      });
+
+      const formattedData = employeeCourses?.data.map((course: any) => {
+        const { id, title, is_open_exam, is_open_task, employee_course } =
+          course;
+
+        let totalEvaluationSum = 0;
+        let totalCount = 0;
+
+        employee_course.forEach(
+          (record: {
+            exam_score: number | null;
+            tasks_score: number | null;
+          }) => {
+            const examScore = record.exam_score || 0;
+            const tasksScore = record.tasks_score || 0;
+
+            const examEvaluation = is_open_exam
+              ? (examScore / 100) * (is_open_task ? 70 : 100)
+              : 0;
+            const taskEvaluation = is_open_task ? (tasksScore / 100) * 30 : 0;
+
+            const totalEvaluation = examEvaluation + taskEvaluation;
+
+            totalEvaluationSum += totalEvaluation;
+            totalCount += 1;
           },
         );
 
-        // Group data by course.id, calculate averages
-        const courseScores = employeeCourses?.data?.reduce(
-          (
-            acc: Record<
-              string,
-              {
-                title: string;
-                examTotal: number;
-                taskTotal: number;
-                examCount: number;
-                taskCount: number;
-              }
-            >,
-            course: any,
-          ) => {
-            const courseId = course.course.id;
-            const title = course.course.title;
-            const examScore = course.exam_score || 0;
-            const tasksScore = course.tasks_score || 0;
-            const isOpenExam = course.course.is_open_exam;
-            const isOpenTask = course.course.is_open_task;
+        const averageEvaluation =
+          totalCount > 0 ? totalEvaluationSum / totalCount : 0;
 
-            if (!acc[courseId]) {
-              acc[courseId] = {
-                title,
-                examTotal: 0,
-                taskTotal: 0,
-                examCount: 0,
-                taskCount: 0,
-              };
-            }
+        return {
+          id,
+          title,
+          average_score: averageEvaluation.toFixed(2), // Rounded to 2 decimal places
+        };
+      });
 
-            // Add scores if the respective `is_open` flags are true
-            if (isOpenExam) {
-              acc[courseId].examTotal += examScore;
-              acc[courseId].examCount += 1;
-            }
-            if (isOpenTask) {
-              acc[courseId].taskTotal += tasksScore;
-              acc[courseId].taskCount += 1;
-            }
-
-            return acc;
-          },
-          {},
-        );
-
-        const formattedData = Object.keys(courseScores).map((courseId) => {
-          const { title, examTotal, examCount, taskTotal, taskCount } =
-            courseScores[courseId];
-          const averageExam = examCount > 0 ? examTotal / examCount : 0;
-          const averageTask = taskCount > 0 ? taskTotal / taskCount : 0;
-          const averageScore = (averageExam + averageTask) / 2;
-
-          return {
-            id: courseId,
-            title,
-            average_score: averageScore.toFixed(2), // Rounded to 2 decimal places
-          };
-        });
-
-        setAllData(formattedData);
-        setTotalItems(formattedData.length);
-        setFetching(false);
-        updatePaginatedData(formattedData, currentPage, pageSize);
-      } catch (error) {
-        console.error("Error fetching:", error);
-      } finally {
-        setFetching(false);
-      }
+      setAllData(formattedData);
+      setTotalItems(formattedData.length);
+      setFetching(false);
+    } catch (error) {
+      console.error("Error fetching:", error);
+    } finally {
+      setFetching(false);
     }
   }
-
-  // Updates paginated data based on current page and page size
-  const updatePaginatedData = (allData: any[], page: number, size: number) => {
-    const startIndex = (page - 1) * size;
-    const paginatedData = allData.slice(startIndex, startIndex + size);
-    setData(paginatedData);
-  };
 
   useEffect(() => {
     fetchData();
   }, [selectedUnit, selectedCourse, dateRange]);
 
-  useEffect(() => {
-    updatePaginatedData(allData, currentPage, pageSize);
-  }, [currentPage, pageSize, allData]);
+  // Memoized calculation for paginated data
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return allData.slice(startIndex, startIndex + pageSize);
+  }, [allData, currentPage, pageSize]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
-
-  const handleSortChange = (sortingState: any) => {
-    setSortingFields(sortingState);
-    setCurrentPage(1);
   };
 
   return (
@@ -197,15 +162,15 @@ export function CoursesSummary({
       layout="table"
       columns={columns}
       canChangeLayout={false}
-      data={data}
+      data={paginatedData}
+      loading={fetching}
       currentPage={currentPage}
       pageSize={pageSize}
       totalItems={totalItems}
       onPageChange={handlePageChange}
       setCurrentPage={setCurrentPage}
       setPageSize={setPageSize}
-      onSortChange={handleSortChange}
-      scrollAreaStyles="h-[25vh]"
+      scrollAreaStyles="h-[350px]"
     />
   );
 }

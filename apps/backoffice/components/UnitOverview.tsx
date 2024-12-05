@@ -6,6 +6,7 @@ import {
   BarChart,
   ResponsiveContainer,
   CartesianGrid,
+  YAxis,
   XAxis,
   Tooltip,
   Bar,
@@ -31,7 +32,7 @@ interface EmployeeCourse {
   employee: {
     employee_id: string;
     unit: string;
-    id_region: { id_region: string | undefined, name: string };
+    id_region: { id_region: string | undefined; name: string };
   };
 }
 
@@ -44,6 +45,13 @@ type UnitScores = Record<
     taskCount: number;
   }
 >;
+
+type Filters = {
+  completed?: { _eq: number };
+  employee?: { id_region?: { _eq: string } };
+  course?: { _eq: string };
+  date_created?: { _between: [string, string] };
+};
 
 export function UnitOverview({
   selectedUnit,
@@ -61,46 +69,44 @@ export function UnitOverview({
     setFetching(true);
     setError(null);
     try {
-      const filters: any = {
+      const filters: Filters = {
         completed: { _eq: 1 },
       };
+
+      if (selectedUnit?.id) {
+        filters.employee = { id_region: { _eq: selectedUnit.id } };
+      }
+
+      if (selectedCourse?.id) {
+        filters.course = { _eq: selectedCourse?.id };
+      }
 
       if (dateRange?.from && dateRange?.to) {
         filters.date_created = {
           _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
         };
+      }
 
-        const { data: employeeCourses }: { data: { data: EmployeeCourse[] } } =
-          await fetch.get("items/employee_course", {
-            params: {
-              fields: [
-                "id",
-                "exam_score",
-                "tasks_score",
-                "course.is_open_exam",
-                "course.is_open_task",
-                "course.id",
-                "employee.employee_id",
-                "employee.unit",
-                "employee.id_region.id_region",
-                "employee.id_region.name",
-              ],
-              filter: filters,
-            },
-          });
-
-        const filteredCourses = employeeCourses?.data?.filter((course) => {
-          // console.log(course.employee.id_region.id_region);
-          const matchesUnit = selectedUnit?.id
-            ? course.employee?.id_region?.id_region === selectedUnit.id
-            : true;
-          const matchesCourse = selectedCourse?.id
-            ? course.course.id === selectedCourse.id
-            : true;
-          return matchesUnit && matchesCourse;
+      const { data: employeeCourses }: { data: { data: EmployeeCourse[] } } =
+        await fetch.get("items/employee_course", {
+          params: {
+            fields: [
+              "id",
+              "employee.id_region.id_region",
+              "employee.id_region.name",
+              "employee.employee_id",
+              "course.id",
+              "course.is_open_exam",
+              "course.is_open_task",
+              "exam_score",
+              "tasks_score",
+            ],
+            filter: filters,
+          },
         });
 
-        const unitScores = filteredCourses.reduce<UnitScores>((acc, ec) => {
+      const unitScores = employeeCourses?.data?.reduce<UnitScores>(
+        (acc, ec) => {
           const unit = ec.employee?.id_region?.name || "Unknown";
           const examScore = ec.exam_score || 0;
           const tasksScore = ec.tasks_score || 0;
@@ -126,34 +132,60 @@ export function UnitOverview({
           }
 
           return acc;
-        }, {});
+        },
+        {},
+      );
 
-        const formattedData = Object.keys(unitScores).map((unit) => ({
-          name: unit.split("-")[1],
-          examAverage:
-            unitScores[unit].examCount > 0
-              ? unitScores[unit].examTotal / unitScores[unit].examCount
-              : 0,
-          tasksAverage:
-            unitScores[unit].taskCount > 0
-              ? unitScores[unit].tasksTotal / unitScores[unit].taskCount
-              : 0,
-        }));
+      const formattedData = Object.keys(unitScores).map((unit) => ({
+        name: unit.includes("-") ? unit.split("-")[1] : unit || "Unknown",
+        examAverage:
+          unitScores[unit].examCount > 0
+            ? unitScores[unit].examTotal / unitScores[unit].examCount
+            : 0,
+        tasksAverage:
+          unitScores[unit].taskCount > 0
+            ? unitScores[unit].tasksTotal / unitScores[unit].taskCount
+            : 0,
+      }));
 
-        setDataBarchart(formattedData);
-      }
+      setDataBarchart(formattedData);
     } catch (error) {
       console.error("Error fetching:", error);
       setError("Failed to fetch data. Please try again.");
     } finally {
       setFetching(false);
     }
-  }, [fetch, selectedUnit, selectedCourse, dateRange]);
+  }, [selectedUnit, selectedCourse, dateRange]);
 
   useEffect(() => {
-    const debounceFetch = setTimeout(fetchData, 200);
+    const debounceFetch = setTimeout(fetchData, 500);
     return () => clearTimeout(debounceFetch);
   }, [selectedUnit, selectedCourse, dateRange]);
+
+  const CustomTooltip = ({ payload }: { payload?: any[] }) => {
+    if (!payload || payload.length === 0) return null;
+    const data = payload[0].payload;
+    return (
+      <div className="p-2 text-sm font-light bg-white border rounded-lg">
+        <p className="mb-2 font-medium">{`${data.name}`}</p>
+        <p>{`Rata - rata Ujian: ${(data.examAverage || 0).toFixed(2)}`}</p>
+        <p>{`Rata - rata Tugas: ${(data.tasksAverage || 0).toFixed(2)}`}</p>
+      </div>
+    );
+  };
+
+  const CustomXAxisTick = ({ x, y, payload }) => {
+    const words = payload.value.split(" ");
+    return (
+      <text x={x} y={y + 10} textAnchor="middle" style={{ fontSize: "10px" }}>
+        {words.map((word, index) => (
+          <tspan key={index} x={x} dy={index === 0 ? 0 : 14}>
+            {word}
+          </tspan>
+        ))}
+      </text>
+    );
+  };
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -176,45 +208,37 @@ export function UnitOverview({
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            width={500}
-            height={300}
             data={dataBarchart}
             margin={{
-              top: 5,
               right: 30,
-              left: 20,
-              bottom: 5,
+              bottom: 50,
             }}
+            barCategoryGap="15%"
+            barGap={0}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <Tooltip
-              content={({ payload }) => {
-                if (!payload || payload.length === 0) return null;
-                const data = payload[0].payload;
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "white",
-                      padding: "5px",
-                      border: "1px solid #ccc",
-                    }}
-                  >
-                    <p>{`Unit: ${data.name}`}</p>
-                    <p>{`Exam Average: ${(data.examAverage || 0).toFixed(
-                      2,
-                    )}`}</p>
-                    <p>{`Tasks Average: ${(data.tasksAverage || 0).toFixed(
-                      2,
-                    )}`}</p>
-                  </div>
-                );
+            <YAxis
+              type="number"
+              domain={['auto', 'auto']}
+              style={{
+                fontSize: "12px",
               }}
             />
-            <Bar dataKey="examAverage" fill="#8884d8" name="Rata - rata Kuis" />
+            <XAxis
+              tick={<CustomXAxisTick />}
+              dataKey="name"
+              interval={0}
+              tickLine={true}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Bar
+              dataKey="examAverage"
+              fill="#3aaed7"
+              name="Rata - rata Ujian"
+            />
             <Bar
               dataKey="tasksAverage"
-              fill="#82ca9d"
+              fill="#e6df5a"
               name="Rata - rata Tugas"
             />
           </BarChart>
