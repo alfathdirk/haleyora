@@ -36,6 +36,45 @@
     "flow": "51776e27-4efd-41e2-9edd-6d374a4d3d1d"
   },
   {
+    "id": "b9094ae3-1f05-46f1-b34e-bfa3987d905f",
+    "name": "Get Employee Course",
+    "key": "request_kxc04",
+    "type": "item-read",
+    "position_x": 19,
+    "position_y": 1,
+    "options": {
+      "permissions": "$full",
+      "collection": "employee_course",
+      "query": {
+        "fields": [
+          "id",
+          "exam_score",
+          "tasks_score",
+          "score_final",
+          "course.min_score",
+          "course.is_open_task",
+          "course.is_open_exam"
+        ],
+        "filter": {
+          "score_final": {
+            "_eq": 0
+          },
+          "completed": {
+            "_eq": 1
+          }
+        },
+        "page": 1,
+        "limit": 50,
+        "sort": [
+          "date_created"
+        ]
+      }
+    },
+    "resolve": "ddd8d100-796a-4c0d-8444-7d009c1f30c5",
+    "reject": null,
+    "flow": "4c82a2fc-05e3-476d-baf5-03d444da4636"
+  },
+  {
     "id": "bee48511-6565-4bdf-9ec7-40bf45d8614b",
     "name": "Webhook / Request URL",
     "key": "request_usfud",
@@ -60,6 +99,42 @@
     "resolve": null,
     "reject": null,
     "flow": "7cf044d5-4f8c-4285-a66b-dfd34d03f7de"
+  },
+  {
+    "id": "ddd8d100-796a-4c0d-8444-7d009c1f30c5",
+    "name": "Run Script",
+    "key": "exec_e6xqg",
+    "type": "exec",
+    "position_x": 37,
+    "position_y": 1,
+    "options": {
+      "code": "module.exports = async function() {\n    const employeeCourses = {{ $last }}\n\n    const newData = employeeCourses.map((ec) => {\n        const examScore = ec.exam_score || 0;\n        const tasksScore = ec.tasks_score || 0;\n        const isOpenExam = ec.course.is_open_exam;\n        const isOpenTask = ec.course.is_open_task;\n        const minScore = ec.course.min_score;\n\n        const examEvaluation = isOpenExam ? ((examScore / 100) * (isOpenTask ? 70 : 100)) : 0;\n        const taskEvaluation = isOpenTask ? (tasksScore / 100) * 30 : tasksScore;\n        const totalEvaluation = examEvaluation + taskEvaluation;\n\n    \treturn {\n        \tid: ec.id,\n            exam_score_final: examEvaluation,\n            tasks_score_final: taskEvaluation,\n\t\t\tscore_final: totalEvaluation,\n            is_passed: totalEvaluation >= minScore\n        };\n    })\n\treturn newData;\n}"
+    },
+    "resolve": "df0a23eb-7bdf-4b32-862d-3a1337533de1",
+    "reject": null,
+    "flow": "4c82a2fc-05e3-476d-baf5-03d444da4636"
+  },
+  {
+    "id": "df0a23eb-7bdf-4b32-862d-3a1337533de1",
+    "name": "Webhook / Request URL",
+    "key": "request_815gj",
+    "type": "request",
+    "position_x": 55,
+    "position_y": 1,
+    "options": {
+      "method": "PATCH",
+      "body": "{{ $last }}",
+      "headers": [
+        {
+          "header": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "url": "http://103.10.97.221:8066/items/employee_course"
+    },
+    "resolve": null,
+    "reject": null,
+    "flow": "4c82a2fc-05e3-476d-baf5-03d444da4636"
   },
   {
     "id": "fec8f168-1e1c-4522-8e8b-91e5e95359a5",

@@ -21,6 +21,20 @@
     "operation": "fec8f168-1e1c-4522-8e8b-91e5e95359a5"
   },
   {
+    "id": "4c82a2fc-05e3-476d-baf5-03d444da4636",
+    "name": "Score Final Calculation",
+    "icon": "bolt",
+    "color": null,
+    "description": null,
+    "status": "active",
+    "trigger": "schedule",
+    "accountability": "all",
+    "options": {
+      "cron": "* * * * *"
+    },
+    "operation": "b9094ae3-1f05-46f1-b34e-bfa3987d905f"
+  },
+  {
     "id": "51776e27-4efd-41e2-9edd-6d374a4d3d1d",
     "name": "CreateUserOnEmployeeCreated",
     "icon": "bolt",

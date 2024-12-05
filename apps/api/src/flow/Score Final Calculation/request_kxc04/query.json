@@ -1,0 +1,24 @@
+{
+  "fields": [
+    "id",
+    "exam_score",
+    "tasks_score",
+    "score_final",
+    "course.min_score",
+    "course.is_open_task",
+    "course.is_open_exam"
+  ],
+  "filter": {
+    "score_final": {
+      "_eq": 0
+    },
+    "completed": {
+      "_eq": 1
+    }
+  },
+  "page": 1,
+  "limit": 50,
+  "sort": [
+    "date_created"
+  ]
+}
