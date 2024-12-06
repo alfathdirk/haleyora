@@ -49,7 +49,7 @@ const formSchema = z.object({
     .array(z.instanceof(File)),
   // video_content: z
   //   .array(z.instanceof(File)),
-  video_content_link: z.string().max(500).optional(),
+  video_url: z.string().max(500).optional(),
   image: z
     .array(z.instanceof(File)),
 });
@@ -101,7 +101,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
         image: [],
         material_content: [],
         // video_content: [],
-        video_content_link: "",
+        video_url: "",
       };
 
   const form = useForm<CourseFormValues>({
@@ -543,7 +543,7 @@ export const CourseForm: React.FC<ProductFormProps> = ({
 
               {/* <FormField
                 control={form.control}
-                name="video_content_link"
+                name="video_url"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Link video</FormLabel>
@@ -559,16 +559,15 @@ export const CourseForm: React.FC<ProductFormProps> = ({
               /> */}
               <FormField
                 control={form.control}
-                name="video_content_link"
+                name="video_url"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Link video</FormLabel>
                     <FormControl>
                       <Textarea
                         disabled={loading}
-                        placeholder="Deskripsi untuk tugas"
                         {...field}
-                        required
+                        // required
                       />
                     </FormControl>
                     <FormMessage />

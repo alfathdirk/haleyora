@@ -4,8 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { EmployeeCourse } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
 import clsx from "clsx";
-import { format } from "date-fns";
-import id from "date-fns/locale/id";
 
 export const columns: ColumnDef<EmployeeCourse>[] = [
   {

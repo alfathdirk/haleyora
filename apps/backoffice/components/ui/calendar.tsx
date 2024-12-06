@@ -61,7 +61,7 @@ export function Calendar({
         IconLeft: () => <ChevronLeft className="w-4 h-4" />,
         IconRight: () => <ChevronRight className="w-4 h-4" />,
       }}
-      disabled={{ after: new Date() }}
+      // disabled={{ after: new Date() }}
       {...props}
     />
   );
