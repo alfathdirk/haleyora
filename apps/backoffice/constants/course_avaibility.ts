@@ -4,7 +4,7 @@ export const CourseAvailabilityType = {
   unit_layanan: 'Unit Layanan',
   unit_pln: 'Unit PLN',
   pekerjaan: 'Pekerjaan',
-  penempatan: 'Penempatan',
+  placement: 'Penempatan',
 }
 
 export const CourseAvailabilityToEmployee = {
@@ -13,7 +13,7 @@ export const CourseAvailabilityToEmployee = {
   unit_layanan: 'unit',
   unit_pln: 'unit_pln',
   pekerjaan: 'job',
-  penempatan: 'position',
+  placement: 'placement',
 }
 
 export const CourseAvailabilityArray = [
@@ -43,9 +43,9 @@ export const CourseAvailabilityArray = [
     employee_key: 'job',
   },
   {
-    id: 'penempatan',
+    id: 'placement',
     value: 'Penempatan',
-    employee_key: 'position',
+    employee_key: 'placement',
   }
 ]
 
