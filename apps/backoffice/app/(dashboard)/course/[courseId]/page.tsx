@@ -77,6 +77,7 @@ export default function Page() {
           task_description: res?.data?.task_description,
           description: res?.data?.description ?? "",
           video_content_link: res?.data?.video_content_link ?? "",
+          video_url: res?.data?.video_url ?? "",
           min_score: String(res?.data?.min_score) ?? "",
           status: res?.data?.status ?? "",
         });
