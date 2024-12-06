@@ -56,7 +56,7 @@ export const CourseAvailabilityTable = ({
       cell: ({ row }) => {
         return (
           <div>
-            {format(new Date(row?.original.start_date), "dd MMMM yyyy", {
+            {format(new Date(row?.original.start_date + "Z"), "dd MMMM yyyy", {
               locale: id,
             }) ?? "-"}
           </div>
@@ -69,7 +69,7 @@ export const CourseAvailabilityTable = ({
       cell: ({ row }) => {
         return (
           <div>
-            {format(new Date(row?.original.end_date), "dd MMMM yyyy", {
+            {format(new Date(row?.original.end_date + "Z"), "dd MMMM yyyy", {
               locale: id,
             }) ?? "-"}
           </div>
