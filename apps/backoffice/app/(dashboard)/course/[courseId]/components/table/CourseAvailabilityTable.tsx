@@ -5,7 +5,6 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { useDirectusFetch } from "@/hooks/useDirectusFetch";
 import { ColumnDef } from "@tanstack/react-table";
 import CourseAvailabilityFormDialog from "../dialog/CourseAvailabilityFormDialog";
-import { Button } from "@/components/ui/button";
 import { DeleteAction } from "../delete-action";
 import { format } from "date-fns";
 import id from "date-fns/locale/id";
@@ -155,21 +154,14 @@ export const CourseAvailabilityTable = ({
     return (
       <div className="flex items-center justify-between w-full">
         <div className="pr-4">
-          <div className="mt-4 text-lg font-normal">Jadwal Ketersediaan</div>
+          <div className="text-lg font-normal">Jadwal Ketersediaan</div>
         </div>
         <CourseAvailabilityFormDialog
           courseId={courseId}
           allData={allData}
           setAllData={setAllData}
           triggerTitle={
-            <Button
-              type="button"
-              size={"sm"}
-              className=""
-              variant={"secondary"}
-            >
-              Tambah
-            </Button>
+            <div className="px-3 py-1 rounded-lg bg-secondary">Tambah</div>
           }
           dialogTriggerProps={{
             className: "p-2 h-fit group hover:bg-transparent",
