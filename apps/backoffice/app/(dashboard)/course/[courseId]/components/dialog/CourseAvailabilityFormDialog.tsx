@@ -72,8 +72,8 @@ export default function CourseAvailabilityFormDialog({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      entity: "",
-      entity_name: "",
+      entity: "All",
+      entity_name: "All",
       start_date: "",
       end_date: "",
     },
