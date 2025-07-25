@@ -55,6 +55,9 @@ export function CoursesSummary({
 
     const filters: any = {};
     const deep: any = {
+      course_availability: {
+        _filter: {}
+      },
       employee_course: {
         _filter: {
           completed: {
@@ -70,7 +73,13 @@ export function CoursesSummary({
       };
     }
 
-    if (dateRange?.from && dateRange?.to) {
+        if (dateRange?.from && dateRange?.to) {
+      // Filter course availability by date range
+      deep.course_availability._filter = {
+        start_date: { _lte: dateRange.to.toISOString() },
+        end_date: { _gte: dateRange.from.toISOString() }
+      };
+
       deep.employee_course._filter.date_created = {
         _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
       };
@@ -90,6 +99,7 @@ export function CoursesSummary({
             "is_open_task",
             "employee_course.exam_score",
             "employee_course.tasks_score",
+            "course_availability.*"
           ],
           filter: filters,
           deep,
@@ -97,8 +107,24 @@ export function CoursesSummary({
       });
 
       const formattedData = employeeCourses?.data.map((course: any) => {
-        const { id, title, is_open_exam, is_open_task, employee_course } =
+        const { id, title, is_open_exam, is_open_task, employee_course, course_availability } =
           course;
+
+        if (dateRange?.from && dateRange?.to) {
+          const hasValidAvailability = course_availability?.some((availability: any) => {
+            const startDate = new Date(availability.start_date);
+            const endDate = new Date(availability.end_date);
+            const fromDate = dateRange.from!;
+            const toDate = dateRange.to!;
+
+            // Check if the availability period overlaps with the selected date range
+            return startDate <= toDate && endDate >= fromDate;
+          });
+
+          if (!hasValidAvailability) {
+            return null; // Skip this course if no valid availability
+          }
+        }
 
         let totalEvaluationSum = 0;
         let totalCount = 0;
@@ -131,7 +157,7 @@ export function CoursesSummary({
           title,
           average_score: averageEvaluation.toFixed(2), // Rounded to 2 decimal places
         };
-      });
+      }).filter(Boolean);
 
       setAllData(formattedData);
       setTotalItems(formattedData.length);

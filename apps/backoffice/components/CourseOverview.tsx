@@ -42,10 +42,23 @@ export function CourseOverview({
           _between: [dateRange.from.toISOString(), dateRange.to.toISOString()],
         };
 
+        // Add course availability filter
+        const courseAvailabilityFilter = {
+          start_date: { _lte: dateRange.to.toISOString() },
+          end_date: { _gte: dateRange.from.toISOString() }
+        };
+
         const { data: resTotalCompleted } = await fetch.get("items/employee_course", {
           params: {
             filter: JSON.stringify(filters),
             aggregate: JSON.stringify({ count: "id" }),
+            deep: JSON.stringify({
+              course: {
+                course_availability: {
+                  _filter: courseAvailabilityFilter
+                }
+              }
+            }),
           },
         });
 
@@ -58,6 +71,13 @@ export function CourseOverview({
               exam_attempt: { _lte: 3 },
             }),
             aggregate: JSON.stringify({ count: "id" }),
+            deep: JSON.stringify({
+              course: {
+                course_availability: {
+                  _filter: courseAvailabilityFilter
+                }
+              }
+            }),
           },
         });
 
@@ -69,6 +89,13 @@ export function CourseOverview({
               exam_score: { _lte: 0 },
             }),
             aggregate: JSON.stringify({ count: "id" }),
+            deep: JSON.stringify({
+              course: {
+                course_availability: {
+                  _filter: courseAvailabilityFilter
+                }
+              }
+            }),
           },
         });
 
@@ -134,7 +161,7 @@ export function CourseOverview({
         {payload.map((entry: any, index: number) => (
           <div
             key={`item-${index}`}
-            className="inline-flex items-center gap-x-2"
+            className="inline-flex gap-x-2 items-center"
           >
             <div
               className={"w-3 h-3"}
