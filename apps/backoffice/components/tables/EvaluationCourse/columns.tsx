@@ -31,7 +31,7 @@ export const columns: ColumnDef<EmployeeCourse>[] = [
   },
   {
     accessorKey: "score_final",
-    header: "Nilai Keseluruhan",
+    header: "Nilai Keseluruhan (Final)",
     cell: ({ row }) => (
       <div className="px-2.5 py-1 w-fit">
         {row.original?.score_final ?? ""}
