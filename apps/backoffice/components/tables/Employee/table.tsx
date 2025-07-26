@@ -83,24 +83,21 @@ export const EmployeesTable = ({
   async function fetchData() {
     try {
       setFetching(true)
-      let deep = {};
       const filters: any = {
         ...(searchValue && { full_name: { _contains: searchValue } }),
         ...(selectedUnit?.id && { id_region: { _eq: selectedUnit?.id } }),
       };
 
       if (dateRange?.from && dateRange?.to) {
-        deep = {
-          employee_course: {
-            _filter: {
-              completed: { _eq: 1 },
-              date_created: {
-                _between: [
-                  dateRange.from.toISOString(),
-                  dateRange.to.toISOString(),
-                ],
-              },
-            },
+        filters.employee_course = {
+          date_created: {
+            _between: [
+              dateRange.from.toISOString(),
+              dateRange.to.toISOString(),
+            ],
+          },
+          completed: {
+            _eq: 1,
           },
         };
       }
@@ -132,7 +129,6 @@ export const EmployeesTable = ({
           filter: filters,
           sort: sortParams,
           meta: "total_count,filter_count",
-          deep,
         },
       });
 
@@ -170,8 +166,8 @@ export const EmployeesTable = ({
 
   const headerActions = () => {
     return (
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center w-full space-x-2 ">
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center space-x-2 w-full">
           <div className="w-1/2">
             <SelectFilterUnit
               selectedUnit={selectedUnit}

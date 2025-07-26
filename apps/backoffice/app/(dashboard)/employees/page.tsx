@@ -14,6 +14,7 @@ import { Loader } from "@/components/ui/loader";
 import { debounce } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { useDirectusContext } from "@/hooks/useDirectusContext";
+import { startOfMonth } from "date-fns";
 
 export default function Page() {
   const { accessToken } = useDirectusContext();
@@ -34,8 +35,8 @@ export default function Page() {
     search: string;
   }>({
     dateRange: {
-      from: undefined,
-      to: undefined,
+      from: startOfMonth(new Date()),
+      to: new Date(),
     },
     id_region: {
       id: null,
@@ -200,7 +201,7 @@ export default function Page() {
       fetching: boolean;
     }) => (
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardHeader className="flex flex-row justify-between items-center pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">{title}</CardTitle>
         </CardHeader>
         <CardContent>
@@ -260,7 +261,7 @@ export default function Page() {
         <Heading title={`Karyawan`} description="Manajemen Karyawan" />
         <div>
           <Button className="text-xs md:text-sm" onClick={handleExport}>
-            <DownloadCloud className="w-4 h-4 mr-2" />{" "}
+            <DownloadCloud className="mr-2 w-4 h-4" />{" "}
             {exporting ? "Mohon Tunggu.." : "Unduh Data"}
           </Button>
         </div>
