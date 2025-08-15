@@ -193,7 +193,7 @@ export default function CourseAvailabilityFormDialog({
     const availabilityEntry = {
       ...result.data,
       start_date: format(startDate, "yyyy-MM-dd"),
-      end_date: format(endDate, "yyyy-MM-dd"),
+      end_date: format(endDate, "yyyy-MM-dd") + " 23:59:00",
     };
 
     setAllData([...allData, availabilityEntry]);

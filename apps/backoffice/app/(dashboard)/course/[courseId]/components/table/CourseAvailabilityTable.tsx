@@ -67,11 +67,10 @@ export const CourseAvailabilityTable = ({
       accessorKey: "end_date",
       header: "Tanggal Berakhir",
       cell: ({ row }) => {
+        console.log(format(new Date(row?.original?.end_date), "dd MMMM yyyy"));
         return (
           <div>
-            {format(new Date(row?.original?.end_date?.includes("Z") ? row?.original.end_date : row?.original?.end_date + "Z"), "dd MMMM yyyy", {
-              locale: id,
-            }) ?? "-"}
+            {format(new Date(row?.original?.end_date), "dd MMMM yyyy") ?? "-"}
           </div>
         );
       },
