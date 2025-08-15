@@ -35,6 +35,7 @@ import { DateRange } from "react-day-picker";
 import { CalendarDateRangePicker } from "@/components/date-range-picker";
 import { Loader } from "@/components/ui/loader";
 import { debounce } from "@/lib/utils";
+import { format } from "date-fns";
 
 const formSchema = z.object({
   entity: z.string().min(1, "Entitas harus dipilih."),
@@ -187,10 +188,12 @@ export default function CourseAvailabilityFormDialog({
     }
 
     const { from, to } = dateRange || {};
+    const startDate = new Date(from || "");
+    const endDate = new Date(to || "");
     const availabilityEntry = {
       ...result.data,
-      start_date: from?.toISOString() || "",
-      end_date: to?.toISOString() || "",
+      start_date: format(startDate, "yyyy-MM-dd"),
+      end_date: format(endDate, "yyyy-MM-dd"),
     };
 
     setAllData([...allData, availabilityEntry]);
